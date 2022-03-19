@@ -867,6 +867,24 @@ Called with `C-u C-u' skips `dotspacemacs/user-config' _and_ preliminary tests."
   (when (configuration-layer/package-used-p 'spaceline)
     (spacemacs//restore-buffers-powerline)))
 
+(defun spacemacs/sort=>sorted-layers-list ()
+  "`setq' a sorted form of `dotspacemacs-configuration-layers'."
+
+  (setq dotspacemacs-configuration-layers
+        (delete-dups
+         (mapcar #'car
+                 (sort
+                  (mapcar* #'cons dotspacemacs-configuration-layers
+                           (mapcar 'listp dotspacemacs-configuration-layers))
+                  (lambda (cons snoc)
+                    "https://emacs.stackexchange.com/a/34649"
+                    (string-lessp (if (cdr cons)
+                                      (caar cons)
+                                    (car cons))
+                                  (if (cdr snoc)
+                                      (caar snoc)
+                                    (car snoc)))))))))
+
 (defun dotspacemacs/get-variable-string-list ()
   "Return a list of all the dotspacemacs variables as strings."
   (all-completions "" obarray
