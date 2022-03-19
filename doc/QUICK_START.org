@@ -143,9 +143,19 @@ set to ~​,​~ by default. This key is a shortcut for ~SPC m~
 where all the major-mode specific commands are bound.
 
 ** Evil-tutor
-If you are willing to learn the Vim key bindings (highly recommended since
-you can benefit from them even in =emacs= style), press ~SPC h T v~
-to begin an Evil-adapted Vimtutor.
+Spacemacs is based on Vim modal editing, so it is recommended to learn the
+basics even if you are not using Vim bindings (ie, you are using =emacs= or
+=hybrid= style).
+
+- Press ~SPC h T v~ to begin with the Evil tutor
+  
+The tutor will remember your changes to the file, as you are instructed to edit
+it to learn, and *should* recall your place in the tutor as well (just as the
+built-in Emacs tutorial does). If your place within the tutorial file is lost,
+navigate to it using the navigation commands below.
+  
+- Press ~SPC m n~ to navigate to the next lesson
+- Press ~SPC m p~ to navigate to the previous lesson
 
 ** Universal argument
 In =vim= editing style the universal argument defaults to ~SPC u~
