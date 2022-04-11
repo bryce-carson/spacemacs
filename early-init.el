@@ -39,6 +39,8 @@
               "core/core-early-funcs")
       nil (not init-file-debug))
 
+(load-file "~/code/emacs/webkit.el")
+
 ;; Remove GUI elements soon after GUI being initialized to avoid some possible grapical glitches.
 ;; This has to be done use these hooks,
 ;; see https://www.gnu.org/software/emacs/manual/html_node/emacs/Early-Init-File.html

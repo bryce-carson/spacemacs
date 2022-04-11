@@ -187,13 +187,11 @@ Doge special text banner for dark themes can be reachable via `997',
 `doge-inverted' or `random*'.
 Cate special text banner can de reachable via `998', `cat' or `random*'.
 `random' ignore special banners whereas `random*' does not."
-  (let ((banner (spacemacs-buffer//choose-banner))
+  ;; (load-file "~/code/emacs/webkit.el")
+  (let ((banner "~/code/emacs/banner.html")
         (buffer-read-only nil))
     (when banner
-      (spacemacs-buffer/message (format "Banner: %s" banner))
-      (if (image-type-available-p (intern (file-name-extension banner)))
-          (spacemacs-buffer//insert-image-banner banner)
-        (spacemacs-buffer//insert-ascii-banner-centered banner)))
+      (spacemacs-buffer//insert-webkit-banner banner))
     (spacemacs-buffer//insert-buttons)
     (spacemacs//redisplay)))
 
