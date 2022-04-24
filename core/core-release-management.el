@@ -58,7 +58,7 @@ NOTE: This variable will be set asynchronously after Spacemacs startup.")
   "Hooks to be ran when Spacemacs detects revision change.")
 
 (defun spacemacs/switch-to-version (&optional version)
-  "Switch spacemacs to VERSION.
+  "Switch Spacemacs to VERSION.
 
 VERSION is a string with the format `x.x.x'.
 IMPORTANT: The switch is performed by hard resetting the current branch.
@@ -109,12 +109,13 @@ Update `spacemacs-new-version' variable if any new version has been
 found."
   (interactive "P")
   (cond
-   ((and (not force)
-         (not dotspacemacs-check-for-update))
-    (message "Skipping check for new version (reason: dotfile)"))
-   ((and (not force)
-         (string-equal "develop" (spacemacs//git-get-current-branch)))
-    (message "Skipping check for new version (reason: develop branch)"))
+   ((not force)
+    (let ((on-master? (string-equal "master" (spacemacs//git-get-current-branch)))
+          (check-update? dotspacemacs-check-for-update))
+      (if (and (not check-update?) on-master?)
+          (progn
+            (message "Skipping check for new version (reason: `dotspacemacs-check-for-update' is set to `nil').")
+            (warn "Spacemacs now uses a rolling release model, and the 'master' branch is deprecated and unsupported.")))))
    ((and (not force)
          (not (spacemacs//can-check-for-new-version-at-startup)))
     (message (concat "Skipping check for new version "
