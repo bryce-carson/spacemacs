@@ -1,3 +1,66 @@
+* TODO Tangling issues
+
+Erroneously changes to the copyright author in these files:
+- core-compilation
+- core-customization
+- core-spacebind
+- core-transite-state
+
+* AWK
+
+The following AWK scripts are used to hack on this literate document. They
+bridge the gap between what Org mode can do and what we want.
+
+#+begin_src awk
+  FNR == 1 && /^;;;/ {
+      print("#+end_src")
+      print("")
+      print("* "FILENAME)
+      print("#+begin_src emacs-lisp :noweb strip-export :tangle "FILENAME)
+      print($0)
+  }
+  FNR > 1 {
+      print($0)
+  }
+  END {
+      print("#+end_src")
+      print("")
+  }
+#+end_src
+
+#+begin_src awk
+  {
+      # Regex to match <<...>>
+      while (match($0, /<<[^>]+>>/)) {
+          # Extract matched string, e.g., <<foo>>
+          matched_string = substr($0, RSTART, RLENGTH)
+
+          # Extract content inside <<...>>
+          inner = substr(matched_string, 3, length(matched_string) - 4)
+
+          # Test against known cases
+          switch (inner) {
+          case "is a core file that uses lexical binding":
+          case "copyright year":
+          case "benevolent dictator for life":
+          case "git host":
+          case "spacemacs ghurl":
+          case "copyright holders":
+          case "copyright boilerplate":
+          case "copyright":
+              # Do nothing
+              break
+          default:
+              print inner
+              break
+          }
+
+          # Remove this match so next match can be found in same line
+          $0 = substr($0, RSTART + RLENGTH)
+      }
+  }
+#+end_src
+
 * Core
 This is part of the first line of every core file (unless that file does not use
 lexical binding).
@@ -25,7 +88,7 @@ These chunks define copyright information that is included at the top of every c
   https://<<git host>>/syl20bnr/spacemacs
 #+end_src
 
-#+begin_src text :noweb yes :nowb-ref "copyright holders"
+#+begin_src text :noweb yes :noweb-ref "copyright holders"
   <<benevolent dictator for life>> & Contributors
 #+end_src
 
@@ -9499,7 +9562,7 @@ These chunks define copyright information that is included at the top of every c
 * core-spacemacs.el
 #+begin_src emacs-lisp :noweb no-export :tangle core-spacemacs.el
   ;;; core-spacemacs.el <<is a core file that uses lexical binding>> -*-
-  <<coypright>>
+  <<copyright>>
 
   (setq message-log-max 16384)
 
