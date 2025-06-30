@@ -1,4 +1,4 @@
-;;; core-spacemacs.el --- Spacemacs Core File
+;;; core-documentation.el --- Spacemacs Core File
 ;;
 ;; Copyright (c) 2012-2025 Sylvain Benner & Contributors
 ;;
