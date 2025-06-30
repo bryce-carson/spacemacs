@@ -4,18 +4,53 @@ Spacemacs is a volunteer effort. We encourage you to pitch in. The community
 makes Spacemacs what it is. We have a few guidelines, which we ask all
 contributors to follow.
 
-You can only consider reading the sections relevant to what you are going to do
-or just watch this video [[https://www.youtube.com/watch?v=OMS-3Jl05mE&feature=youtu.be&list=PLpr9V-R8ZxiCHMl2_dn1Fovcd34Oz45sua][here]]:
-- [[#asking-for-help][Asking for help]] if you are about to open an issue to ask a question.
-- [[#reporting-issues][Reporting issues]] if you are about to open a new issue.
-- [[#contributing-code][Contributing code]] if you are about to send a PR.
-- [[https://github.com/syl20bnr/spacemacs/blob/develop/CONTRIBUTING.org#reviewing-pull-requests][Reviewing Pull Requests]] if you are about to review a PR.
-
 Thanks! :heart: :heart: :heart:
 
+You can consider reading only the section(s) relevant to your intentions, or
+[[https://www.youtube.com/watch?v=OMS-3Jl05mE&feature=youtu.be&list=PLpr9V-R8ZxiCHMl2_dn1Fovcd34Oz45sua][watch a video on YouTube]]:
+
+- Submitting or Reviewing Pull Requests (PRs) :: PRs affect changes in the
+  repository if they're merged. They /could change anything/. They go through
+  volunteer-based review and automated testing processes.
+
+  Read some of the following according to the changes you're proposing or
+  reviewing:
+
+  - Contributing Documentation
+  - Contributing code
+  - Contributing Configuration
+  - Contributing Data
+
+  - [[#reviewing-pull-requests][Reviewing Pull Requests]]
+
+- [[#asking-for-help][Asking for Help]] :: when you need /advice on using Spacemacs/ and are about to
+  open an issue to ask a question.
+
+- [[#reporting-issues][Reporting Issues]] :: if you are about to open a new issue.
+
+* TODO LICENSE, COPYING, etc.
+Code contributed to the Spacemacs repository, or to the Spacemacs organization,
+is held in common by utilizing the GNU General Public License, rather than
+attributing the copyright to some second party like a non-profit or charitable
+foundation.
+
+Assets like graphics, documentation, configuration files, etc. are held in
+common under licenses like the GNU Free Documentation License, or must be in the
+public domain.
+
+=CONTRIBUTING.org= (the source of the document you're reading) is partially
+based on the [[https://github.com/rails/rails/blob/master/CONTRIBUTING.md][Rails Contribution guidelines]] and [[https://github.com/flycheck/flycheck/blob/master/doc/contributor/contributing.rst][Flycheck Contribution guidelines]].
+At Mon 30 Jun 2025 01:59:15 AM MDT, Bryce Carson reorganized this file as part
+of a project to improve the user experience of reading documentation, updating
+Spacemacs (and its documentation), troublehsooting, contributing, and more.
+
+ :space_invader: :water_buffalo:
+
 * Table of Contents                     :TOC_5_gh:noexport:
+- [[#license-copying-etc][LICENSE, COPYING, etc.]]
 - [[#asking-for-help][Asking for help]]
 - [[#reporting-issues][Reporting issues]]
+- [[#contributing-banners-or-other-files-placed-within-assets][Contributing banners or other files placed within /assets]]
 - [[#contributing-code][Contributing code]]
   - [[#general-contribution-guidelines][General contribution guidelines]]
     - [[#license][License]]
@@ -36,7 +71,6 @@ Thanks! :heart: :heart: :heart:
   - [[#using-magit-to-quickly-test-prs][Using Magit to quickly test PRs]]
 - [[#additional-information][Additional information]]
   - [[#testing][Testing]]
-- [[#credits][Credits]]
 
 * Asking for help
 If you want to ask an usage question, be sure to look first into some places as
@@ -67,6 +101,15 @@ Issues have to be reported on our [[https://github.com/syl20bnr/spacemacs/issues
   - If possible, try to include details on how to reproduce it, like a step by
     step guide.
 
+
+* TODO Contributing banners or other files placed within [[file:assets/][/assets]]
+The banner on the Spacemacs home buffer is the Spacemacs logo (by default; the
+buffer is called the startup buffer in some documentation). There are other
+community-contributed images and ASCII art banners available in the directory
+=core/banners/=. If you have some vector drawing or ASCII artwork skills you can
+submit your artwork! You are free to choose a reasonable height size but the
+width size should be around 75 characters.
+
 * Contributing code
 Code contributions are welcome. Please read the following sections carefully.
 In any case, feel free to join us on the [[https://gitter.im/syl20bnr/spacemacs][gitter chat]] to ask questions about
@@ -88,12 +131,22 @@ definition and writing documentation. Please read the [[https://github.com/syl20
 before your first contribution to get to know them.
 
 *** Changelog entry
-Add a short entry describing your proposed change under a suitable subheading in
-[[https://github.com/syl20bnr/spacemacs/blob/develop/CHANGELOG.develop][CHANGELOG.develop]]. Use the previous entries and [[https://github.com/syl20bnr/spacemacs/blob/develop/CONTRIBUTING.org#commit-messages][commit messages instructions]] as
-guidelines. You can add your name or github username in parentheses at the end
-of the entry if you want to. If an entry already exists describing your PR
-(small documentation improvements etc.), you can omit the changelog entry or add
-your name at the end of the pre-existing one.
+Add a short entry describing /your proposed change(s)/ under a suitable
+subheading in [[https://github.com/syl20bnr/spacemacs/blob/develop/CHANGELOG.develop][CHANGELOG.develop]]. Guidelines are the style in previous entries
+and [[#commit-messages][commit messages instructions]] as guidelines. You may append your real name or
+GitHub username to the entry in parentheses (e.g. /(Example-Contributor)/).
+
+Common entries like "fix typo" or "update hyperlink" must find their home under
+a common heading. If an exiting entry describes your contributions do not add
+another entry (e.g. "small documentation improvements", "fix typo", "update
+hyperlink", etc.); instead, you may add your name to the existing list of
+collaborators for such a contribution. Where you add your name is unimportant.
+
+#+begin_example
+#* Layer Changes
+#** Emacs Lisp
+- Add support for =debugger= and =edebug=, see tutorial in =README.org= file ~("bryce-carson" "syl20bnr")~.
+#+end_example
 
 *** Pull Request
 Submit your contribution against the =develop= branch. You should not use
@@ -290,13 +343,6 @@ relevant documentation file. It should be the layer's =README.org= file for
 layer's key bindings, or =DOCUMENTATION.org= for general Spacemacs key bindings.
 
 ** Contributing a banner
-The startup banner is by default the Spacemacs logo but there are also ASCII
-banners available in the directory =core/banners/=.
-
-If you have some ASCII skills you can submit your artwork!
-
-You are free to choose a reasonable height size but the width size should be
-around 75 characters.
 
 * Reviewing Pull Requests
 You can contribute by reviewing PRs created by others. This will help share the
@@ -385,7 +431,3 @@ To add tests for a layer, do the following:
    #+END_SRC
 
 5. Add the new test to list of tests in =travis/run_build.sh=.
-
-* Credits
-This =CONTRIBUTING.org= file is partially based on the [[https://github.com/rails/rails/blob/master/CONTRIBUTING.md][Rails Contribution
-guidelines]] and [[https://github.com/flycheck/flycheck/blob/master/doc/contributor/contributing.rst][Flycheck Contribution guidelines]].

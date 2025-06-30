@@ -1,6 +1,5 @@
-#+COMMENT -*- mode: org -*-
-
-This file contains the change log for the next major version of Spacemacs.
+* NOTICE: Spacemacs stable version changelog is in [[file:CHANGELOG.org][CHANGELOG.org]]
+*This file contains the change log for the next major version of Spacemacs.*
 
 Use the following template structure and fill it in with your changes.
 When a release will be drafted, the notes will be copied at the top of
