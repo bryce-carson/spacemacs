@@ -184,7 +184,6 @@ These chunks define copyright information that is included at the top of every c
   ;;; core-command-line.el <<is a core file that uses lexical binding>> -*-
   <<copyright>>
 
-
   (defvar spacemacs-force-resume-layouts nil
     "If non-nil force the current emacs instance to resume layouts
     at start time despite the value of `dotspacemacs-auto-resume-layouts'.")
@@ -259,7 +258,6 @@ These chunks define copyright information that is included at the top of every c
   ;; URL: <<spacemacs ghurl>>
   ;;
   ;; <<about this file>>
-
 
   (require 'cl-lib)
   (require 'subr-x)
@@ -340,7 +338,6 @@ These chunks define copyright information that is included at the top of every c
 #+begin_src emacs-lisp :noweb no-export :tangle core-configuration-layer.el
   ;;; core-configuration-layer.el <<is a core file that uses lexical binding>> -*-
   <<copyright>>
-
 
   (require 'cl-lib)
   (require 'epg)
@@ -3193,7 +3190,6 @@ These chunks define copyright information that is included at the top of every c
   ;;
   ;; <<about this file>>
 
-
   (require 'validate)
   (require 'seq)
   (eval-when-compile (require 'cl-lib))
@@ -3867,7 +3863,6 @@ These chunks define copyright information that is included at the top of every c
   ;;; core-display-init.el <<is a core file that uses lexical binding>> -*-
   <<copyright>>
 
-
   (defvar spacemacs--after-display-system-init-list '()
     "List of functions to be run after the display system is initialized.")
 
@@ -3917,7 +3912,6 @@ These chunks define copyright information that is included at the top of every c
 #+begin_src emacs-lisp :noweb no-export :tangle core-documentation.el
   ;;; core-documentation.el --- Spacemacs Core File
   <<copyright>>
-
 
   (require 'org)
   (require 'ox-publish)
@@ -5606,7 +5600,6 @@ These chunks define copyright information that is included at the top of every c
   ;;; core-emacs-backports.el --- Spacemacs Core File  -*- lexical-binding: t -*-
   <<copyright>>
 
-
   ;; nothing for now
 
   (provide 'core-emacs-backports)
@@ -5618,7 +5611,6 @@ These chunks define copyright information that is included at the top of every c
 #+begin_src emacs-lisp :noweb no-export :tangle core-env.el
   ;;; core-env.el <<is a core file that uses lexical binding>> -*-
   <<copyright>>
-
 
   (require 'core-dotspacemacs)
   (require 'load-env-vars)
@@ -6329,8 +6321,6 @@ These chunks define copyright information that is included at the top of every c
   ;;; core-hooks.el <<is a core file that uses lexical binding>> -*-
   <<copyright>>
 
-
-
   (defun spacemacs/run-prog-mode-hooks ()
     "Runs `prog-mode-hook'. Useful for modes that don't derive from
   `prog-mode' but should."
@@ -6389,7 +6379,6 @@ These chunks define copyright information that is included at the top of every c
 #+begin_src emacs-lisp :noweb no-export :tangle core-jump.el
   ;;; core-jump.el <<is a core file that uses lexical binding>> -*-
   <<copyright>>
-
 
   (defvar spacemacs-default-jump-handlers '()
     "List of jump handlers available in every mode.")
@@ -6487,7 +6476,6 @@ These chunks define copyright information that is included at the top of every c
 #+begin_src emacs-lisp :noweb no-export :tangle core-keybindings.el
   ;;; core-keybindings.el <<is a core file that uses lexical binding>> -*-
   <<copyright>>
-
 
   (require 'core-funcs)
 
@@ -6778,7 +6766,6 @@ These chunks define copyright information that is included at the top of every c
   ;;; -*- lexical-binding: t -*-
   ;;; core-micro-state.el --- Spacemacs Core File
   <<copyright>>
-
 
   (defun spacemacs/defface-micro-state-faces ()
     "Define faces for micro-states."
@@ -10736,7 +10723,6 @@ These chunks define copyright information that is included at the top of every c
   ;;
   ;; <<about this file>>
 
-
   (defun spacemacs//transient-state-func-name (name)
     "Return the name of the transient state function."
     (intern (format "spacemacs/%S-transient-state" name)))
@@ -10992,6 +10978,7 @@ These chunks define copyright information that is included at the top of every c
 #+begin_src emacs-lisp :noweb no-export :tangle core-use-package-ext.el
   ;;; core-use-package-ext.el <<is a core file that uses lexical binding>> -*-
   <<copyright>>
+
   (require 'core-fonts-support)
   (require 'core-spacebind)
 
