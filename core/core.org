@@ -47,8 +47,8 @@ can then be broken into smaller noweb chunks.
   }
   FNR == 1 && /^;;;/ {
       if (flag) {
-      print("#+end_src")
-      print("")
+          print("#+end_src")
+          print("")
       }
       print("* "FILENAME)
       print("#+begin_src emacs-lisp :noweb strip-export :tangle "FILENAME)
@@ -303,9 +303,9 @@ These chunks define copyright information that is included at the top of every c
               (setq paths (list nil nil nil nil))
               (push (cons name paths) afiles))
             (if-let* ((idx (cl-loop for i from 0
-                                   for s in slist
-                                   until (string-suffix-p s file)
-                                   finally return i)))
+                                    for s in slist
+                                    until (string-suffix-p s file)
+                                    finally return i)))
                 (setf (nth idx paths) file))))
         (cl-dolist (item (mapcar 'cdr afiles))
           (let ((el (or (nth 0 item) (nth 1 item)))   ; .el or .el.gz file
@@ -3505,7 +3505,7 @@ These chunks define copyright information that is included at the top of every c
   (declare-function configuration-layer/layer-used-p "core-configuration-layer" (layer-name))
   (declare-function spacemacs/set-leader-keys-for-major-mode "core-keybindings" (mode key def &rest bindings))
 
-  #+end_src
+#+end_src
 
 #+begin_src emacs-lisp :noweb no :noweb-ref "signal to reader to replace with a backtrace if relevant"
   "<<BACKTRACE IF RELEVANT>>"
@@ -3641,8 +3641,8 @@ These chunks define copyright information that is included at the top of every c
     (when spacemacs-debug-with-timed-requires
       (require 'time-date)
       (with-current-buffer (get-buffer-create "*load-times*")
-          (insert (format "Threshold set at %.3f seconds\n\n"
-                          spacemacs-debug-timer-threshold))
+        (insert (format "Threshold set at %.3f seconds\n\n"
+                        spacemacs-debug-timer-threshold))
 
         (advice-add 'package-initialize :around #'spacemacs//timed-initialize)
         (advice-add 'require :around #'spacemacs//timed-require)
@@ -3821,9 +3821,9 @@ These chunks define copyright information that is included at the top of every c
               nil t))
 
   (define-key spacemacs/report-issue-mode-map
-    (kbd "C-c C-c") 'spacemacs//report-issue-done)
+              (kbd "C-c C-c") 'spacemacs//report-issue-done)
   (define-key spacemacs/report-issue-mode-map
-    (kbd "C-c C-k") 'kill-buffer)
+              (kbd "C-c C-k") 'kill-buffer)
 
   (with-eval-after-load 'bind-map
     (spacemacs/set-leader-keys-for-major-mode 'spacemacs/report-issue-mode
