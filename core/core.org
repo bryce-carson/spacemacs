@@ -71,7 +71,7 @@ must be escaped or modified, otherwise the noweb chunk reference syntax
 processing in Org will attempt to expand the references and an error will occur
 during export and tangling.
 
-#+begin_src awk
+#+begin_src awk :tangle find-false-noweb-ref.awk
   {
       # Regex to match <<...>>
       while (match($0, /<<[^>]+>>/)) {
