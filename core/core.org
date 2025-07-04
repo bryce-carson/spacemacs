@@ -32,14 +32,6 @@ provided by packages through a recency initiative may work.
 - Package code is not reviewed.
 - Package code responsible for unexpected or inexplicable errors or warnings in Spacemacs might be patched to resolve these.
 
-* TODO Tangling issues
-
-Erroneously changes to the copyright author in these files:
-- core-compilation
-- core-customization
-- core-spacebind
-- core-transite-state
-
 * AWK Scripts
 The following AWK scripts are used to hack on this literate document. They
 bridge the gap between what Org mode can do and what we want.
@@ -148,12 +140,11 @@ These chunks define copyright information that is included at the top of every c
   <<benevolent dictator for life>> & Contributors
 #+end_src
 
-#+begin_src text :noweb yes :noweb-ref "copyright boilerplate"
-  Copyright (c) 2012-<<copyright year>> <<copyright holders>>
+#+begin_src text :noweb yes :noweb-ref "sylvian"
+  <<benevolent dictator for life>> <sylvain.benner@gmail.com>
+#+end_src
 
-  Author: <<benevolent dictator for life>> <sylvain.benner@gmail.com>
-  URL: <<spacemacs ghurl>>
-
+#+begin_src text :noweb yes :noweb-ref "about this file"
   This file is not part of GNU Emacs.
 
   This program is free software; you can redistribute it and/or modify
@@ -168,6 +159,15 @@ These chunks define copyright information that is included at the top of every c
 
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#+end_src
+
+#+begin_src text :noweb yes :noweb-ref "copyright boilerplate"
+  Copyright (c) 2012-<<copyright year>> <<copyright holders>>
+
+  Author: <<sylvian>>
+  URL: <<spacemacs ghurl>>
+
+  <<about this file>>
 #+end_src
 
 #+begin_src emacs-lisp :noweb yes :noweb-ref "copyright"
@@ -248,7 +248,13 @@ These chunks define copyright information that is included at the top of every c
 * core-compilation.el
 #+begin_src emacs-lisp :noweb no-export :tangle core-compilation.el
   ;;; core-compilation.el <<is a core file that uses lexical binding>>; no-byte-compile: t -*-
-  <<copyright>>
+  ;;
+  ;; Copyright (c) 2012-<<copyright year>> <<copyright holders>>
+  ;;
+  ;; Author: Eugene "JAremko" Yaremenko <w3techplayground@gmail.com>
+  ;; URL: <<spacemacs ghurl>>
+  ;;
+  ;; <<about this file>>
 
 
   (require 'cl-lib)
@@ -3175,7 +3181,13 @@ These chunks define copyright information that is included at the top of every c
 * core-customization.el
 #+begin_src emacs-lisp :noweb no-export :tangle core-customization.el
   ;;; core-customization.el <<is a core file that uses lexical binding>> -*-
-  <<copyright>>
+  ;;
+  ;; Copyright (c) 2012-<<copyright year>> <<copyright holders>>
+  ;;
+  ;; Author: Eugene "JAremko" Yaremenko <w3techplayground@gmail.com>
+  ;; URL: <<spacemacs ghurl>>
+  ;;
+  ;; <<about this file>>
 
 
   (require 'validate)
@@ -7473,7 +7485,13 @@ These chunks define copyright information that is included at the top of every c
 * core-spacebind.el
 #+begin_src emacs-lisp :noweb no-export :tangle core-spacebind.el
   ;;; core-spacebind.el <<is a core file that uses lexical binding>> -*-
-  <<copyright>>
+  ;;
+  ;; Copyright (c) 2012-<<copyright year>> <<copyright holders>>
+  ;;
+  ;; Author: Eugene "JAremko" Yaremenko <w3techplayground@gmail.com>
+  ;; URL: <<spacemacs ghurl>>
+  ;;
+  ;; <<about this file>>
 
   (require 'core-load-paths)
   (require 'core-keybindings)
@@ -10706,7 +10724,13 @@ These chunks define copyright information that is included at the top of every c
 #+begin_src emacs-lisp :noweb no-export :tangle core-transient-state.el
   ;;; -*- lexical-binding: t -*-
   ;;; core-transient-state.el --- Spacemacs Core File
-  <<copyright>>
+  ;;
+  ;; Copyright (c) 2012-<<copyright year>> <<copyright holders>>
+  ;;
+  ;; Author: Justin Burkett <justin@burkett.cc>
+  ;; URL: <<spacemacs ghurl>>
+  ;;
+  ;; <<about this file>>
 
 
   (defun spacemacs//transient-state-func-name (name)
