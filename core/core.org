@@ -32,7 +32,7 @@ provided by packages through a recency initiative may work.
 - Package code is not reviewed.
 - Package code responsible for unexpected or inexplicable errors or warnings in Spacemacs might be patched to resolve these.
 
-* AWK Scripts
+* AWK scripts used to simplifly literate programming tasks
 The following AWK scripts are used to hack on this literate document. They
 bridge the gap between what Org mode can do and what we want.
 
@@ -109,7 +109,11 @@ The series of cases can be obtained by grepping core.org for
 defining the noweb chunk which can later be referenced with
 ~<<copyright boilerplate>>~, for example.
 
-* Core
+* Noweb modules used throughout core
+These are noweb chunks used throughout the core files; for now it is just
+copyright and lexical binding file local variables.
+
+** Indicate the file uses lexical binding
 This is part of the first line of every core file (unless that file does not use
 lexical binding).
 
@@ -117,7 +121,7 @@ lexical binding).
   --- Spacemacs Core File -*- lexical-binding: t
 #+end_src
 
-* Copyright
+** Copyright
 These chunks define copyright information that is included at the top of every core file of Spacemacs.
 
 #+begin_src text :noweb-ref "copyright year"
