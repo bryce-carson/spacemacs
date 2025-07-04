@@ -1,4 +1,4 @@
-;;; init.el --- Spacemacs Initialization File -*- no-byte-compile: t; lexical-binding: nil; -*-
+;;; init.el --- Spacemacs Initialization File -*- lexical-binding: nil; no-byte-compile: t; -*-
 ;;
 ;; Copyright (c) 2012-2025 Sylvain Benner & Contributors
 ;;
@@ -40,7 +40,12 @@
 (load spacemacs--last-emacs-version-file t (not init-file-debug))
 ;; Update saved Emacs version.
 (unless (string= spacemacs--last-emacs-version emacs-version)
-  (spacemacs//update-last-emacs-version))
+  ;; Update `spacemacs--last-emacs-version' and its saved value.
+  (with-temp-file spacemacs--last-emacs-version-file
+    (insert (format "(setq spacemacs--last-emacs-version %S)"
+                    (setq spacemacs--last-emacs-version emacs-version)))
+    (make-directory (file-name-directory spacemacs--last-emacs-version-file)
+                    t)))
 
 (if (not (version<= spacemacs-emacs-min-version emacs-version))
     (error (concat "Your version of Emacs (%s) is too old. "

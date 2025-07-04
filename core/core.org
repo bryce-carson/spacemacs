@@ -118,7 +118,11 @@ This is part of the first line of every core file (unless that file does not use
 lexical binding).
 
 #+begin_src text :noweb-ref "is a core file that uses lexical binding"
-  --- Spacemacs Core File -*- lexical-binding: t
+  --- Spacemacs Core File -*- lexical-binding: t;
+#+end_src
+
+#+begin_src text :noweb-ref "is a core file that uses lexical binding and shouldn't be byte-compiled"
+  --- Spacemacs Core File -*- lexical-binding: t; no-byte-compile: t; -*-
 #+end_src
 
 ** Copyright
@@ -249,8 +253,15 @@ These chunks define copyright information that is included at the top of every c
 #+end_src
 
 * core-compilation.el
+At first glance it seems appropriate that this is a feature... but we always
+load it and we don't ever test that the feature is not loaded and take an
+alternate path, so in-lining the functions where possible using noweb makes more
+sense. The use of Emacs features (i.e. provide and require) for code
+categorization and commentary isn't great, and we have now Org mode in the
+literate branch.
+
 #+begin_src emacs-lisp :noweb no-export :tangle core-compilation.el
-  ;;; core-compilation.el <<is a core file that uses lexical binding>>; no-byte-compile: t -*-
+  ;;; core-compilation.el <<is a core file that uses lexical binding and shouldn't be byte-compiled>>
   ;;
   ;; Copyright (c) 2012-<<copyright year>> <<copyright holders>>
   ;;
@@ -322,14 +333,6 @@ These chunks define copyright information that is included at the top of every c
                (setq state 1)))))
         (puthash dir state spacemacs--dir-byte-compile-status)
         state)))
-
-  (defun spacemacs//update-last-emacs-version ()
-    "Update `spacemacs--last-emacs-version' and its saved value."
-    (with-temp-file spacemacs--last-emacs-version-file
-      (insert (format "(setq spacemacs--last-emacs-version %S)"
-                      (setq spacemacs--last-emacs-version emacs-version)))
-      (make-directory (file-name-directory spacemacs--last-emacs-version-file)
-                      t)))
 
   (provide 'core-compilation)
 #+end_src
@@ -5571,6 +5574,11 @@ These chunks define copyright information that is included at the top of every c
 #+end_src
 
 * core-early-funcs.el
+It's one function which is only used within =spacemacs//init=, setting
+keybindings to toggle GUI elements on and off. It should be moved to
+initialization.org---or an intialization section within everything.org---when we
+have that file; then the feature can be removed.
+
 #+begin_src emacs-lisp :noweb no-export :tangle core-early-funcs.el
   ;;; core-early-funcs.el <<is a core file that uses lexical binding>> -*-
   ;;
@@ -6653,112 +6661,136 @@ These chunks define copyright information that is included at the top of every c
 #+end_src
 
 * core-load-paths.el
+#+begin_src text :noweb-ref commentary on the core load paths
+  Define various PATH variables, and set up load path.
+#+end_src
+
 #+begin_src emacs-lisp :noweb no-export :tangle core-load-paths.el
-  ;;; core-load-paths.el --- Spacemacs Core File  -*- no-byte-compile: t; lexical-binding: t -*-
+  ;;; core-load-paths.el <<is a core file that uses lexical binding and shouldn't be byte-compiled>>
   <<copyright>>
 
   ;;; Commentary:
-  ;;
-  ;;    Define various PATH variables, and set up load path.
+  ;; <<commentary on the core load paths>>
 
   ;;; Code:
+  <<path variables and constants>>
 
-  ;;;; PATH variables/constants
+  <<setup cache directories>>
 
-  ;; ~/.emacs.d
-  (defvar spacemacs-start-directory
-    (expand-file-name "../" (file-name-directory (or load-file-name buffer-file-name)))
-    "Spacemacs start directory.")
+  <<load paths>>
 
-  ;; ~/.emacs.d/assets
-  (defconst spacemacs-assets-directory
-    (concat spacemacs-start-directory "assets/")
-    "Spacemacs assets directory.")
+  <<custom theme load path>>
 
-  ;; ~/.emacs.d/core
-  (defconst spacemacs-core-directory
-    (concat spacemacs-start-directory "core/")
-    "Spacemacs core directory.")
+  (provide 'core-load-paths)
+  ;;; core-load-paths.el ends here
+#+end_src
 
-  ;; ~/.emacs.d/core/banners
-  (defconst spacemacs-banner-directory
-    (concat spacemacs-core-directory "banners/")
-    "Spacemacs banners directory.")
+Here's a bunch of paths.
 
-  (defconst spacemacs-banner-official-png
-    (concat spacemacs-banner-directory "img/spacemacs.png")
-    "Spacemacs official banner image.")
+#+begin_src emacs-lisp :noweb-ref "path variables and constants"
+    ;;;; PATH variables/constants
+    ;; ~/.emacs.d
+    (defvar spacemacs-start-directory
+      (expand-file-name "../" (file-name-directory (or load-file-name buffer-file-name)))
+      "Spacemacs start directory.")
 
-  (defconst spacemacs-badge-official-png
-    (concat spacemacs-banner-directory "img/spacemacs-badge.png")
-    "Spacemacs official badge image.")
+    ;; ~/.emacs.d/assets
+    (defconst spacemacs-assets-directory
+      (concat spacemacs-start-directory "assets/")
+      "Spacemacs assets directory.")
 
-  (defconst spacemacs-gplv3-official-png
-    (concat spacemacs-banner-directory "img/gplv3.png")
-    "GPLv3 official badge image.")
+    ;; ~/.emacs.d/core
+    (defconst spacemacs-core-directory
+      (concat spacemacs-start-directory "core/")
+      "Spacemacs core directory.")
 
-  ;; ~/.emacs.d/core/info
-  (defconst spacemacs-info-directory
-    (concat spacemacs-core-directory "info/")
-    "Spacemacs info files directory.")
+    ;; ~/.emacs.d/core/banners
+    (defconst spacemacs-banner-directory
+      (concat spacemacs-core-directory "banners/")
+      "Spacemacs banners directory.")
 
-  ;; ~/.emacs.d/core/info/release-notes
-  (defconst spacemacs-release-notes-directory
-    (concat spacemacs-info-directory "release-notes/")
-    "Spacemacs release notes directory.")
+    (defconst spacemacs-banner-official-png
+      (concat spacemacs-banner-directory "img/spacemacs.png")
+      "Spacemacs official banner image.")
 
-  ;; ~/.emacs.d/doc
-  (defconst spacemacs-docs-directory
-    (concat spacemacs-start-directory "doc/")
-    "Spacemacs documentation directory.")
+    (defconst spacemacs-badge-official-png
+      (concat spacemacs-banner-directory "img/spacemacs-badge.png")
+      "Spacemacs official badge image.")
 
-  ;; ~/.emacs.d/news
-  (defconst spacemacs-news-directory
-    (concat spacemacs-start-directory "news/")
-    "Spacemacs News directory.")
+    (defconst spacemacs-gplv3-official-png
+      (concat spacemacs-banner-directory "img/gplv3.png")
+      "GPLv3 official badge image.")
 
-  ;; ~/.emacs.d/private
-  (defconst spacemacs-private-directory
-    (concat user-emacs-directory "private/")
-    "Spacemacs private directory.")
+    ;; ~/.emacs.d/core/info
+    (defconst spacemacs-info-directory
+      (concat spacemacs-core-directory "info/")
+      "Spacemacs info files directory.")
 
-  ;; ~/.emacs.d/tests
-  (defconst spacemacs-test-directory
-    (concat spacemacs-start-directory "tests/")
-    "Spacemacs tests directory.")
+    ;; ~/.emacs.d/core/info/release-notes
+    (defconst spacemacs-release-notes-directory
+      (concat spacemacs-info-directory "release-notes/")
+      "Spacemacs release notes directory.")
 
-  ;; ~/.emacs.d/.cache
-  ;;
-  ;; This is based on `user-emacs-directory', not `spacemacs-start-directory',
-  ;; because Spacemacs may be installed to a shared location and this directory
-  ;; and its children should be per-user.
-  (defconst spacemacs-cache-directory
-    (concat user-emacs-directory ".cache/")
-    "Spacemacs storage area for persistent files.")
+    ;; ~/.emacs.d/doc
+    (defconst spacemacs-docs-directory
+      (concat spacemacs-start-directory "doc/")
+      "Spacemacs documentation directory.")
 
-  ;; ~/.emacs.d/.cache/auto-save
-  (defconst spacemacs-auto-save-directory
-    (concat spacemacs-cache-directory "auto-save/")
-    "Spacemacs auto-save directory.")
+    ;; ~/.emacs.d/news
+    (defconst spacemacs-news-directory
+      (concat spacemacs-start-directory "news/")
+      "Spacemacs News directory.")
 
-  
+    ;; ~/.emacs.d/private
+    (defconst spacemacs-private-directory
+      (concat user-emacs-directory "private/")
+      "Spacemacs private directory.")
+
+    ;; ~/.emacs.d/tests
+    (defconst spacemacs-test-directory
+      (concat spacemacs-start-directory "tests/")
+      "Spacemacs tests directory.")
+
+    ;; ~/.emacs.d/.cache
+    ;;
+    ;; This is based on `user-emacs-directory', not `spacemacs-start-directory',
+    ;; because Spacemacs may be installed to a shared location and this directory
+    ;; and its children should be per-user.
+    (defconst spacemacs-cache-directory
+      (concat user-emacs-directory ".cache/")
+      "Spacemacs storage area for persistent files.")
+
+    ;; ~/.emacs.d/.cache/auto-save
+    (defconst spacemacs-auto-save-directory
+      (concat spacemacs-cache-directory "auto-save/")
+      "Spacemacs auto-save directory.")
+#+end_src
+
+TODO: explain this?
+
+#+begin_src emacs-lisp :noweb-ref "setup cache directories"
   ;;;; Setup cache directories
-
   (make-directory spacemacs-cache-directory 'parents)
-  
+  #+end_src
+
+Add all of the subdirectories which contain elisp to the built-in ~load-path~
+list. Create errors for any directories that cannot be added.
+
+#+begin_src emacs-lisp :noweb-ref "load paths"
   ;;;; Load Paths
   (dolist (subdirectory '(nil "libs/" "libs/spacemacs-theme/" "libs/forks/"))
     (let ((path (concat spacemacs-core-directory subdirectory)))
       (if (file-exists-p path)
          (add-to-list 'load-path path)
        (error "The directory %s does not exist and cannot be added to the `load-path'." path))))
+#+end_src
 
+Add to the built-in list the directory wherein Spacemacs themes are stored.
+
+#+begin_src emacs-lisp :noweb-ref "custom theme load path"
   ;;;; Themes
-  (add-to-list 'custom-theme-load-path (concat spacemacs-core-directory
-                                               "libs/spacemacs-theme/"))
-
-  (provide 'core-load-paths)
-  ;;; core-load-paths.el ends here
+  (add-to-list 'custom-theme-load-path
+   (concat spacemacs-core-directory "libs/spacemacs-theme/"))
 #+end_src
 
 * core-micro-state.el
@@ -7027,7 +7059,10 @@ These chunks define copyright information that is included at the top of every c
   (provide 'core-micro-state)
 #+end_src
 
-* core-progress-bar.el
+* TODO core-progress-bar.el
+Why is this /an emacs feature/ at all? There's no good reason to define this
+separately from the spacemacs buffer /feature/.
+
 #+begin_src emacs-lisp :noweb no-export :tangle core-progress-bar.el
   ;;; core-progress-bar.el <<is a core file that uses lexical binding>> -*-
   <<copyright>>
@@ -7957,7 +7992,6 @@ These chunks define copyright information that is included at the top of every c
   <<copyright>>
 
   ;;; Code:
-
   (require 'core-dotspacemacs)
   (eval-when-compile
     (defvar dotspacemacs-distribution)
@@ -7972,8 +8006,23 @@ These chunks define copyright information that is included at the top of every c
     (defvar spacemacs-gplv3-official-png)
     (defvar spacemacs-version)
     (defvar configuration-layer-error-count))
-  
 
+  <<define the components of the spacemacs buffer>>
+
+  (provide 'core-spacemacs-buffer)
+  ;;; core-spacemacs-buffer ends here
+#+end_src
+
+** Definitions
+All the definitions in the file are given here.
+
+#+begin_src emacs-lisp :noweb no-export :noweb-ref "define the components of the spacemacs buffer"
+  <<variables defined for the spacemacs buffer>>
+
+  <<functions and macros for the spacemacs buffer>>
+#+end_src
+
+#+begin_src emacs-lisp :noweb no-export :noweb-ref "variables defined for the spacemacs buffer"
   (defconst spacemacs-buffer-version-info "0.999"
     "Current version used to display addition release information.")
 
@@ -8078,7 +8127,9 @@ These chunks define copyright information that is included at the top of every c
       (define-key map "q" 'quit-window)
       map)
     "Keymap for spacemacs-buffer mode.")
+#+end_src
 
+#+begin_src emacs-lisp :noweb no-export :noweb-ref "functions and macros for the spacemacs buffer"
   (define-derived-mode spacemacs-buffer-mode special-mode "Spacemacs buffer"
     "Spacemacs major mode for startup screen.
 
@@ -9630,10 +9681,6 @@ These chunks define copyright information that is included at the top of every c
     (interactive)
     (spacemacs/home)
     (delete-other-windows))
-
-  (provide 'core-spacemacs-buffer)
-
-  ;;; core-spacemacs-buffer ends here
 #+end_src
 
 * core-spacemacs.el
@@ -10975,6 +11022,8 @@ These chunks define copyright information that is included at the top of every c
 #+end_src
 
 * core-use-package-ext.el
+Where any page breaks existed the file has been broken into subsections of chunks.
+
 #+begin_src emacs-lisp :noweb no-export :tangle core-use-package-ext.el
   ;;; core-use-package-ext.el <<is a core file that uses lexical binding>> -*-
   <<copyright>>
@@ -11022,9 +11071,12 @@ These chunks define copyright information that is included at the top of every c
                                         (substring (format "%s" keyword) 1)))))
               (push `(add-hook ',hook (lambda nil ,@body t)) expanded-forms)))))
       `(progn ,@expanded-forms)))
+#+end_src
 
-  
+** Subsection one
+This is the first subsection.
 
+#+begin_src emacs-lisp :noweb no-export :tangle core-use-package-ext.el
   (defun spacemacs/use-package-extend ()
     "Extend use-package with custom keywords."
     (when (and (require 'use-package nil t) (not spacemacs--use-package-extended))
@@ -11124,13 +11176,16 @@ These chunks define copyright information that is included at the top of every c
 #+end_src
 
 * core-versions.el
+#+begin_src text :noweb-ref Core Versions Commentary
+  Define Spacemacs version and minimum supported Emacs version.
+#+end_src
+
 #+begin_src emacs-lisp :noweb no-export :tangle core-versions.el
   ;;; core-versions.el --- Spacemacs Core File  -*- lexical-binding: t -*-
   <<copyright>>
 
   ;;; Commentary:
-  ;;
-  ;;    Define Spacemacs version and minimum supported Emacs version.
+  ;; <<Core Versions Commentary>>
 
   (defconst spacemacs-version          "0.999.0" "Spacemacs version.")
   (defconst spacemacs-emacs-min-version   "28.2" "Minimal version of Emacs.")
