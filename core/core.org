@@ -1,3 +1,37 @@
+#+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-bigblow.setup
+
+* TODO Ideas
+
+** Cryogenic Emacs Lisp TARchive In Code
+- CELTIC :: Cryogenic Emacs Lisp TARchive In Code
+** Cryogenic ELPA
+- KEPLER :: Labelled Experimental Register of Compatible Emacs Packages
+- KELP A :: Cryogenic Emacs Lisp Package A
+- KELP B :: Cryogenic Emacs Lisp Package B
+- KELP C :: Cryogenic Emacs Lisp Package C
+
+CELPA is a series of rolling package sets frozen in time. Each set in the series
+was (re-)frozen with a "grade" indicating the trustworthiness or /presumed lack/
+of security exposure through supply-chain attacks of /the package set/. Emacs is
+a complex software environment and has inherent security flaws that cannot be
+remedied; avoiding security exposure through limiting the attack surface
+provided by packages through a recency initiative may work.
+
+- KELP 'A' :: the highest grade given to a package set. No security violations
+  are known; bug fixes are introduced here.
+- KELP 'B' :: the second-highest package set grading. No security violations are
+  known; no bugs are fixed.
+- KELP 'F' :: the worst grading a set may receive. The set is untrusted: unknown
+  security violations /are assumed to exist/. Package updates from MELPA are
+  automatically integrated into the set on a weekly basis.
+
+*** Integration testing for stability and security
+
+- Integrating package code into your Emacs configuration carries unknown security risks.
+- Spacemacs is a community-maintained configuration framework.
+- Package code is not reviewed.
+- Package code responsible for unexpected or inexplicable errors or warnings in Spacemacs might be patched to resolve these.
+
 * TODO Tangling issues
 
 Erroneously changes to the copyright author in these files:
@@ -6,18 +40,28 @@ Erroneously changes to the copyright author in these files:
 - core-spacebind
 - core-transite-state
 
-* AWK
-
+* AWK Scripts
 The following AWK scripts are used to hack on this literate document. They
 bridge the gap between what Org mode can do and what we want.
 
-#+begin_src awk
+** Concatenate elisp files into a single org mode document
+This script, =chunk-it.awk=, emits an org document constructed from the input (Emacs Lisp) files,
+with each elisp file being a top-level section and a single source chunk, which
+can then be broken into smaller noweb chunks.
+
+#+begin_src awk :tangle chunk-it.awk
+  BEGIN {
+      flag = 0
+  }
   FNR == 1 && /^;;;/ {
+      if (flag) {
       print("#+end_src")
       print("")
+      }
       print("* "FILENAME)
       print("#+begin_src emacs-lisp :noweb strip-export :tangle "FILENAME)
       print($0)
+      flag = 1
   }
   FNR > 1 {
       print($0)
@@ -27,6 +71,13 @@ bridge the gap between what Org mode can do and what we want.
       print("")
   }
 #+end_src
+
+** Identify noweb chunk reference-like strings in the document
+This script is used to identify instances of the strings ~<<~ and ~>>~ on the
+same line, which are not actual noweb chunk-references; when these occur they
+must be escaped or modified, otherwise the noweb chunk reference syntax
+processing in Org will attempt to expand the references and an error will occur
+during export and tangling.
 
 #+begin_src awk
   {
@@ -61,12 +112,17 @@ bridge the gap between what Org mode can do and what we want.
   }
 #+end_src
 
+The series of cases can be obtained by grepping core.org for
+="^#begin_src .*:noweb-ref \(.*\)=". The first matching group is the text
+defining the noweb chunk which can later be referenced with
+~<<copyright boilerplate>>~, for example.
+
 * Core
 This is part of the first line of every core file (unless that file does not use
 lexical binding).
 
 #+begin_src text :noweb-ref "is a core file that uses lexical binding"
-  --- Spacemacs Core File -*- lexical-binding: t;
+  --- Spacemacs Core File -*- lexical-binding: t
 #+end_src
 
 * Copyright
@@ -123,6 +179,7 @@ These chunks define copyright information that is included at the top of every c
 #+begin_src emacs-lisp :noweb no-export :tangle core-command-line.el
   ;;; core-command-line.el <<is a core file that uses lexical binding>> -*-
   <<copyright>>
+
 
   (defvar spacemacs-force-resume-layouts nil
     "If non-nil force the current emacs instance to resume layouts
@@ -190,7 +247,7 @@ These chunks define copyright information that is included at the top of every c
 
 * core-compilation.el
 #+begin_src emacs-lisp :noweb no-export :tangle core-compilation.el
-  ;;; core-compilation.el <<is a core file that uses lexical binding>> no-byte-compile: t -*-
+  ;;; core-compilation.el <<is a core file that uses lexical binding>>; no-byte-compile: t -*-
   <<copyright>>
 
 
@@ -3434,8 +3491,17 @@ These chunks define copyright information that is included at the top of every c
 
   #+end_src
 
+#+begin_src emacs-lisp :noweb no :noweb-ref "signal to reader to replace with a backtrace if relevant"
+  "<<BACKTRACE IF RELEVANT>>"
+#+end_src
+
+#+begin_src emacs-lisp :noweb no :noweb-ref "font lock comment face string"
+  "\\(<<.*?>>\\)"
+#+end_src
+
 #+name: DEBUG FACILITY
 #+begin_src emacs-lisp :noweb no-export :tangle core-debug.el
+  
   ;;;; Debug Facility
 
   (defvar spacemacs-debug-timer-threshold 0.15
@@ -3687,7 +3753,7 @@ These chunks define copyright information that is included at the top of every c
                            (buffer-substring-no-properties
                             (point-min)
                             (min (point-max) 1000)))
-                       "<<BACKTRACE IF RELEVANT>>"))
+                       <<signal to reader to replace with a backtrace if relevant>>))
           (last-keys
            (if (and arg (y-or-n-p "Do you really want to include your last pressed keys, which may include some sensitive data? "))
                (concat (spacemacs//describe-last-keys-string) "\n")
@@ -3733,7 +3799,7 @@ These chunks define copyright information that is included at the top of every c
   \\{spacemacs/report-issue-mode-map}
   "
     (font-lock-add-keywords 'spacemacs/report-issue-mode
-                            '(("\\(<<.*?>>\\)" . 'font-lock-comment-face)))
+                            '((<<font lock comment face string>> . 'font-lock-comment-face)))
     (add-hook 'kill-buffer-query-functions
               'spacemacs//report-issue-kill-buffer-query
               nil t))
@@ -5497,6 +5563,8 @@ These chunks define copyright information that is included at the top of every c
 * core-early-funcs.el
 #+begin_src emacs-lisp :noweb no-export :tangle core-early-funcs.el
   ;;; core-early-funcs.el <<is a core file that uses lexical binding>> -*-
+  ;;
+  ;; This file is sourced by emacs early-init.el file.
   <<copyright>>
 
   (defun spacemacs//toggle-gui-elements (&optional on-off)
@@ -10896,7 +10964,6 @@ These chunks define copyright information that is included at the top of every c
 #+begin_src emacs-lisp :noweb no-export :tangle core-use-package-ext.el
   ;;; core-use-package-ext.el <<is a core file that uses lexical binding>> -*-
   <<copyright>>
-
   (require 'core-fonts-support)
   (require 'core-spacebind)
 
