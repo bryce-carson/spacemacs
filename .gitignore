@@ -101,3 +101,4 @@ gtags.files
 eln-cache/
 meghanada/
 vimish-fold/
+/core/*.el
