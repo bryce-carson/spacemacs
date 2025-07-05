@@ -5,36 +5,6 @@
 ** Aggressively "in the large" literate programming
 ** Pre- and post-tangle hooks are used to run Emacs Lisp, AWK, etc.
 ** Obsessively documented ("literate programming in the large"-style)
-** Cryogenic Emacs Lisp TARchive In Code
-- CELTIC :: Cryogenic Emacs Lisp TARchive In Code
-** Cryogenic ELPA
-- KEPLER :: Labelled Experimental Register of Compatible Emacs Packages
-- KELP A :: Cryogenic Emacs Lisp Package A
-- KELP B :: Cryogenic Emacs Lisp Package B
-- KELP C :: Cryogenic Emacs Lisp Package C
-
-CELPA is a series of rolling package sets frozen in time. Each set in the series
-was (re-)frozen with a "grade" indicating the trustworthiness or /presumed lack/
-of security exposure through supply-chain attacks of /the package set/. Emacs is
-a complex software environment and has inherent security flaws that cannot be
-remedied; avoiding security exposure through limiting the attack surface
-provided by packages through a recency initiative may work.
-
-- KELP 'A' :: the highest grade given to a package set. No security violations
-  are known; bug fixes are introduced here.
-- KELP 'B' :: the second-highest package set grading. No security violations are
-  known; no bugs are fixed.
-- KELP 'F' :: the worst grading a set may receive. The set is untrusted: unknown
-  security violations /are assumed to exist/. Package updates from MELPA are
-  automatically integrated into the set on a weekly basis.
-
-*** Integration testing for stability and security
-
-- Integrating package code into your Emacs configuration carries unknown security risks.
-- Spacemacs is a community-maintained configuration framework.
-- Package code is not reviewed.
-- Package code responsible for unexpected or inexplicable errors or warnings in Spacemacs might be patched to resolve these.
-
 * AWK scripts used to simplifly literate programming tasks
 The following AWK scripts are used to hack on this literate document. They
 bridge the gap between what Org mode can do and what we want.
@@ -313,10 +283,6 @@ literate branch.
           dotspacemacs-layer-dir
         spacemacs-private-directory))
     "Spacemacs default directory for private layers.")
-
-  (defconst configuration-layer-lock-file
-    (concat spacemacs-start-directory ".lock")
-    "Absolute path to the lock file.")
 
   (defvar configuration-layer-stable-elpa-version spacemacs-version
     "Version of ELPA stable repository. This value is aimed to be defined in
@@ -688,7 +654,7 @@ literate branch.
 
   (defun configuration-layer/load-lock-file ()
     "Load the .lock file"
-    (configuration-layer/load-file configuration-layer-lock-file))
+    (configuration-layer/load-file (concat spacemacs-start-directory ".lock")))
 
   (defun configuration-layer/initialize ()
     "Initialize `package.el'."
