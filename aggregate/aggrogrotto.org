@@ -1,4 +1,3 @@
-# -*- org-babel-pre-tangle-hook: (lambda () (unless (file-exists-p "banners") (make-directory "banners")) (unless (file-exists-p "templates") (make-directory "templates"))) -*-
 #+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-bigblow.setup
 
 * TODO Ideas
