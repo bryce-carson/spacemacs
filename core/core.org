@@ -39,7 +39,9 @@ provided by packages through a recency initiative may work.
 The following AWK scripts are used to hack on this literate document. They
 bridge the gap between what Org mode can do and what we want.
 
-** Concatenate elisp files into a single org mode document
+** TODO Concatenate elisp files into a single org mode document
+TODO: It would be nice to support directories recursively.
+
 This script, =chunk-it.awk=, emits an org document constructed from the input (Emacs Lisp) files,
 with each elisp file being a top-level section and a single source chunk, which
 can then be broken into smaller noweb chunks.
