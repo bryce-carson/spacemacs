@@ -62,7 +62,7 @@ during export and tangling.
           case "copyright year":
           case "benevolent dictator for life":
           case "git host":
-          case "spacemacs ghurl":
+          case "aggrogrotto url":
           case "copyright holders":
           case "copyright boilerplate":
           case "copyright":
@@ -168,7 +168,7 @@ literate branch.
   ;; Copyright (c) 2012-<<copyright year>> <<copyright holders>>
   ;;
   ;; Author: Eugene "JAremko" Yaremenko <w3techplayground@gmail.com>
-  ;; URL: <<spacemacs ghurl>>
+  ;; URL: <<aggrogrotto url>>
   ;;
   ;; <<about this file>>
 
@@ -3091,7 +3091,7 @@ literate branch.
   ;; Copyright (c) 2012-<<copyright year>> <<copyright holders>>
   ;;
   ;; Author: Eugene "JAremko" Yaremenko <w3techplayground@gmail.com>
-  ;; URL: <<spacemacs ghurl>>
+  ;; URL: <<aggrogrotto url>>
   ;;
   ;; <<about this file>>
 
@@ -7362,7 +7362,7 @@ Add to the built-in list the directory wherein Spacemacs themes are stored.
   ;; Copyright (c) 2012-<<copyright year>> <<copyright holders>>
   ;;
   ;; Author: Eugene "JAremko" Yaremenko <w3techplayground@gmail.com>
-  ;; URL: <<spacemacs ghurl>>
+  ;; URL: <<aggrogrotto url>>
   ;;
   ;; <<about this file>>
 
@@ -7862,6 +7862,45 @@ it. It could use a rewrite, in my opinion.
 
   (provide 'core-spacemacs-buffer)
   ;;; core-spacemacs-buffer ends here
+#+end_src
+
+#+begin_src text :tangle info/quickhelp.txt
+  Press [TAB] or [J] to move to next button.
+
+  Press [Shift-TAB] or [K] to move to previous button.
+
+  Press [c] to jump to org-agenda list if it is enabled.
+
+  Press [b] to jump to bookmark list if it is enabled.
+
+  Press [d] to jump to org-todo list if it is enabled.
+
+  Press [e] to jump to error list.
+
+  Press [m] to jump to the top menu.
+
+  Press [o] to jump to any link or button.
+
+  Press [p] to jump to project list if it is enabled.
+
+  Press [r] to jump to recent file list if it is enabled.
+
+  Press [w] to jump to warning list.
+
+  Press [SPC] (in Vim editing style) or [Alt-m] (in Emacs editing style) to access
+  Spacemacs commands (will list only the Vim style ones for the rest of this
+  help).
+
+  Press [SPC f e d] (or [Alt-m f e d] in Emacs style) to access .spacemacs file.
+
+  Press [SPC h SPC] to access a list of documentation and supported layers. You
+  can type anything to narrow to a specific feature i.e. "python" for Python
+  layer. There are multiple lists and you can press [Ctrl-o] to switch between
+  them.
+
+  When reading a document, you can use [SPC s j] to jump to a heading.
+
+  Please consult Spacemacs documentation from [SPC h SPC] for more details.
 #+end_src
 
 *** Definitions
@@ -10848,7 +10887,7 @@ separately from the spacemacs buffer /feature/.
   ;; Copyright (c) 2012-<<copyright year>> <<copyright holders>>
   ;;
   ;; Author: Justin Burkett <justin@burkett.cc>
-  ;; URL: <<spacemacs ghurl>>
+  ;; URL: <<aggrogrotto url>>
   ;;
   ;; <<about this file>>
 
@@ -18602,9 +18641,9 @@ VALUE is validated against SYMBOL's custom type.
   ;;; spacemacs-theme.el ends here
 #+end_src
 
-* Noweb modules used throughout core
-These are noweb chunks used throughout the core files; for now it is just
-copyright and lexical binding file local variables.
+* Noweb modules
+These are noweb chunks which are referenced in many places; for now it
+is just copyright and lexical binding file local variables.
 
 ** Indicate the file uses lexical binding
 This is part of the first line of every core file (unless that file does not use
@@ -18619,30 +18658,23 @@ lexical binding).
 #+end_src
 
 ** Copyright
-These chunks define copyright information that is included at the top of every core file of Spacemacs.
+These chunks define copyright information that is included at the top
+of every core file of Aggrogrotto.
 
 #+begin_src text :noweb-ref "copyright year"
   2025
 #+end_src
 
-#+begin_src text :noweb-ref "benevolent dictator for life"
-  Sylvain Benner
-#+end_src
-
-#+begin_src text :noweb-ref "git host"
-  github.com
-#+end_src
-
-#+begin_src text :noweb yes :noweb-ref "spacemacs ghurl"
-  https://<<git host>>/syl20bnr/spacemacs
+#+begin_src text :noweb yes :noweb-ref "aggrogrotto url"
+  https://github.com/bryce-carson/aggrogrotto
 #+end_src
 
 #+begin_src text :noweb yes :noweb-ref "copyright holders"
-  <<benevolent dictator for life>> & Contributors
+  Bryce Carson & Contributors
 #+end_src
 
-#+begin_src text :noweb yes :noweb-ref "sylvian"
-  <<benevolent dictator for life>> <sylvain.benner@gmail.com>
+#+begin_src text :noweb yes :noweb-ref "bryce"
+  Bryce Carson <bryce.a.carson@gmail.com>
 #+end_src
 
 #+begin_src text :noweb yes :noweb-ref "about this file"
@@ -18663,10 +18695,10 @@ These chunks define copyright information that is included at the top of every c
 #+end_src
 
 #+begin_src text :noweb yes :noweb-ref "copyright boilerplate"
-  Copyright (c) 2012-<<copyright year>> <<copyright holders>>
+  Copyright (c) <<copyright year>> <<copyright holders>>
 
-  Author: <<sylvian>>
-  URL: <<spacemacs ghurl>>
+  Author: <<bryce>>
+  URL: <<aggrogrotto url>>
 
   <<about this file>>
 #+end_src
@@ -18677,12 +18709,12 @@ These chunks define copyright information that is included at the top of every c
 #+end_src
 
 #+begin_src text :noweb strip-export :tangle ../COPYRIGHT
-  Spacemacs is licensed under GPL 3.0 terms, except as otherwise noted below
-  and/or in individual files.
+  Aggrogrotto is licensed under GPL 3.0 terms, except as otherwise noted
+  below and/or in individual files.
 
-  Spacemacs includes packages and snippets written by third parties.
-  The following third party packages/snippets are included, and carry their own
-  copyright notices and license terms:
+  Aggrogrotto includes packages and snippets written by third parties.
+  The following third party packages/snippets are included, and carry
+  their own copyright notices and license terms:
 
   ,* erc-yank, under layers/+chat/erc/local/erc-yank.
 
@@ -18849,53 +18881,18 @@ These chunks define copyright information that is included at the top of every c
 #+end_src
 
 * FILES
-#+begin_src text :tangle info/quickhelp.txt
-  Press [TAB] or [J] to move to next button.
-
-  Press [Shift-TAB] or [K] to move to previous button.
-
-  Press [c] to jump to org-agenda list if it is enabled.
-
-  Press [b] to jump to bookmark list if it is enabled.
-
-  Press [d] to jump to org-todo list if it is enabled.
-
-  Press [e] to jump to error list.
-
-  Press [m] to jump to the top menu.
-
-  Press [o] to jump to any link or button.
-
-  Press [p] to jump to project list if it is enabled.
-
-  Press [r] to jump to recent file list if it is enabled.
-
-  Press [w] to jump to warning list.
-
-  Press [SPC] (in Vim editing style) or [Alt-m] (in Emacs editing style) to access
-  Spacemacs commands (will list only the Vim style ones for the rest of this
-  help).
-
-  Press [SPC f e d] (or [Alt-m f e d] in Emacs style) to access .spacemacs file.
-
-  Press [SPC h SPC] to access a list of documentation and supported layers. You
-  can type anything to narrow to a specific feature i.e. "python" for Python
-  layer. There are multiple lists and you can press [Ctrl-o] to switch between
-  them.
-
-  When reading a document, you can use [SPC s j] to jump to a heading.
-
-  Please consult Spacemacs documentation from [SPC h SPC] for more details.
+** init.el
+#+begin_src :noweb-ref aggro init file
+ init.el --- Aggrogrotto Initialization File -*- no-byte-compile: t; lexical-binding: nil; -*-
 #+end_src
 
-** init.el
 #+begin_src emacs-lisp :noweb strip-export :tangle ../init.el
-  ;;; init.el --- Spacemacs Initialization File -*- lexical-binding: nil; no-byte-compile: t; -*-
+  ;;; <<aggro init file>>
   ;;
   ;; Copyright (c) 2012-<<copyright year>> <<copyright holders>>
   ;;
-  ;; Author: <<sylvian>>
-  ;; URL: <<ghurl>>
+  ;; Author: <<bryce>>
+  ;; URL: <<aggrogrotto url>>
   ;;
   ;; <<about this file>>
 
@@ -18968,12 +18965,12 @@ package manager before loading the init file, so this file is neither needed nor
 loaded on those versions.
 
 #+begin_src emacs-lisp :noweb strip-export :tangle ../early-init.el
-  ;;; early-init.el --- Spacemacs Early Init File -*- no-byte-compile: t; lexical-binding: nil; -*-
+  ;;; early-<<aggro init file>>
   ;;
   ;; Copyright (c) 2020-<<copyright year>> <<copyright holders>>
   ;;
-  ;; Author: Miciah Dashiel Butler Masters <miciah.masters@gmail.com>
-  ;; URL: <<ghurl>>
+  ;; Author: <<bryce>>
+  ;; URL: <<aggrogrotto url>>
   ;;
   ;; <<about this file>>
 
@@ -20392,7 +20389,7 @@ https://www.gnu.org/software/emacs/manual/html_node/emacs/Early-Init-File.html
   ##
   ## Copyright (c) 2012-<<copyright year>> <<copyright holders>>
   ##
-  ## Author: <<sylvian>>
+  ## Author: <<sylvain>>
   ## URL: <<ghurl>>
   ##
   ## <<about this file>>
