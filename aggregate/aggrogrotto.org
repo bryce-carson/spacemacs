@@ -5,7 +5,31 @@
 ** Aggressively "in the large" literate programming
 ** Pre- and post-tangle hooks are used to run Emacs Lisp, AWK, etc.
 ** Obsessively documented ("literate programming in the large"-style)
-* AWK scripts used to simplifly literate programming tasks
+* Scripts used to simplifly literate programming tasks
+The following LISP is used to create the directory tree expected by Aggrogrotto
+if it doesn't exist. The first element of the results is /expected to be nil/.
+
+#+name: Create Aggrogrotto directory tree
+#+begin_src emacs-lisp
+  (mapcar (lambda (d) (when d (f-directory? d)))
+          (seq-uniq
+           (mapcar (lambda (element-parameters)
+                     (when (string-match ":tangle \\(.*\\)/" element-parameters)
+                       (let* ((aggrogrotto-dir (f-dirname (buffer-file-name)))
+                              (dir (f-dirname (substring element-parameters (match-beginning 1))))
+                              (dir-real (f-relative dir)))
+                         (unless (f-directory? dir-real)
+                           (make-directory dir-real))
+                         dir-real)))
+                   (org-element-map (org-element-parse-buffer) 'src-block
+                     (lambda (srcblock)
+                       (let ((params (org-element-property :parameters srcblock)))
+                         params))))))
+#+end_src
+
+#+RESULTS: Create Aggrogrotto directory tree
+| nil | t | t | t | t | t | t |
+
 The following AWK scripts are used to hack on this literate document. They
 bridge the gap between what Org mode can do and what we want.
 
