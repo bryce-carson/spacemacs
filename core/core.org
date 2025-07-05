@@ -1,10 +1,6 @@
 # -*- org-babel-pre-tangle-hook: (lambda () (unless (file-exists-p "banners") (make-directory "banners")) (unless (file-exists-p "templates") (make-directory "templates"))) -*-
 #+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-bigblow.setup
 
-* Changelog
-- core-progress-bar.el was refiled under core-spacemacs-buffer.el, but it still isn't re-integrated therein.
-- info/release-notes is not reproduced
-
 * README
 #+begin_src markdown :noweb strip-export :tangle ../README.md
   <a name="top" id="fork-destination-box"></a>
@@ -676,25 +672,12 @@
 #+begin_src makefile :noweb strip-export :tangle ../spacemacs.mk
   ## Makefile --- Spacemacs master makefile
   ##
-  ## Copyright (c) 2012-2025 Sylvain Benner & Contributors
+  ## Copyright (c) 2012-<<copyright year>> <<copyright holders>>
   ##
-  ## Author: Sylvain Benner <sylvain.benner@gmail.com>
-  ## URL: https://github.com/syl20bnr/spacemacs
+  ## Author: <<sylvian>>
+  ## URL: <<ghurl>>
   ##
-  ## This file is not part of GNU Emacs.
-  ##
-  ## This program is free software; you can redistribute it and/or modify
-  ## it under the terms of the GNU General Public License as published by
-  ## the Free Software Foundation, either version 3 of the License, or
-  ## (at your option) any later version.
-  ##
-  ## This program is distributed in the hope that it will be useful,
-  ## but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  ## GNU General Public License for more details.
-  ##
-  ## You should have received a copy of the GNU General Public License
-  ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  ## <<about this file>>
 
 
   EMACS_DIR = $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
@@ -734,179 +717,6 @@
   endif
 
   .PHONY: test unit_tests func_tests
-#+end_src
-
-* COPYRIGHT
-#+begin_src text :noweb strip-export :tangle ../COPYRIGHT
-  Spacemacs is licensed under GPL 3.0 terms, except as otherwise noted below
-  and/or in individual files.
-
-  Spacemacs includes packages and snippets written by third parties.
-  The following third party packages/snippets are included, and carry their own
-  copyright notices and license terms:
-
-  ,* erc-yank, under layers/+chat/erc/local/erc-yank.
-
-      Copyright (C) 2012 John Wiegley <jwiegley@gmail.com>
-
-      This program is free software; you can redistribute it and/or
-      modify it under the terms of the GNU General Public License as
-      published by the Free Software Foundation; either version 2, or (at
-      your option) any later version.
-
-      This program is distributed in the hope that it will be useful, but
-      WITHOUT ANY WARRANTY; without even the implied warranty of
-      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-      General Public License for more details.
-
-      You should have received a copy of the GNU General Public License
-      along with GNU Emacs; see the file COPYING.  If not, write to the
-      Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-      Boston, MA 02111-1307, USA.
-
-  ,* evil-tmux-navigator, under layers/+tools/tmux/local/tmux.
-
-      Copyright (c) 2019 Keith Smiley <http://keith.so>
-
-      Permission is hereby granted, free of charge, to any person obtaining a copy of
-      this software and associated documentation files (the 'Software'), to deal in
-      the Software without restriction, including without limitation the rights to
-      use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
-      the Software, and to permit persons to whom the Software is furnished to do so,
-      subject to the following conditions:
-
-      The above copyright notice and this permission notice shall be included in all
-      copies or substantial portions of the Software.
-
-      THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-      IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
-      FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-      COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
-      IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-      CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-  ,* org-async-init.el, under layers/+emacs/org/local.
-
-      Copyright (C) T. Verron.
-
-      Published at <http://superuser.com/a/898717/702698>.
-
-      Licensed under CC BY-SA 3.0 <https://creativecommons.org/licenses/by-sa/3.0/>.
-
-  ,* pylookup, under layers/+lang/python/local/pylookup.
-
-      Copyright (C) 2010-2013 Taesoo Kim.
-
-      This program is free software: you can redistribute it and/or modify
-      it under the terms of the GNU General Public License as published by
-      the Free Software Foundation, either version 3 of the License, or
-      (at your option) any later version.
-
-      This program is distributed in the hope that it will be useful,
-      but WITHOUT ANY WARRANTY; without even the implied warranty of
-      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-      GNU General Public License for more details.
-
-      You should have received a copy of the GNU General Public License
-      along with this program. If not, see <https://www.gnu.org/licenses/>.
-
-  ,* vim-colors.el, under layers/+spacemacs/spacemacs-modeline/local/vim-powerline.
-
-      Adapted from default color scheme of
-      vim-powerline <https://github.com/Lokaltog/vim-powerline> and is move to
-      powerline <https://github.com/powerline/powerline>.
-
-      Copyright (C) 2013 Kim Silkebækken and other contributors.
-      https://github.com/powerline/powerline
-
-      Permission is hereby granted, free of charge, to any person obtaining
-      a copy of this software and associated documentation files (the
-      "Software"), to deal in the Software without restriction, including
-      without limitation the rights to use, copy, modify, merge, publish,
-      distribute, sublicense, and/or sell copies of the Software, and to
-      permit persons to whom the Software is furnished to do so, subject to
-      the following conditions:
-
-      The above copyright notice and this permission notice shall be
-      included in all copies or substantial portions of the Software.
-
-      THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-      EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-      MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-      IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-      CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-      TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-      SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-  ,* nav-flash, under layers/+misc/nav-flash
-
-      This is ported from Doom Emacs <https://github.com/doomemacs/doomemacs>
-      and originally licensed under MIT License.
-
-      It had since been modified and relicensed to GPL 3.0 License.
-
-      Below is the original MIT License.
-
-      The MIT License (MIT)
-
-      Copyright (c) 2014-2021 Henrik Lissner.
-
-      Permission is hereby granted, free of charge, to any person obtaining
-      a copy of this software and associated documentation files (the
-      "Software"), to deal in the Software without restriction, including
-      without limitation the rights to use, copy, modify, merge, publish,
-      distribute, sublicense, and/or sell copies of the Software, and to
-      permit persons to whom the Software is furnished to do so, subject to
-      the following conditions:
-
-      The above copyright notice and this permission notice shall be
-      included in all copies or substantial portions of the Software.
-
-      THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-      EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-      MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-      IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-      CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-      TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-      SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-  ,* A few code snippets are borrowed from Prelude <https://github.com/bbatsov/prelude>
-
-      Copyright © 2011-2022 Bozhidar Batsov and contributors.
-
-      Distributed under the GNU General Public License, version 3
-
-  ,* Multiple code snippets from various users of Stack Exchange.
-
-      Snippets from the following copyright holders are licensed under
-      CC BY-SA 3.0 <https://creativecommons.org/licenses/by-sa/3.0/> and are used
-      under fair use doctrine:
-
-      event-jr <https://stackoverflow.com/users/903943/event-jr>
-      itsjeyd <https://stackoverflow.com/users/1199226/itsjeyd>
-      Jon Ericson <https://emacs.stackexchange.com/users/2/jon-ericson>
-      malabarba <https://emacs.stackexchange.com/users/50/malabarba>
-      phils <https://stackoverflow.com/users/324105/phils>
-      punchagan <https://emacs.stackexchange.com/users/2465/punchagan>
-      Scott Weldon <https://stackoverflow.com/users/2747593/scott-weldon>
-      Trey Jackson <https://stackoverflow.com/users/6148/trey-jackson>
-
-      Snippets from the following copyright holders are licensed under
-      CC BY-SA 2.5 <https://creativecommons.org/licenses/by-sa/2.5/> and are used
-      under fair use doctrine:
-
-      Trey Jackson <https://stackoverflow.com/users/6148/trey-jackson>
-
-  ,* Various code snippets are from Emacs Wiki, which we choose to receive the work
-    uner GNU Free Documentation License
-
-      Copyright (c)  2022  Emacs Wiki.
-      Permission is granted to copy, distribute and/or modify this document
-      under the terms of the GNU Free Documentation License, Version 1.3
-      or any later version published by the Free Software Foundation;
-      with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
-      A copy of the license is included in the section entitled "GNU
-      Free Documentation License".
 #+end_src
 
 * TODO Ideas
@@ -1094,6 +904,178 @@ These chunks define copyright information that is included at the top of every c
   ;; <<copyright boilerplate>>
 #+end_src
 
+#+begin_src text :noweb strip-export :tangle ../COPYRIGHT
+  Spacemacs is licensed under GPL 3.0 terms, except as otherwise noted below
+  and/or in individual files.
+
+  Spacemacs includes packages and snippets written by third parties.
+  The following third party packages/snippets are included, and carry their own
+  copyright notices and license terms:
+
+  ,* erc-yank, under layers/+chat/erc/local/erc-yank.
+
+      Copyright (C) 2012 John Wiegley <jwiegley@gmail.com>
+
+      This program is free software; you can redistribute it and/or
+      modify it under the terms of the GNU General Public License as
+      published by the Free Software Foundation; either version 2, or (at
+      your option) any later version.
+
+      This program is distributed in the hope that it will be useful, but
+      WITHOUT ANY WARRANTY; without even the implied warranty of
+      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+      General Public License for more details.
+
+      You should have received a copy of the GNU General Public License
+      along with GNU Emacs; see the file COPYING.  If not, write to the
+      Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+      Boston, MA 02111-1307, USA.
+
+  ,* evil-tmux-navigator, under layers/+tools/tmux/local/tmux.
+
+      Copyright (c) 2019 Keith Smiley <http://keith.so>
+
+      Permission is hereby granted, free of charge, to any person obtaining a copy of
+      this software and associated documentation files (the 'Software'), to deal in
+      the Software without restriction, including without limitation the rights to
+      use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+      the Software, and to permit persons to whom the Software is furnished to do so,
+      subject to the following conditions:
+
+      The above copyright notice and this permission notice shall be included in all
+      copies or substantial portions of the Software.
+
+      THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+      IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+      FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+      COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+      IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+      CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+  ,* org-async-init.el, under layers/+emacs/org/local.
+
+      Copyright (C) T. Verron.
+
+      Published at <http://superuser.com/a/898717/702698>.
+
+      Licensed under CC BY-SA 3.0 <https://creativecommons.org/licenses/by-sa/3.0/>.
+
+  ,* pylookup, under layers/+lang/python/local/pylookup.
+
+      Copyright (C) 2010-2013 Taesoo Kim.
+
+      This program is free software: you can redistribute it and/or modify
+      it under the terms of the GNU General Public License as published by
+      the Free Software Foundation, either version 3 of the License, or
+      (at your option) any later version.
+
+      This program is distributed in the hope that it will be useful,
+      but WITHOUT ANY WARRANTY; without even the implied warranty of
+      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+      GNU General Public License for more details.
+
+      You should have received a copy of the GNU General Public License
+      along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+  ,* vim-colors.el, under layers/+spacemacs/spacemacs-modeline/local/vim-powerline.
+
+      Adapted from default color scheme of
+      vim-powerline <https://github.com/Lokaltog/vim-powerline> and is move to
+      powerline <https://github.com/powerline/powerline>.
+
+      Copyright (C) 2013 Kim Silkebækken and other contributors.
+      https://github.com/powerline/powerline
+
+      Permission is hereby granted, free of charge, to any person obtaining
+      a copy of this software and associated documentation files (the
+      "Software"), to deal in the Software without restriction, including
+      without limitation the rights to use, copy, modify, merge, publish,
+      distribute, sublicense, and/or sell copies of the Software, and to
+      permit persons to whom the Software is furnished to do so, subject to
+      the following conditions:
+
+      The above copyright notice and this permission notice shall be
+      included in all copies or substantial portions of the Software.
+
+      THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+      EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+      MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+      IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+      CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+      TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+      SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+  ,* nav-flash, under layers/+misc/nav-flash
+
+      This is ported from Doom Emacs <https://github.com/doomemacs/doomemacs>
+      and originally licensed under MIT License.
+
+      It had since been modified and relicensed to GPL 3.0 License.
+
+      Below is the original MIT License.
+
+      The MIT License (MIT)
+
+      Copyright (c) 2014-2021 Henrik Lissner.
+
+      Permission is hereby granted, free of charge, to any person obtaining
+      a copy of this software and associated documentation files (the
+      "Software"), to deal in the Software without restriction, including
+      without limitation the rights to use, copy, modify, merge, publish,
+      distribute, sublicense, and/or sell copies of the Software, and to
+      permit persons to whom the Software is furnished to do so, subject to
+      the following conditions:
+
+      The above copyright notice and this permission notice shall be
+      included in all copies or substantial portions of the Software.
+
+      THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+      EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+      MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+      IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+      CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+      TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+      SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+  ,* A few code snippets are borrowed from Prelude <https://github.com/bbatsov/prelude>
+
+      Copyright © 2011-2022 Bozhidar Batsov and contributors.
+
+      Distributed under the GNU General Public License, version 3
+
+  ,* Multiple code snippets from various users of Stack Exchange.
+
+      Snippets from the following copyright holders are licensed under
+      CC BY-SA 3.0 <https://creativecommons.org/licenses/by-sa/3.0/> and are used
+      under fair use doctrine:
+
+      event-jr <https://stackoverflow.com/users/903943/event-jr>
+      itsjeyd <https://stackoverflow.com/users/1199226/itsjeyd>
+      Jon Ericson <https://emacs.stackexchange.com/users/2/jon-ericson>
+      malabarba <https://emacs.stackexchange.com/users/50/malabarba>
+      phils <https://stackoverflow.com/users/324105/phils>
+      punchagan <https://emacs.stackexchange.com/users/2465/punchagan>
+      Scott Weldon <https://stackoverflow.com/users/2747593/scott-weldon>
+      Trey Jackson <https://stackoverflow.com/users/6148/trey-jackson>
+
+      Snippets from the following copyright holders are licensed under
+      CC BY-SA 2.5 <https://creativecommons.org/licenses/by-sa/2.5/> and are used
+      under fair use doctrine:
+
+      Trey Jackson <https://stackoverflow.com/users/6148/trey-jackson>
+
+  ,* Various code snippets are from Emacs Wiki, which we choose to receive the work
+    uner GNU Free Documentation License
+
+      Copyright (c)  2022  Emacs Wiki.
+      Permission is granted to copy, distribute and/or modify this document
+      under the terms of the GNU Free Documentation License, Version 1.3
+      or any later version published by the Free Software Foundation;
+      with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
+      A copy of the license is included in the section entitled "GNU
+      Free Documentation License".
+#+end_src
+
 * core-command-line.el
 #+begin_src emacs-lisp :noweb no-export :tangle core-command-line.el
   ;;; core-command-line.el <<is a core file that uses lexical binding>> -*-
@@ -1263,8 +1245,12 @@ literate branch.
   (require 'core-command-line)
   (require 'core-dotspacemacs)
   (require 'core-funcs)
+
+  ;; NOTE: The Spacemacs Buffer and Configuration layer are intimately tied
+  ;; together.
   (require 'core-progress-bar)
   (require 'core-spacemacs-buffer)
+
   (require 'core-load-paths)
 
   (defvar configuration-layer--refresh-package-timeout dotspacemacs-elpa-timeout
@@ -6484,18 +6470,13 @@ literate branch.
   (provide 'core-dotspacemacs)
 #+end_src
 
-* core-early-funcs.el
+* (OBSOLETE) core-early-funcs.el
 It's one function which is only used within =spacemacs//init=, setting
 keybindings to toggle GUI elements on and off. It should be moved to
 initialization.org---or an intialization section within everything.org---when we
 have that file; then the feature can be removed.
 
-#+begin_src emacs-lisp :noweb no-export :tangle core-early-funcs.el
-  ;;; core-early-funcs.el <<is a core file that uses lexical binding>> -*-
-  ;;
-  ;; This file is sourced by emacs early-init.el file.
-  <<copyright>>
-
+#+begin_src emacs-lisp :noweb-ref "define an internal spacemacs function to toggle gui elements"
   (defun spacemacs//toggle-gui-elements (&optional on-off)
     "Toggle menu bar, tool bar, scroll bars, and tool tip modes. If
   optional ON-OFF is not specified, then toggle on/off state. If
@@ -6510,6 +6491,19 @@ have that file; then the feature can be removed.
     ;; tooltips in echo-aera
     (when (fboundp 'tooltip-mode)
       (tooltip-mode (or on-off (not tooltip-mode)))))
+#+end_src
+
+Historically, this chunk was tangled to =#+name=, but that is no longer
+necessary (see above).
+
+#+name: core-early-funcs.el
+#+begin_src emacs-lisp :noweb no-export
+  ;;; core-early-funcs.el <<is a core file that uses lexical binding>> -*-
+  ;;
+  ;; This file is sourced by emacs early-init.el file.
+  <<copyright>>
+
+  <<define an internal spacemacs function to toggle gui elements>>
 
   (provide 'core-early-funcs)
 #+end_src
@@ -7706,8 +7700,7 @@ Add to the built-in list the directory wherein Spacemacs themes are stored.
 
 * core-micro-state.el
 #+begin_src emacs-lisp :noweb no-export :tangle core-micro-state.el
-  ;;; -*- lexical-binding: t -*-
-  ;;; core-micro-state.el --- Spacemacs Core File
+  ;;; core-micro-state.el <<is a core file that uses lexical binding>>
   <<copyright>>
 
   (defun spacemacs/defface-micro-state-faces ()
@@ -10124,14 +10117,7 @@ All the definitions in the file are given here.
       (dolist (recent-file recentf-list by-project)
         (spacemacs-buffer//associate-to-project recent-file by-project))))
 
-  (defun spacemacs//subseq (seq start end)
-    "Adapted version of `cl-subseq'.
-  Use `cl-subseq', but accounting for end points greater than the size of the
-  list.  Return entire list if end is omitted.
-  SEQ, START and END are the same arguments as for `cl-subseq'"
-    (let ((len (length seq)))
-      (cl-subseq seq start (and (number-or-marker-p end)
-                                (min len end)))))
+  <<spacemacs subseq>>
 
   (defmacro spacemacs-buffer||propertize-heading (icon text shortcut-char)
     `(concat (when dotspacemacs-startup-buffer-show-icons
@@ -10536,6 +10522,17 @@ All the definitions in the file are given here.
     (delete-other-windows))
 #+end_src
 
+#+begin_src emacs-lisp :noweb-ref "spacemacs subseq"
+  (defun spacemacs//subseq (seq start end)
+    "Adapted version of `cl-subseq'.
+  Use `cl-subseq', but accounting for end points greater than the size of the
+  list.  Return entire list if end is omitted.
+  SEQ, START and END are the same arguments as for `cl-subseq'"
+    (let ((len (length seq)))
+      (cl-subseq seq start (and (number-or-marker-p end)
+                                (min len end)))))
+#+end_src
+
 ** Banners
 #+begin_src text :tangle banners/000-banner.txt
   Welcome to
@@ -10795,7 +10792,6 @@ separately from the spacemacs buffer /feature/.
   (require 'core-spacemacs-buffer)
   (require 'core-keybindings)
   (require 'core-toggle)
-  (require 'core-early-funcs)
   (require 'core-funcs)
   (require 'core-micro-state)
   (require 'core-transient-state)
@@ -13049,33 +13045,16 @@ This is the first subsection.
 #+begin_src emacs-lisp :noweb strip-export :tangle ../init.el
   ;;; init.el --- Spacemacs Initialization File -*- lexical-binding: nil; no-byte-compile: t; -*-
   ;;
-  ;; Copyright (c) 2012-2025 Sylvain Benner & Contributors
+  ;; Copyright (c) 2012-<<copyright year>> <<copyright holders>>
   ;;
-  ;; Author: Sylvain Benner <sylvain.benner@gmail.com>
-  ;; URL: https://github.com/syl20bnr/spacemacs
+  ;; Author: <<sylvian>>
+  ;; URL: <<ghurl>>
   ;;
-  ;; This file is not part of GNU Emacs.
-  ;;
-  ;; This program is free software; you can redistribute it and/or modify
-  ;; it under the terms of the GNU General Public License as published by
-  ;; the Free Software Foundation, either version 3 of the License, or
-  ;; (at your option) any later version.
-  ;;
-  ;; This program is distributed in the hope that it will be useful,
-  ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  ;; GNU General Public License for more details.
-  ;;
-  ;; You should have received a copy of the GNU General Public License
-  ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  ;; <<about this file>>
 
-
-  ;; Without this comment emacs25 adds (package-initialize) here
-  ;; (package-initialize)
-
+  ;;; Garbage collection
   ;; Avoid garbage collection during startup.
   ;; see `SPC h . dotspacemacs-gc-cons' for more info
-
   (defconst emacs-start-time (current-time))
   (setq gc-cons-threshold 402653184 gc-cons-percentage 0.6)
   (load (concat (file-name-directory load-file-name) "core/core-load-paths")
@@ -13083,6 +13062,7 @@ This is the first subsection.
   (load (concat spacemacs-core-directory "core-versions")
         nil (not init-file-debug))
 
+  ;;; Native and byte compilation
   ;; Remove compiled core files if they become stale or Emacs version has changed.
   (load (concat spacemacs-core-directory "core-compilation")
         nil (not init-file-debug))
@@ -13096,6 +13076,7 @@ This is the first subsection.
       (make-directory (file-name-directory spacemacs--last-emacs-version-file)
                       t)))
 
+  ;; Spacemacs version handling
   (if (not (version<= spacemacs-emacs-min-version emacs-version))
       (error (concat "Your version of Emacs (%s) is too old. "
                      "Spacemacs requires Emacs version %s or above.")
@@ -13112,6 +13093,7 @@ This is the first subsection.
       (require 'core-spacemacs)
       (configuration-layer/load-lock-file)
       (spacemacs/init)
+      ;; FIXME: this shouldn't be here according to its function documentation.
       (configuration-layer/stable-elpa-init)
       (configuration-layer/load)
       (spacemacs-buffer/display-startup-note)
@@ -13126,60 +13108,50 @@ This is the first subsection.
 #+end_src
 
 ** early-init.el
+Before Emacs 27, the init file was responsible for initializing the package
+manager by calling `package-initialize'. Emacs 27 changed the default behavior:
+It now calls `package-initialize' before loading the init file. This behavior
+would prevent Spacemacs's own package initialization from running. However,
+Emacs 27 also loads the "early init" file (this file) before it initializes the
+package manager, and Spacemacs can use this early init file to prevent Emacs
+from initializing the package manager.
+
+Earlier Emacs versions do not load the early init file and do not initialize the
+package manager before loading the init file, so this file is neither needed nor
+loaded on those versions.
+
 #+begin_src emacs-lisp :noweb strip-export :tangle ../early-init.el
   ;;; early-init.el --- Spacemacs Early Init File -*- no-byte-compile: t; lexical-binding: nil; -*-
   ;;
-  ;; Copyright (c) 2020-2025 Sylvain Benner & Contributors
+  ;; Copyright (c) 2020-<<copyright year>> <<copyright holders>>
   ;;
   ;; Author: Miciah Dashiel Butler Masters <miciah.masters@gmail.com>
-  ;; URL: https://github.com/syl20bnr/spacemacs
+  ;; URL: <<ghurl>>
   ;;
-  ;; This file is not part of GNU Emacs.
-  ;;
-  ;; This program is free software; you can redistribute it and/or modify
-  ;; it under the terms of the GNU General Public License as published by
-  ;; the Free Software Foundation, either version 3 of the License, or
-  ;; (at your option) any later version.
-  ;;
-  ;; This program is distributed in the hope that it will be useful,
-  ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  ;; GNU General Public License for more details.
-  ;;
-  ;; You should have received a copy of the GNU General Public License
-  ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  ;; <<about this file>>
 
-
-  ;; Before Emacs 27, the init file was responsible for initializing the package
-  ;; manager by calling `package-initialize'. Emacs 27 changed the default
-  ;; behavior: It now calls `package-initialize' before loading the init file.
-  ;; This behavior would prevent Spacemacs's own package initialization from
-  ;; running. However, Emacs 27 also loads the "early init" file (this file)
-  ;; before it initializes the package manager, and Spacemacs can use this early
-  ;; init file to prevent Emacs from initializing the package manager. (See
-  ;; <http://git.savannah.gnu.org/cgit/emacs.git/commit/?id=24acb31c04b4048b85311d794e600ecd7ce60d3b>.)
-  ;;
-  ;; Earlier Emacs versions do not load the early init file and do not initialize
-  ;; the package manager before loading the init file, so this file is neither
-  ;; needed nor loaded on those versions.
+  ;; <http://git.savannah.gnu.org/cgit/emacs.git/commit/?id=24acb31c04b4048b85311d794e600ecd7ce60d3b>
   (setq package-enable-at-startup nil)
 
-  (load (concat (file-name-directory load-file-name)
-                "core/core-early-funcs")
-        nil (not init-file-debug))
+  <<define an internal spacemacs function to toggle gui elements>>
 
-  ;; Unfortunately the hooks below prevent users from customizing gui elements
-  ;; within dotspacemacs/user-config function. Thus the hooks are commented out.
-  ;; These should not be needed in any case since gui elements are turned off
-  ;; within spacemacs/init function.  Original comment follows next.
-  ;;
-  ;; Remove GUI elements soon after GUI being initialized to avoid some possible
-  ;; grapical glitches. This has to be done use these hooks, see
-  ;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Early-Init-File.html
-  ;;
-  ;; (add-hook 'window-setup-hook 'spacemacs/toggle-gui-elements-off)
-  ;; (add-hook 'tty-setup-hook 'spacemacs/toggle-gui-elements-off)
+  ;; <<unnecessary gui element-disabling hooks>>
 #+end_src
+
+Unfortunately the hooks below prevent users from customizing gui elements
+within dotspacemacs/user-config function. Thus the hooks are commented out.
+These should not be needed in any case since gui elements are turned off
+within spacemacs/init function.  Original comment follows next.
+
+Remove GUI elements soon after GUI being initialized to avoid some possible
+grapical glitches. This has to be done use these hooks, see
+https://www.gnu.org/software/emacs/manual/html_node/emacs/Early-Init-File.html
+
+#+begin_src emacs-lisp :noweb-ref "unnecessary gui element-disabling hooks"
+  (add-hook 'window-setup-hook 'spacemacs/toggle-gui-elements-off)
+  (add-hook 'tty-setup-hook 'spacemacs/toggle-gui-elements-off)
+#+end_src
+
 ** LIBRARIES
 *** ido-vertical-mode.el
 #+begin_src emacs-lisp :noweb strip-export :tangle ido-vertical-mode.el
