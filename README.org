@@ -11,3 +11,8 @@ Spacemacs-proper. As a "distribution" it will be much smaller than Spacemacs and
 will have different uses. Maintainers and contributors might want to use it;
 people interested in literate programming might want to read it, but not much
 else.
+
+As a design goal: "it is always safe to pull changes into your Aggrogrotto-based
+.emacs.d, as only Org files will be modified. Tangled files will not be
+modified, so your actual working Emacs won't be affected." Never force pull, as
+it is rude. Force push is for Jedi. Instead, merge with the force.
