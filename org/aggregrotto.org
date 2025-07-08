@@ -36,10 +36,11 @@ if it doesn't exist. The first element of the results is /expected to be nil/.
 - ../../../../../../../tmp
 - ../build/core/
 - ../build/
-- ../build/info/
+- ../build/core/info/
 - ../build/core/banners/
-- ../build/core/forks/
-- ../build/core/forks/spacemacs-theme/
+- ../build/core/libs/
+- ../build/core/libs/forks/
+- ../build/core/libs/spacemacs-theme/
 - ../build/core/templates/
 - ../build/private/
 - ../build/private/local/
@@ -8000,7 +8001,7 @@ initialization functionality.
   ;;; core-spacemacs-buffer ends here
 #+end_src
 
-#+begin_src text :tangle ../build/info/quickhelp.txt
+#+begin_src text :tangle ../build/core/info/quickhelp.txt
   Press [TAB] or [J] to move to next button.
 
   Press [Shift-TAB] or [K] to move to previous button.
@@ -11501,7 +11502,7 @@ This is the first subsection.
 
 ** LIBRARIES
 *** ido-vertical-mode.el
-#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/forks/ido-vertical-mode.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/libs/ido-vertical-mode.el
 ;;; ido-vertical-mode.el --- Makes ido-mode display vertically
 
 ;; Copyright (C) 2013, 2014  Steven Degutis
@@ -11900,7 +11901,7 @@ This is based on:
 #+end_src
 
 *** mocker.el
-#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/forks/mocker.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/libs/mocker.el
 ;;; mocker.el --- mocking framework for emacs -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2011  Yann Hodique.
@@ -12270,7 +12271,7 @@ specialized mini-languages for specific record classes.
 #+end_src
 
 *** package-build-badges.el
-#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/forks/package-build-badges.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/libs/package-build-badges.el
 ;;; package-build-badges.el --- Create badges for packages  -*- lexical-binding:t; coding:utf-8 -*-
 
 ;; Copyright (C) 2011-2024 Donald Ephraim Curtis
@@ -12418,7 +12419,7 @@ This is essentially a copy of `elpaa--make-badge'."
 #+end_src
 
 *** package-build.el
-#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/forks/package-build.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/libs/package-build.el
 ;;; package-build.el --- Tools for assembling a package archive  -*- lexical-binding:t; coding:utf-8 -*-
 
 ;; Copyright (C) 2011-2024 Donald Ephraim Curtis
@@ -14316,7 +14317,7 @@ a package."
 #+end_src
 
 *** package-recipe.el
-#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/forks/package-recipe.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/libs/package-recipe.el
 ;;; package-recipe.el --- Package recipes as EIEIO objects  -*- lexical-binding:t; coding:utf-8 -*-
 
 ;; Copyright (C) 2018-2025 Jonas Bernoulli
@@ -14554,7 +14555,7 @@ a message for each invalid recipe."
 #+end_src
 
 *** package-recipe-mode.el
-#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/forks/package-recipe-mode.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/libs/package-recipe-mode.el
 ;;; package-recipe-mode.el --- Major-mode for editing package recipes  -*- lexical-binding:t; coding:utf-8 -*-
 
 ;; Copyright (C) 2011-2024 Donald Ephraim Curtis
@@ -14676,7 +14677,7 @@ Use \\[package-build-current-recipe] to build this recipe, \
 #+end_src
 
 *** quelpa.el
-#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/forks/quelpa.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/libs/quelpa.el
 ;;; quelpa.el --- Emacs Lisp packages built directly from source  -*- lexical-binding: t; -*-
 
 ;; Copyright 2014-2021, Steckerhalter
@@ -16735,7 +16736,7 @@ With prefix FORCE, packages will all be upgraded discarding local changes."
 #+end_src
 
 *** spinner.el
-#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/forks/spinner.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/libs/spinner.el
 ;;; spinner.el --- Add spinners and progress-bars to the mode-line for ongoing operations -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2015 Free Software Foundation, Inc.
@@ -17079,7 +17080,7 @@ active spinner."
 #+end_src
 
 *** validate.el
-#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/forks/validate.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/libs/validate.el
 ;;; validate.el --- Schema validation for Emacs-lisp  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2016  Free Software Foundation, Inc.
@@ -17297,7 +17298,7 @@ VALUE is validated against SYMBOL's custom type.
 
 *** ./forks/load-env-vars.el
 
-#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/forks/load-env-vars.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/libs/forks/load-env-vars.el
 ;;; load-env-vars.el --- Load environment variables from files                     -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2018  Jorge Dias
@@ -17409,7 +17410,7 @@ VALUE is validated against SYMBOL's custom type.
 *** ./spacemacs-theme/spacemacs-theme.el
 - LICENSE: GPLv3
 
-#+begin_src markdown :noweb no-export :tangle ../build/core/forks/spacemacs-theme/README.md
+#+begin_src markdown :noweb no-export :tangle ../build/core/libs/spacemacs-theme/README.md
   # Spacemacs-theme
 
   [![MELPA](http://melpa.org/packages/spacemacs-theme-badge.svg)](http://melpa.org/#/spacemacs-theme) ![Made with Spacemacs](https://cdn.rawgit.com/syl20bnr/spacemacs/442d025779da2f62fc86c2082703697714db6514/assets/spacemacs-badge.svg)
@@ -17643,11 +17644,11 @@ VALUE is validated against SYMBOL's custom type.
   Then check out this project [base16-builder](https://github.com/auduchinok/base16-builder).
 #+end_src
 
-#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/forks/spacemacs-theme/spacemacs-theme-pkg.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/libs/spacemacs-theme/spacemacs-theme-pkg.el
   (define-package "spacemacs-theme" "0.2" "Color theme with a dark and light versions" 'nil :url "https://github.com/nashamri/spacemacs-theme" :keywords '("color" "theme"))
 #+end_src
 
-#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/forks/spacemacs-theme/spacemacs-dark-theme.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/libs/spacemacs-theme/spacemacs-dark-theme.el
   ;; -*- lexical-binding: t; -*-
   (require 'spacemacs-theme)
 
@@ -17658,7 +17659,7 @@ VALUE is validated against SYMBOL's custom type.
   (provide-theme 'spacemacs-dark)
 #+end_src
 
-#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/forks/spacemacs-theme/spacemacs-light-theme.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/libs/spacemacs-theme/spacemacs-light-theme.el
   ;; -*- lexical-binding: t; -*-
   (require 'spacemacs-theme)
 
@@ -17669,7 +17670,7 @@ VALUE is validated against SYMBOL's custom type.
   (provide-theme 'spacemacs-light)
 #+end_src
 
-#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/forks/spacemacs-theme/spacemacs-theme.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/libs/spacemacs-theme/spacemacs-theme.el
   ;;; spacemacs-theme.el --- Color theme with a dark and light versions.  -*- lexical-binding: t; -*-
 
   ;; Copyright (C) 2015-2018 Nasser Alshammari
