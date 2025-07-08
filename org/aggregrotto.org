@@ -16,22 +16,31 @@
 #+begin_src markdown :noweb yes :tangle /tmp/test-tag-maintainers.md
   @<<maintainers>>
 
-  I have created a literate programming fork of Spacemacs, aggressively so, which
-  I am calling Aggrogrotto. It's called Aggrogrotto because _it is an aesthetic
-  cave within Spacemacs' mountain of code_. I'm taking an aggressive approach to
-  literate programming: everything that can be done from within a single Org file
-  is being done from within that file. The name is unimportant, however.
+  I have created a literate (aggressively so) programming fork of Spacemacs core
+  functionality which I am calling Aggregrotto. It's called Aggregrotto because
+  _it is an aesthetic, artificial cave within Spacemacs' (otherwise natural)
+  mountain of code_. I'm taking an aggressive approach to literate programming:
+  everything that can be done from within a single Org file is being done from
+  within that file. The name is unimportant, however.
 
-  As a repository of code, Aggrogrotto is lean (only a few files) and does not
+  As a repository of code, Aggregrotto is lean (only a few files) and does not
   seek to reproduce everything _Spacemacs proper_ does: CI, tests/, and layers/
-  are not a part of Aggrogrotto. Those things are already taken care of within
+  are not a part of Aggregrotto. Those things are already taken care of within
   Spacemacs' repository and I don't want to replace Spacemacs nor reimplement
-  everything it does.
-
-  Tangling Aggrogrotto produces core/, and other changes, which can be applied to
-  Spacemacs as a large patch. At the moment it offers only a new approach to
+  everything it does. At the moment it offers only a new approach to
   (re-)engineering the core of Spacemacs, and any other parts of the project which
   are impacted by changes to the core.
+
+  In terms of a fork it is not taking Spacemacs in a different direction. For now
+  it only produces Spacemacs' core files and an increasingly useful literate
+  program when exported as HTML.
+
+  Tangling Aggregrotto produces core/, and other changes, which can be applied to
+  Spacemacs as a large patch; Aggregrotto cannot be merged directly. Originally
+  the changes coming out of Aggregrotto could've been merged directly, but I
+  wanted to ensure that the core files themselves were not edited, so I deleted
+  them. That change spurred many others, and I've ended the pruning process with
+  just `LICENSE`, `README.org`, and `org/*.org`.
 
   While it is a fork, it isn't taking Spacemacs in a massively different
   direction, except that core/ is the product of tangling the literate program (as
@@ -40,22 +49,65 @@
   the upper limits of Org mode's literate programming facilities.
 #+end_src
 
+#+begin_src markdown
+  @<<maintainers>>
+
+  I’ve created a heavily literate fork of Spacemacs’ core functionality, which I’m
+  calling **Aggregrotto**. The name comes from the idea of an *artificial,
+  aesthetic cave* within Spacemacs’ *natural* mountain of code which aggregates
+  all of the core code into one file.
+
+  Aggregrotto is intended to employ all the benefits of literate programming in
+  Org mode. Everything that can be done within a single Org file *is* done within
+  that file, and if not directly through the increasing use of pre- and
+  post-tangle hooks and AWK scripts for some other development tasks.
+
+  As a repository, Aggregrotto is intentionally lean: it's just a few files. It
+  does not replicate everything in *Spacemacs proper*: CI, `tests/`, `layers/`,
+  images, everything else is out of scope. Spacemacs already handles those well
+  and I have no intention of replacing Spacemacs or reimplementing or employing
+  its infrastructure. Instead, Aggregrotto offers a new way to (re)engineer the
+  Spacemacs core and any parts of the project that are impacted by changes
+  therein.
+
+  This fork is not about taking Spacemacs in a new direction feature-wise. For
+  now, it only regenerates Spacemacs’ core files and produces an increasingly rich
+  literate program that can be exported as HTML.
+
+  When tangled, Aggregrotto generates `core/` and related changes that can be
+  applied to Spacemacs as a large patch — but not merged directly. Originally, the
+  output could have been merged as-is, but to keep the core files themselves
+  untouched, I removed them. That choice led to many other cleanups. What remains
+  is just `LICENSE`, `README.org`, and `org/*.org`.
+
+  In short, while Aggregrotto *is* a fork, it’s not a radical departure. Its
+  purpose is to deliver a better-documented `core/` for Spacemacs and to push the
+  boundaries of what Org mode’s literate programming can do.
+
+  I hope this effort will be integrated into the Spacemacs infrastructure, or at
+  least become part of the workflow of the team of maintainers. Inspiring others
+  to use literate programming to its full extent is also a goal of mine. Others
+  who care about Spacemacs’ core features and the documentation thereof are
+  welcomed to begin contributing documentation of code and edits to the structure
+  of the literate program.
+#+end_src
+
 * Ideas
 - Aggressively "in the large" literate programming
 - Pre- and post-tangle hooks are used to run Emacs Lisp, AWK, etc.
 - Obsessively documented ("literate programming in the large"-style)
 
 * Scripts used to simplifly literate programming tasks
-The following LISP is used to create the directory tree expected by Aggrogrotto
+The following LISP is used to create the directory tree expected by Aggregrotto
 if it doesn't exist. The first element of the results is /expected to be nil/.
 
-#+name: Create Aggrogrotto directory tree
+#+name: Create Aggregrotto directory tree
 #+begin_src emacs-lisp
   (mapcar (lambda (d) (when d (f-directory? d)))
           (seq-uniq
            (mapcar (lambda (element-parameters)
                      (when (string-match ":tangle \\(.*\\)/" element-parameters)
-                       (let* ((aggrogrotto-dir (f-dirname (buffer-file-name)))
+                       (let* ((aggregrotto-dir (f-dirname (buffer-file-name)))
                               (dir (f-dirname (substring element-parameters (match-beginning 1))))
                               (dir-real (f-relative dir)))
                          (unless (f-directory? dir-real)
@@ -67,7 +119,7 @@ if it doesn't exist. The first element of the results is /expected to be nil/.
                          params))))))
 #+end_src
 
-#+RESULTS: Create Aggrogrotto directory tree
+#+RESULTS: Create Aggregrotto directory tree
 | t | nil | t | t | t | t | t | t | t | t | t | t |
 
 The following AWK scripts are used to hack on this literate document. They
@@ -90,7 +142,7 @@ can then be broken into smaller noweb chunks.
           print("")
       }
       print("* "FILENAME)
-      print("#+begin_src emacs-lisp :noweb strip-export :tangle "FILENAME)
+      print("#+begin_src emacs-lisp :noweb no-export :tangle "FILENAME)
       print($0)
       flag = 1
   }
@@ -138,7 +190,7 @@ must be escaped or modified, otherwise the noweb chunk reference syntax
 processing in Org will attempt to expand the references and an error will occur
 during export and tangling.
 
-#+begin_src awk :tangle find-false-noweb-ref.awk
+#+begin_src awk :tangle /tmp/find-false-noweb-ref.awk
   {
       # Regex to match <<...>>
       while (match($0, /<<[^>]+>>/)) {
@@ -154,7 +206,7 @@ during export and tangling.
           case "copyright year":
           case "benevolent dictator for life":
           case "git host":
-          case "aggrogrotto url":
+          case "aggregrotto url":
           case "copyright holders":
           case "copyright boilerplate":
           case "copyright":
@@ -179,7 +231,7 @@ defining the noweb chunk which can later be referenced with
 * Core files
 These sections define files tangled into the core/ directory, and auxilliary
 files that must be changed or redefined due to changes to the core files in
-Aggrogrotto.
+Aggregrotto.
 
 ** Command Line Arguments
 This file defines the functions which parse the command line and cause Emacs to
@@ -270,7 +322,7 @@ literate branch.
   ;; Copyright (c) 2012-<<copyright year>> <<copyright holders>>
   ;;
   ;; Author: Eugene "JAremko" Yaremenko <w3techplayground@gmail.com>
-  ;; URL: <<aggrogrotto url>>
+  ;; URL: <<aggregrotto url>>
   ;;
   ;; <<about this file>>
 
@@ -342,6 +394,14 @@ literate branch.
 #+end_src
 
 ** Configuration Layer System
+The configuration layer system, along with the =.spacemacs= system, is the core
+feature of Spacemacs (apart from the community-configuration thereof). You can
+say the configuration layer system is the spirit of Spacemacs', and the
+=.spacemacs= system is the /raison d'être/ for the layer system: the provision
+of a declarative configuration system.
+
+*** Configuraiton layer
+
 #+begin_src emacs-lisp :noweb no-export :tangle core-configuration-layer.el
   ;;; core-configuration-layer.el <<is a core file that uses lexical binding>> -*-
   <<copyright>>
@@ -360,7 +420,7 @@ literate branch.
   ;; NOTE: The Spacemacs Buffer and Configuration layer are intimately tied
   ;; together.
   (require 'core-progress-bar)
-  (require 'core-spacemacs-buffer)
+  (require 'core-spacemacs-buffer); TODO: progress-bar should be a subfeature of buffer.
 
   (require 'core-load-paths)
 
@@ -476,6 +536,15 @@ literate branch.
   (defconst configuration-layer-rollback-info "rollback-info"
     "Spacemacs rollback information file.")
 
+  <<cfgl-layer class, related classes, and methods>>
+#+end_src
+
+*** Common Lisp classes
+The Common Lisp classes are part of the configuration layer, but the section
+title is used to "set off"---used as introductory phrasing---for this part of
+the "cfgl" system.
+
+#+begin_src emacs-lisp :noweb-ref "cfgl-layer class, related classes, and methods"
   (defclass cfgl-layer ()
     ((name :initarg :name
            :type symbol
@@ -688,7 +757,13 @@ literate branch.
         (pop layers))
       (when (configuration-layer/layer-used-p (car layers))
         (car layers))))
+#+end_src
 
+*** Configuration Layer (continued)
+
+More variables.
+
+#+begin_src emacs-lisp :tangle core-configuration-layer.el
   (defvar configuration-layer-elpa-archives nil
     "List of ELPA archives required by Spacemacs. This value is set by the lock
   file. It can be overridden by users inside `dotspacemacs/user-init'.")
@@ -753,10 +828,44 @@ literate branch.
   (defvar update-packages-alist '()
     "Used to collect information about rollback packages in the
   cache folder.")
+#+end_src
 
+*** The lock file
+A lock file is used to define some version information across sessions.
+
+#+begin_src emacs-lisp :noweb-ref lock file handling
   (defun configuration-layer/load-lock-file ()
     "Load the .lock file"
     (configuration-layer/load-file (concat spacemacs-start-directory ".lock")))
+#+end_src
+
+#+begin_src emacs-lisp :noweb no-export :tangle ".lock"
+  ;; .lock <<is a core file that uses lexical binding>>
+
+  (setq configuration-layer-stable-elpa-name "spacelpa")
+  (setq configuration-layer-stable-elpa-version "0.400")
+  (setq configuration-layer-stable-elpa-archive (concat configuration-layer-stable-elpa-directory
+                                                        "spacelpa-"
+                                                        configuration-layer-stable-elpa-version))
+  (setq configuration-layer-elpa-subdirectory "develop")
+
+  (setq configuration-layer-elpa-archives
+        `(("melpa"    . "melpa.org/packages/")
+          ("gnu"      . "elpa.gnu.org/packages/")
+          ("nongnu"   . "elpa.nongnu.org/nongnu/")
+          ("spacelpa" . ,(concat configuration-layer-stable-elpa-archive "/packages/"))))
+
+  (setq package-archive-priorities
+        '(("spacelpa" . 8)
+          ("melpa"    . 4)
+          ("nongnu"   . 2)
+          ("gnu"      . 1)))
+#+end_src
+
+*** Configuration Layer (continued)
+
+#+begin_src emacs-lisp :noweb no-export :tangle core-configuration-layer.el
+  <<lock file handling>>
 
   (defun configuration-layer/initialize ()
     "Initialize `package.el'."
@@ -3193,7 +3302,7 @@ literate branch.
   ;; Copyright (c) 2012-<<copyright year>> <<copyright holders>>
   ;;
   ;; Author: Eugene "JAremko" Yaremenko <w3techplayground@gmail.com>
-  ;; URL: <<aggrogrotto url>>
+  ;; URL: <<aggregrotto url>>
   ;;
   ;; <<about this file>>
 
@@ -7285,7 +7394,7 @@ Add to the built-in list the directory wherein Spacemacs themes are stored.
   ;; Copyright (c) 2012-<<copyright year>> <<copyright holders>>
   ;;
   ;; Author: Eugene "JAremko" Yaremenko <w3techplayground@gmail.com>
-  ;; URL: <<aggrogrotto url>>
+  ;; URL: <<aggregrotto url>>
   ;;
   ;; <<about this file>>
 
@@ -11028,7 +11137,7 @@ separately from the spacemacs buffer /feature/.
   ;; Copyright (c) 2012-<<copyright year>> <<copyright holders>>
   ;;
   ;; Author: Justin Burkett <justin@burkett.cc>
-  ;; URL: <<aggrogrotto url>>
+  ;; URL: <<aggregrotto url>>
   ;;
   ;; <<about this file>>
 
@@ -11468,7 +11577,7 @@ This is the first subsection.
 
 ** LIBRARIES
 *** ido-vertical-mode.el
-#+begin_src emacs-lisp :noweb strip-export :tangle ido-vertical-mode.el
+#+begin_src emacs-lisp :noweb no-export :tangle ido-vertical-mode.el
 ;;; ido-vertical-mode.el --- Makes ido-mode display vertically
 
 ;; Copyright (C) 2013, 2014  Steven Degutis
@@ -11867,7 +11976,7 @@ This is based on:
 #+end_src
 
 *** mocker.el
-#+begin_src emacs-lisp :noweb strip-export :tangle mocker.el
+#+begin_src emacs-lisp :noweb no-export :tangle mocker.el
 ;;; mocker.el --- mocking framework for emacs -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2011  Yann Hodique.
@@ -12237,7 +12346,7 @@ specialized mini-languages for specific record classes.
 #+end_src
 
 *** package-build-badges.el
-#+begin_src emacs-lisp :noweb strip-export :tangle package-build-badges.el
+#+begin_src emacs-lisp :noweb no-export :tangle package-build-badges.el
 ;;; package-build-badges.el --- Create badges for packages  -*- lexical-binding:t; coding:utf-8 -*-
 
 ;; Copyright (C) 2011-2024 Donald Ephraim Curtis
@@ -12385,7 +12494,7 @@ This is essentially a copy of `elpaa--make-badge'."
 #+end_src
 
 *** package-build.el
-#+begin_src emacs-lisp :noweb strip-export :tangle package-build.el
+#+begin_src emacs-lisp :noweb no-export :tangle package-build.el
 ;;; package-build.el --- Tools for assembling a package archive  -*- lexical-binding:t; coding:utf-8 -*-
 
 ;; Copyright (C) 2011-2024 Donald Ephraim Curtis
@@ -14283,7 +14392,7 @@ a package."
 #+end_src
 
 *** package-recipe.el
-#+begin_src emacs-lisp :noweb strip-export :tangle package-recipe.el
+#+begin_src emacs-lisp :noweb no-export :tangle package-recipe.el
 ;;; package-recipe.el --- Package recipes as EIEIO objects  -*- lexical-binding:t; coding:utf-8 -*-
 
 ;; Copyright (C) 2018-2025 Jonas Bernoulli
@@ -14521,7 +14630,7 @@ a message for each invalid recipe."
 #+end_src
 
 *** package-recipe-mode.el
-#+begin_src emacs-lisp :noweb strip-export :tangle package-recipe-mode.el
+#+begin_src emacs-lisp :noweb no-export :tangle package-recipe-mode.el
 ;;; package-recipe-mode.el --- Major-mode for editing package recipes  -*- lexical-binding:t; coding:utf-8 -*-
 
 ;; Copyright (C) 2011-2024 Donald Ephraim Curtis
@@ -14643,7 +14752,7 @@ Use \\[package-build-current-recipe] to build this recipe, \
 #+end_src
 
 *** quelpa.el
-#+begin_src emacs-lisp :noweb strip-export :tangle quelpa.el
+#+begin_src emacs-lisp :noweb no-export :tangle quelpa.el
 ;;; quelpa.el --- Emacs Lisp packages built directly from source  -*- lexical-binding: t; -*-
 
 ;; Copyright 2014-2021, Steckerhalter
@@ -16702,7 +16811,7 @@ With prefix FORCE, packages will all be upgraded discarding local changes."
 #+end_src
 
 *** spinner.el
-#+begin_src emacs-lisp :noweb strip-export :tangle spinner.el
+#+begin_src emacs-lisp :noweb no-export :tangle spinner.el
 ;;; spinner.el --- Add spinners and progress-bars to the mode-line for ongoing operations -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2015 Free Software Foundation, Inc.
@@ -17046,7 +17155,7 @@ active spinner."
 #+end_src
 
 *** validate.el
-#+begin_src emacs-lisp :noweb strip-export :tangle validate.el
+#+begin_src emacs-lisp :noweb no-export :tangle validate.el
 ;;; validate.el --- Schema validation for Emacs-lisp  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2016  Free Software Foundation, Inc.
@@ -17264,7 +17373,7 @@ VALUE is validated against SYMBOL's custom type.
 
 *** ./forks/load-env-vars.el
 
-#+begin_src emacs-lisp :noweb strip-export :tangle ./forks/load-env-vars.el
+#+begin_src emacs-lisp :noweb no-export :tangle ./forks/load-env-vars.el
 ;;; load-env-vars.el --- Load environment variables from files                     -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2018  Jorge Dias
@@ -17376,7 +17485,7 @@ VALUE is validated against SYMBOL's custom type.
 *** ./spacemacs-theme/spacemacs-theme.el
 - LICENSE: GPLv3
 
-#+begin_src markdown :noweb strip-export :tangle ./spacemacs-theme/README.md
+#+begin_src markdown :noweb no-export :tangle ./spacemacs-theme/README.md
   # Spacemacs-theme
 
   [![MELPA](http://melpa.org/packages/spacemacs-theme-badge.svg)](http://melpa.org/#/spacemacs-theme) ![Made with Spacemacs](https://cdn.rawgit.com/syl20bnr/spacemacs/442d025779da2f62fc86c2082703697714db6514/assets/spacemacs-badge.svg)
@@ -17610,11 +17719,11 @@ VALUE is validated against SYMBOL's custom type.
   Then check out this project [base16-builder](https://github.com/auduchinok/base16-builder).
 #+end_src
 
-#+begin_src emacs-lisp :noweb strip-export :tangle ./spacemacs-theme/spacemacs-theme-pkg.el
+#+begin_src emacs-lisp :noweb no-export :tangle ./spacemacs-theme/spacemacs-theme-pkg.el
   (define-package "spacemacs-theme" "0.2" "Color theme with a dark and light versions" 'nil :url "https://github.com/nashamri/spacemacs-theme" :keywords '("color" "theme"))
 #+end_src
 
-#+begin_src emacs-lisp :noweb strip-export :tangle ./spacemacs-theme/spacemacs-dark-theme.el
+#+begin_src emacs-lisp :noweb no-export :tangle ./spacemacs-theme/spacemacs-dark-theme.el
   ;; -*- lexical-binding: t; -*-
   (require 'spacemacs-theme)
 
@@ -17625,7 +17734,7 @@ VALUE is validated against SYMBOL's custom type.
   (provide-theme 'spacemacs-dark)
 #+end_src
 
-#+begin_src emacs-lisp :noweb strip-export :tangle ./spacemacs-theme/spacemacs-light-theme.el
+#+begin_src emacs-lisp :noweb no-export :tangle ./spacemacs-theme/spacemacs-light-theme.el
   ;; -*- lexical-binding: t; -*-
   (require 'spacemacs-theme)
 
@@ -17636,7 +17745,7 @@ VALUE is validated against SYMBOL's custom type.
   (provide-theme 'spacemacs-light)
 #+end_src
 
-#+begin_src emacs-lisp :noweb strip-export :tangle ./spacemacs-theme/spacemacs-theme.el
+#+begin_src emacs-lisp :noweb no-export :tangle ./spacemacs-theme/spacemacs-theme.el
   ;;; spacemacs-theme.el --- Color theme with a dark and light versions.  -*- lexical-binding: t; -*-
 
   ;; Copyright (C) 2015-2018 Nasser Alshammari
@@ -18804,7 +18913,7 @@ TODO: the legal implications and obligations of this heading need to be
 assessed. Did I do this incorrectly?
 
 These chunks define copyright information that is included at the top
-of every core file of Aggrogrotto.
+of every core file of Aggregrotto.
 
 *** Emacs LISP File Header modules
 These chunks are modular; they may be redefined to produce variant file headers.
@@ -18813,8 +18922,8 @@ These chunks are modular; they may be redefined to produce variant file headers.
   2025
 #+end_src
 
-#+begin_src text :noweb yes :noweb-ref "aggrogrotto url"
-  https://github.com/bryce-carson/aggrogrotto
+#+begin_src text :noweb yes :noweb-ref "aggregrotto url"
+  https://github.com/bryce-carson/aggregrotto
 #+end_src
 
 #+begin_src text :noweb yes :noweb-ref "copyright holders"
@@ -18846,7 +18955,7 @@ These chunks are modular; they may be redefined to produce variant file headers.
   Copyright (c) <<copyright year>> <<copyright holders>>
 
   Author: <<bryce>>
-  URL: <<aggrogrotto url>>
+  URL: <<aggregrotto url>>
 
   <<about this file>>
 #+end_src
@@ -18859,16 +18968,16 @@ These chunks are modular; they may be redefined to produce variant file headers.
 * FILES
 ** init.el
 #+begin_src :noweb-ref aggro init file
- init.el --- Aggrogrotto Initialization File -*- no-byte-compile: t; lexical-binding: nil; -*-
+ init.el --- Aggregrotto Initialization File -*- no-byte-compile: t; lexical-binding: nil; -*-
 #+end_src
 
-#+begin_src emacs-lisp :noweb strip-export :tangle ../init.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../init.el
   ;;; <<aggro init file>>
   ;;
   ;; Copyright (c) 2012-<<copyright year>> <<copyright holders>>
   ;;
   ;; Author: <<bryce>>
-  ;; URL: <<aggrogrotto url>>
+  ;; URL: <<aggregrotto url>>
   ;;
   ;; <<about this file>>
 
@@ -18940,13 +19049,13 @@ Earlier Emacs versions do not load the early init file and do not initialize the
 package manager before loading the init file, so this file is neither needed nor
 loaded on those versions.
 
-#+begin_src emacs-lisp :noweb strip-export :tangle ../early-init.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../early-init.el
   ;;; early-<<aggro init file>>
   ;;
   ;; Copyright (c) 2020-<<copyright year>> <<copyright holders>>
   ;;
   ;; Author: <<bryce>>
-  ;; URL: <<aggrogrotto url>>
+  ;; URL: <<aggregrotto url>>
   ;;
   ;; <<about this file>>
 
@@ -19693,7 +19802,7 @@ https://www.gnu.org/software/emacs/manual/html_node/emacs/Early-Init-File.html
 #+end_src
 
 ** README
-#+begin_src markdown :noweb strip-export :tangle ../README.md
+#+begin_src markdown :noweb no-export :tangle ../README.md
   <a name="top" id="fork-destination-box"></a>
   <a href="https://spacemacs.org"><img src="assets/spacemacs-badge.svg" alt="Made with Spacemacs" height="20"></a>
   <a href="https://www.gnu.org/licenses/gpl-3.0.en.html"><img src="assets/gplv3.png" alt="GPLv3 Software" align="right" height="20"></a>
@@ -20360,7 +20469,7 @@ https://www.gnu.org/software/emacs/manual/html_node/emacs/Early-Init-File.html
 #+end_src
 
 ** MAKE
-#+begin_src makefile :noweb strip-export :tangle ../spacemacs.mk
+#+begin_src makefile :noweb no-export :tangle ../spacemacs.mk
   ## Makefile --- Spacemacs master makefile
   ##
   ## Copyright (c) 2012-<<copyright year>> <<copyright holders>>
@@ -20413,11 +20522,11 @@ https://www.gnu.org/software/emacs/manual/html_node/emacs/Early-Init-File.html
 ** TODO The top-level notice of COPYRIGHT file
 These contents lived in the top-level file COPYRIGHT in the beginning of the fork.
 
-#+begin_src text :noweb strip-export :tangle ../COPYRIGHT
-  Aggrogrotto is licensed under GPL 3.0 terms, except as otherwise noted
+#+begin_src text :noweb no-export :tangle ../COPYRIGHT
+  Aggregrotto is licensed under GPL 3.0 terms, except as otherwise noted
   below and/or in individual files.
 
-  Aggrogrotto includes packages and snippets written by third parties.
+  Aggregrotto includes packages and snippets written by third parties.
   The following third party packages/snippets are included, and carry
   their own copyright notices and license terms:
 
@@ -20607,7 +20716,7 @@ These contents lived in the top-level file COPYRIGHT in the beginning of the for
 
 ** Private directory
 *** private/README.md
-#+begin_src markdown strip-export :tangle private/README.md
+#+begin_src markdown no-export :tangle private/README.md
 # Private directory
 
 The content of this directory is ignored by Git. This is the default place
@@ -20632,7 +20741,7 @@ your layer.
 #+end_src
 
 *** private/local/README.md
-#+begin_src markdown strip-export :tangle private/local/README.md
+#+begin_src markdown no-export :tangle private/local/README.md
 # Private directory for local packages
 
 The content of this directory is ignored by Git.
@@ -20671,7 +20780,7 @@ to the list `dotspacemacs-additional-packages` in your dotspacemacs file.
 #+end_src
 
 *** private/snippets/README.md
-#+begin_src markdown strip-export :tangle private/snippets/README.md
+#+begin_src markdown no-export :tangle private/snippets/README.md
 # Private directory for Yasnippets snippets
 
 The content of this directory is ignored by Git. This is the default place
@@ -20681,7 +20790,7 @@ This path will be loaded automatically and used whenever Yasnippets loads.
 #+end_src
 
 *** private/templates/README.md
-#+begin_src markdown strip-export :tangle private/templates/README.md
+#+begin_src markdown no-export :tangle private/templates/README.md
 # Private directory for Yatemplate templates
 
 The content of this directory is ignored by Git. This is the default place
