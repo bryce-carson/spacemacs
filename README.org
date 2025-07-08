@@ -6,5 +6,4 @@ Definitions from [[https://languages.oup.com/google-dictionary-en/][/Oxford Lang
 - grotto :: "a small picturesque cave, especially an artificial one in a park or garden."
 
 This is an admittedly strange, haphazard project which aims to create an
-aggressively literate refactor of the Spacemacs Core, able to borrow layers from
-Spacemacs-proper.
+aggressively literate refactor of the Spacemacs Core.
