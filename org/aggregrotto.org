@@ -16,6 +16,8 @@ if it doesn't exist. The first element of the results is /expected to be nil/.
            (mapcar (lambda (element-parameters)
                      (when (string-match ":tangle \\(.*\\)/" element-parameters)
                        (let* ((aggregrotto-dir (f-dirname (buffer-file-name)))
+                              (build-dir (progn (f-mkdir (f-expand "build" (f-parent aggregrotto-dir)))
+                                                (f-expand "build" (f-parent aggregrotto-dir))))
                               (dir (f-dirname (substring element-parameters (match-beginning 1))))
                               (dir-real (f-relative dir)))
                          (unless (f-directory? dir-real)
@@ -28,7 +30,7 @@ if it doesn't exist. The first element of the results is /expected to be nil/.
 #+end_src
 
 #+RESULTS: Create Aggregrotto directory tree
-| t | nil | t | t | t | t | t | t | t | t | t | t |
+| t | t | nil | t | t | t | t | t | t | t | t | t | t |
 
 The following AWK scripts are used to hack on this literate document. They
 bridge the gap between what Org mode can do and what we want.
@@ -145,7 +147,7 @@ Aggregrotto.
 This file defines the functions which parse the command line and cause Emacs to
 take actions accordingly.
 
-#+begin_src emacs-lisp :noweb no-export :tangle core-command-line.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-command-line.el
   ;;; core-command-line.el <<is a core file that uses lexical binding>> -*-
   <<copyright>>
 
@@ -224,7 +226,7 @@ sense. The use of Emacs features (i.e. provide and require) for code
 categorization and commentary isn't great, and we have now Org mode in the
 literate branch.
 
-#+begin_src emacs-lisp :noweb no-export :tangle core-compilation.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-compilation.el
   ;;; core-compilation.el <<is a core file that uses lexical binding and shouldn't be byte-compiled>>
   ;;
   ;; Copyright (c) 2012-<<copyright year>> <<copyright holders>>
@@ -310,7 +312,7 @@ of a declarative configuration system.
 
 *** Configuraiton layer
 
-#+begin_src emacs-lisp :noweb no-export :tangle core-configuration-layer.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-configuration-layer.el
   ;;; core-configuration-layer.el <<is a core file that uses lexical binding>> -*-
   <<copyright>>
 
@@ -671,7 +673,7 @@ the "cfgl" system.
 
 More variables.
 
-#+begin_src emacs-lisp :tangle core-configuration-layer.el
+#+begin_src emacs-lisp :tangle ../build/core/core-configuration-layer.el
   (defvar configuration-layer-elpa-archives nil
     "List of ELPA archives required by Spacemacs. This value is set by the lock
   file. It can be overridden by users inside `dotspacemacs/user-init'.")
@@ -747,7 +749,7 @@ A lock file is used to define some version information across sessions.
     (configuration-layer/load-file (concat spacemacs-start-directory ".lock")))
 #+end_src
 
-#+begin_src emacs-lisp :noweb no-export :tangle ".lock"
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/.lock
   ;; .lock <<is a core file that uses lexical binding>>
 
   (setq configuration-layer-stable-elpa-name "spacelpa")
@@ -772,7 +774,7 @@ A lock file is used to define some version information across sessions.
 
 *** Configuration Layer (continued)
 
-#+begin_src emacs-lisp :noweb no-export :tangle core-configuration-layer.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-configuration-layer.el
   <<lock file handling>>
 
   (defun configuration-layer/initialize ()
@@ -3204,7 +3206,7 @@ A lock file is used to define some version information across sessions.
 #+end_src
 
 ** /Custom.el/ & /Widget.el/ definitions
-#+begin_src emacs-lisp :noweb no-export :tangle core-customization.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-customization.el
   ;;; core-customization.el <<is a core file that uses lexical binding>> -*-
   ;;
   ;; Copyright (c) 2012-<<copyright year>> <<copyright holders>>
@@ -3388,7 +3390,7 @@ A lock file is used to define some version information across sessions.
 #+end_src
 
 *** custom-settings.el
-#+begin_src emacs-lisp :noweb no-export :tangle core-custom-settings.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-custom-settings.el
   ;;; core-custom-settings.el <<is a core file that uses lexical binding>> -*-
   <<copyright>>
 
@@ -3497,7 +3499,7 @@ A lock file is used to define some version information across sessions.
 #+end_src
 
 ** The Spacemacs Debug Facility
-#+begin_src emacs-lisp :noweb no-export :tangle core-debug.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-debug.el
   ;;; core-debug.el --- Spacemacs Core File  -*- lexical-binding: t; -*-
   <<copyright>>
 
@@ -3536,7 +3538,7 @@ A lock file is used to define some version information across sessions.
 #+end_src
 
 #+name: DEBUG FACILITY
-#+begin_src emacs-lisp :noweb no-export :tangle core-debug.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-debug.el
   
   ;;;; Debug Facility
 
@@ -3883,7 +3885,7 @@ A lock file is used to define some version information across sessions.
 #+end_src
 
 ** display-init.el
-#+begin_src emacs-lisp :noweb no-export :tangle core-display-init.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-display-init.el
   ;;; core-display-init.el <<is a core file that uses lexical binding>> -*-
   <<copyright>>
 
@@ -3933,7 +3935,7 @@ A lock file is used to define some version information across sessions.
 #+end_src
 
 ** documentation.el
-#+begin_src emacs-lisp :noweb no-export :tangle core-documentation.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-documentation.el
   ;;; core-documentation.el --- Spacemacs Core File
   <<copyright>>
 
@@ -4276,7 +4278,7 @@ A lock file is used to define some version information across sessions.
 #+end_src
 
 ** The =.spacemacs= system
-#+begin_src emacs-lisp :noweb no-export :tangle core-dotspacemacs.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-dotspacemacs.el
   ;;; core-dotspacemacs.el <<is a core file that uses lexical binding>> -*-
   <<copyright>>
 
@@ -5633,7 +5635,7 @@ necessary (see above).
 #+end_src
 
 ** Emacs backports
-#+begin_src emacs-lisp :noweb no-export :tangle core-emacs-backports.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-emacs-backports.el
   ;;; core-emacs-backports.el --- Spacemacs Core File  -*- lexical-binding: t -*-
   <<copyright>>
 
@@ -5645,7 +5647,7 @@ necessary (see above).
 #+end_src
 
 ** Environment Variables
-#+begin_src emacs-lisp :noweb no-export :tangle core-env.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-env.el
   ;;; core-env.el <<is a core file that uses lexical binding>> -*-
   <<copyright>>
 
@@ -5789,7 +5791,7 @@ necessary (see above).
 #+end_src
 
 ** Font Support
-#+begin_src emacs-lisp :noweb no-export :tangle core-fonts-support.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-fonts-support.el
   ;;; core-fonts-support.el <<is a core file that uses lexical binding>> -*-
   <<copyright>>
 
@@ -5914,7 +5916,7 @@ necessary (see above).
 #+end_src
 
 ** funcs.el
-#+begin_src emacs-lisp :noweb no-export :tangle core-funcs.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-funcs.el
   ;;; core-funcs.el <<is a core file that uses lexical binding>> -*-
   <<copyright>>
 
@@ -6354,7 +6356,7 @@ necessary (see above).
 #+end_src
 
 ** hooks.el
-#+begin_src emacs-lisp :noweb no-export :tangle core-hooks.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-hooks.el
   ;;; core-hooks.el <<is a core file that uses lexical binding>> -*-
   <<copyright>>
 
@@ -6413,7 +6415,7 @@ necessary (see above).
 #+end_src
 
 ** jump.el
-#+begin_src emacs-lisp :noweb no-export :tangle core-jump.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-jump.el
   ;;; core-jump.el <<is a core file that uses lexical binding>> -*-
   <<copyright>>
 
@@ -6514,7 +6516,7 @@ necessary (see above).
   Define various PATH variables, and set up load path.
 #+end_src
 
-#+begin_src emacs-lisp :noweb no-export :tangle core-load-paths.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-load-paths.el
   ;;; core-load-paths.el <<is a core file that uses lexical binding and shouldn't be byte-compiled>>
   <<copyright>>
 
@@ -6643,7 +6645,7 @@ Add to the built-in list the directory wherein Spacemacs themes are stored.
 #+end_src
 
 ** micro-state.el
-#+begin_src emacs-lisp :noweb no-export :tangle core-micro-state.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-micro-state.el
   ;;; core-micro-state.el <<is a core file that uses lexical binding>>
   <<copyright>>
 
@@ -6908,7 +6910,7 @@ Add to the built-in list the directory wherein Spacemacs themes are stored.
 #+end_src
 
 ** release-management.el
-#+begin_src emacs-lisp :noweb no-export :tangle core-release-management.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-release-management.el
   ;;; core-spacemacs.el <<is a core file that uses lexical binding>> -*-
   <<copyright>>
 
@@ -7296,7 +7298,7 @@ Add to the built-in list the directory wherein Spacemacs themes are stored.
 
 ** Keybindings & Spacebind
 *** spacebind.el
-#+begin_src emacs-lisp :noweb no-export :tangle core-spacebind.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-spacebind.el
   ;;; core-spacebind.el <<is a core file that uses lexical binding>> -*-
   ;;
   ;; Copyright (c) 2012-<<copyright year>> <<copyright holders>>
@@ -7774,7 +7776,7 @@ Add to the built-in list the directory wherein Spacemacs themes are stored.
 #+end_src
 
 *** keybindings.el
-#+begin_src emacs-lisp :noweb no-export :tangle core-keybindings.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-keybindings.el
   ;;; core-keybindings.el <<is a core file that uses lexical binding>> -*-
   <<copyright>>
 
@@ -7958,7 +7960,7 @@ The "Spacemacs Buffer" is the ~initial-buffer-choice~ of Spacemacs; the buffer
 is minimally customizable, and it is deeply integrated with Spacemacs layer and
 initialization functionality.
 
-#+begin_src emacs-lisp :noweb no-export :tangle core-spacemacs-buffer.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-spacemacs-buffer.el
   ;;; core-spacemacs-buffer.el <<is a core file that uses lexical binding>> -*-
   <<copyright>>
 
@@ -7984,7 +7986,7 @@ initialization functionality.
   ;;; core-spacemacs-buffer ends here
 #+end_src
 
-#+begin_src text :tangle info/quickhelp.txt
+#+begin_src text :tangle ../build/info/quickhelp.txt
   Press [TAB] or [J] to move to next button.
 
   Press [Shift-TAB] or [K] to move to previous button.
@@ -9698,7 +9700,7 @@ All the definitions in the file are given here.
 #+end_src
 
 *** Banners
-#+begin_src text :tangle banners/000-banner.txt
+#+begin_src text :tangle ../build/core/banners/000-banner.txt
   Welcome to
   ███████╗██████╗**█████╗**██████╗███████╗███╗***███╗*█████╗**██████╗███████╗ B
   ██╔════╝██╔══██╗██╔══██╗██╔════╝██╔════╝████╗*████║██╔══██╗██╔════╝██╔════╝ E
@@ -9708,7 +9710,7 @@ All the definitions in the file are given here.
   ╚══════╝╚═╝*****╚═╝**╚═╝*╚═════╝╚══════╝╚═╝*****╚═╝╚═╝**╚═╝*╚═════╝╚══════╝
 #+end_src
 
-#+begin_src text :tangle banners/001-banner.txt
+#+begin_src text :tangle ../build/core/banners/001-banner.txt
   ┏━━━┓
   ┃┏━┓┃ Welcome to
   ┃┗━━┓╋╋╋╋┏━━┓╋╋╋╋┏━━┓╋╋╋╋┏━━┓╋╋╋╋┏━━┓╋╋╋╋┏┓┏┓╋╋╋╋┏━━┓╋╋╋╋┏━━┓╋╋╋╋┏━━┓ b
@@ -9719,7 +9721,7 @@ All the definitions in the file are given here.
   ╋╋╋╋╋╋╋╋╋┗┛
 #+end_src
 
-#+begin_src text :tangle banners/002-banner.txt
+#+begin_src text :tangle ../build/core/banners/002-banner.txt
   ╭─┏━━━┓───────────────────────────────────────────────────────────────────╮
   │ ┃┏━┓┃ Welcome to                                                        │
   │ ┃┗━━┓    ┏━━┓    ┏━━┓    ┏━━┓    ┏━━┓    ┏┓┏┓    ┏━━┓    ┏━━┓    ┏━━┓ b │
@@ -9730,7 +9732,7 @@ All the definitions in the file are given here.
   ╰──────────┗┛─────────────────────────────────────────────────────────────╯
 #+end_src
 
-#+begin_src text :tangle banners/003-banner.txt
+#+begin_src text :tangle ../build/core/banners/003-banner.txt
   ⠀⠀⠀⢀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
   ⠀⣠⣾⣿⣿⣿⣷⣶⣤⣀⡤⣤⡒⢖⠖⢖⢒⠢⠤⢄⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀
   ⠠⣿⠛⠉⠁⢉⣹⢿⣿⣿⣿⣷⣼⢸⢸⢨⠢⡡⢑⡠⠀⠑⠢⢄⠀⠀⠀⠀⠀⠀
@@ -9749,7 +9751,7 @@ All the definitions in the file are given here.
    ⠀⠀⠀⠀⠀⠀⠀⠙⠒⠤⠤⣀⣀⣀⣀⣀⡠⠤⠔⠒⠉⠀⠀⠀⠀⠀⠀⠀⠀
 #+end_src
 
-#+begin_src text :tangle banners/004-banner.txt
+#+begin_src text :tangle ../build/core/banners/004-banner.txt
   ⠀⠀⠀⣀⣀⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
   ⠀⢀⠎⠁⠀⠀⠈⠉⠒⠦⢀⡀⡄⡤⡤⡤⡤⡤⣄⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
   ⠀⡎⡠⠒⠉⠉⢑⢲⢀⠀⠀⠈⠪⢣⢫⡺⣹⡹⣝⠾⣻⣶⣤⡀⠀⠀⠀⠀⠀⠀
@@ -9768,7 +9770,7 @@ All the definitions in the file are given here.
   ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠛⠻⠻⠿⠿⠿⠛⠛⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀
 #+end_src
 
-#+begin_src text :tangle banners/100-banner.txt
+#+begin_src text :tangle ../build/core/banners/100-banner.txt
   Welcome to
   ███████╗███╗   ███╗ █████╗  ██████╗███████╗
   ██╔════╝████╗ ████║██╔══██╗██╔════╝██╔════╝
@@ -9778,7 +9780,7 @@ All the definitions in the file are given here.
   ╚══════╝╚═╝     ╚═╝╚═╝  ╚═╝ ╚═════╝╚══════╝
 #+end_src
 
-#+begin_src text :tangle banners/997-banner.txt
+#+begin_src text :tangle ../build/core/banners/997-banner.txt
                        ▒▒▒▒▒▒▒▒▒▀▒▒▒▒▒▒▒▒▒▒▒▒▒▒▀▒▒▒▒
                        ▒▒▒▒▒▒▒▒▐░ ▒▒▒▒▒▒▒▒▒▒▒▀▄░▐▒▒▒
        Such powerful   ▒▒▒▒▒▒▒▒▐░░ ▒▒▒▒▒▒▒▒▀▄░░░▌▒▒▒
@@ -9806,7 +9808,7 @@ All the definitions in the file are given here.
     ╚═════╝  ╚═════╝  ╚═════╝ ╚══════╝╚═╝     ╚═╝╚═╝  ╚═╝ ╚═════╝╚══════╝
 #+end_src
 
-#+begin_src text :tangle banners/998-banner.txt
+#+begin_src text :tangle ../build/core/banners/998-banner.txt
                          ▄▄▄▄              ▄
                           ▌▄ █▄          ▄▀▄▀▄
                           ▌███ ▌ ▄▄▄▄▄▄ ▐ ███ ▌
@@ -9835,7 +9837,7 @@ All the definitions in the file are given here.
                     | ╚═╝     ╚═╝ ╚═════╝ ╚═╝     ╚═╝╚═╝  ╚═╝ ╚═════╝╚══════╝
 #+end_src
 
-#+begin_src text :tangle banners/999-banner.txt
+#+begin_src text :tangle ../build/core/banners/999-banner.txt
                         ░░░░░░░░░▄░░░░░░░░░░░░░░▄░░░░
                         ░░░░░░░░▌▒█░░░░░░░░░░░▄▀▒▌░░░
        So powerful      ░░░░░░░░▌▒▒█░░░░░░░░▄▀▒▒▒▐░░░
@@ -9867,7 +9869,7 @@ All the definitions in the file are given here.
 Why is this /an emacs feature/ at all? There's no good reason to define this
 separately from the spacemacs buffer /feature/.
 
-#+begin_src emacs-lisp :noweb no-export :tangle core-progress-bar.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-progress-bar.el
   ;;; core-progress-bar.el <<is a core file that uses lexical binding>> -*-
   <<copyright>>
 
@@ -9926,7 +9928,7 @@ separately from the spacemacs buffer /feature/.
 #+end_src
 
 ** spacemacs.el
-#+begin_src emacs-lisp :noweb no-export :tangle core-spacemacs.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-spacemacs.el
   ;;; core-spacemacs.el <<is a core file that uses lexical binding>> -*-
   <<copyright>>
 
@@ -10315,7 +10317,7 @@ separately from the spacemacs buffer /feature/.
 #+end_src
 
 ** Theme Support
-#+begin_src emacs-lisp :noweb no-export :tangle core-themes-support.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-themes-support.el
   ;;; core-themes-support.el <<is a core file that uses lexical binding>> -*-
   <<copyright>>
 
@@ -10829,7 +10831,7 @@ separately from the spacemacs buffer /feature/.
 #+end_src
 
 ** toggle.el
-#+begin_src emacs-lisp :noweb no-export :tangle core-toggle.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-toggle.el
   ;;; core-toggle.el <<is a core file that uses lexical binding>> -*-
   <<copyright>>
 
@@ -11038,7 +11040,7 @@ separately from the spacemacs buffer /feature/.
 #+end_src
 
 ** transient-state.el
-#+begin_src emacs-lisp :noweb no-export :tangle core-transient-state.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-transient-state.el
   ;;; -*- lexical-binding: t -*-
   ;;; core-transient-state.el --- Spacemacs Core File
   ;;
@@ -11303,7 +11305,7 @@ separately from the spacemacs buffer /feature/.
 ** use-package-ext.el
 Where any page breaks existed the file has been broken into subsections of chunks.
 
-#+begin_src emacs-lisp :noweb no-export :tangle core-use-package-ext.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-use-package-ext.el
   ;;; core-use-package-ext.el <<is a core file that uses lexical binding>> -*-
   <<copyright>>
 
@@ -11355,7 +11357,7 @@ Where any page breaks existed the file has been broken into subsections of chunk
 *** Subsection one
 This is the first subsection.
 
-#+begin_src emacs-lisp :noweb no-export :tangle core-use-package-ext.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-use-package-ext.el
   (defun spacemacs/use-package-extend ()
     "Extend use-package with custom keywords."
     (when (and (require 'use-package nil t) (not spacemacs--use-package-extended))
@@ -11459,7 +11461,7 @@ This is the first subsection.
   Define Spacemacs version and minimum supported Emacs version.
 #+end_src
 
-#+begin_src emacs-lisp :noweb no-export :tangle core-versions.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-versions.el
   ;;; core-versions.el --- Spacemacs Core File  -*- lexical-binding: t -*-
   <<copyright>>
 
@@ -11485,7 +11487,7 @@ This is the first subsection.
 
 ** LIBRARIES
 *** ido-vertical-mode.el
-#+begin_src emacs-lisp :noweb no-export :tangle ido-vertical-mode.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/forks/ido-vertical-mode.el
 ;;; ido-vertical-mode.el --- Makes ido-mode display vertically
 
 ;; Copyright (C) 2013, 2014  Steven Degutis
@@ -11884,7 +11886,7 @@ This is based on:
 #+end_src
 
 *** mocker.el
-#+begin_src emacs-lisp :noweb no-export :tangle mocker.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/forks/mocker.el
 ;;; mocker.el --- mocking framework for emacs -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2011  Yann Hodique.
@@ -12254,7 +12256,7 @@ specialized mini-languages for specific record classes.
 #+end_src
 
 *** package-build-badges.el
-#+begin_src emacs-lisp :noweb no-export :tangle package-build-badges.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/forks/package-build-badges.el
 ;;; package-build-badges.el --- Create badges for packages  -*- lexical-binding:t; coding:utf-8 -*-
 
 ;; Copyright (C) 2011-2024 Donald Ephraim Curtis
@@ -12402,7 +12404,7 @@ This is essentially a copy of `elpaa--make-badge'."
 #+end_src
 
 *** package-build.el
-#+begin_src emacs-lisp :noweb no-export :tangle package-build.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/forks/package-build.el
 ;;; package-build.el --- Tools for assembling a package archive  -*- lexical-binding:t; coding:utf-8 -*-
 
 ;; Copyright (C) 2011-2024 Donald Ephraim Curtis
@@ -14300,7 +14302,7 @@ a package."
 #+end_src
 
 *** package-recipe.el
-#+begin_src emacs-lisp :noweb no-export :tangle package-recipe.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/forks/package-recipe.el
 ;;; package-recipe.el --- Package recipes as EIEIO objects  -*- lexical-binding:t; coding:utf-8 -*-
 
 ;; Copyright (C) 2018-2025 Jonas Bernoulli
@@ -14538,7 +14540,7 @@ a message for each invalid recipe."
 #+end_src
 
 *** package-recipe-mode.el
-#+begin_src emacs-lisp :noweb no-export :tangle package-recipe-mode.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/forks/package-recipe-mode.el
 ;;; package-recipe-mode.el --- Major-mode for editing package recipes  -*- lexical-binding:t; coding:utf-8 -*-
 
 ;; Copyright (C) 2011-2024 Donald Ephraim Curtis
@@ -14660,7 +14662,7 @@ Use \\[package-build-current-recipe] to build this recipe, \
 #+end_src
 
 *** quelpa.el
-#+begin_src emacs-lisp :noweb no-export :tangle quelpa.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/forks/quelpa.el
 ;;; quelpa.el --- Emacs Lisp packages built directly from source  -*- lexical-binding: t; -*-
 
 ;; Copyright 2014-2021, Steckerhalter
@@ -16719,7 +16721,7 @@ With prefix FORCE, packages will all be upgraded discarding local changes."
 #+end_src
 
 *** spinner.el
-#+begin_src emacs-lisp :noweb no-export :tangle spinner.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/forks/spinner.el
 ;;; spinner.el --- Add spinners and progress-bars to the mode-line for ongoing operations -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2015 Free Software Foundation, Inc.
@@ -17063,7 +17065,7 @@ active spinner."
 #+end_src
 
 *** validate.el
-#+begin_src emacs-lisp :noweb no-export :tangle validate.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/forks/validate.el
 ;;; validate.el --- Schema validation for Emacs-lisp  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2016  Free Software Foundation, Inc.
@@ -17281,7 +17283,7 @@ VALUE is validated against SYMBOL's custom type.
 
 *** ./forks/load-env-vars.el
 
-#+begin_src emacs-lisp :noweb no-export :tangle ./forks/load-env-vars.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/forks/load-env-vars.el
 ;;; load-env-vars.el --- Load environment variables from files                     -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2018  Jorge Dias
@@ -17393,7 +17395,7 @@ VALUE is validated against SYMBOL's custom type.
 *** ./spacemacs-theme/spacemacs-theme.el
 - LICENSE: GPLv3
 
-#+begin_src markdown :noweb no-export :tangle ./spacemacs-theme/README.md
+#+begin_src markdown :noweb no-export :tangle ../build/core/forks/spacemacs-theme/README.md
   # Spacemacs-theme
 
   [![MELPA](http://melpa.org/packages/spacemacs-theme-badge.svg)](http://melpa.org/#/spacemacs-theme) ![Made with Spacemacs](https://cdn.rawgit.com/syl20bnr/spacemacs/442d025779da2f62fc86c2082703697714db6514/assets/spacemacs-badge.svg)
@@ -17627,11 +17629,11 @@ VALUE is validated against SYMBOL's custom type.
   Then check out this project [base16-builder](https://github.com/auduchinok/base16-builder).
 #+end_src
 
-#+begin_src emacs-lisp :noweb no-export :tangle ./spacemacs-theme/spacemacs-theme-pkg.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/forks/spacemacs-theme/spacemacs-theme-pkg.el
   (define-package "spacemacs-theme" "0.2" "Color theme with a dark and light versions" 'nil :url "https://github.com/nashamri/spacemacs-theme" :keywords '("color" "theme"))
 #+end_src
 
-#+begin_src emacs-lisp :noweb no-export :tangle ./spacemacs-theme/spacemacs-dark-theme.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/forks/spacemacs-theme/spacemacs-dark-theme.el
   ;; -*- lexical-binding: t; -*-
   (require 'spacemacs-theme)
 
@@ -17642,7 +17644,7 @@ VALUE is validated against SYMBOL's custom type.
   (provide-theme 'spacemacs-dark)
 #+end_src
 
-#+begin_src emacs-lisp :noweb no-export :tangle ./spacemacs-theme/spacemacs-light-theme.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/forks/spacemacs-theme/spacemacs-light-theme.el
   ;; -*- lexical-binding: t; -*-
   (require 'spacemacs-theme)
 
@@ -17653,7 +17655,7 @@ VALUE is validated against SYMBOL's custom type.
   (provide-theme 'spacemacs-light)
 #+end_src
 
-#+begin_src emacs-lisp :noweb no-export :tangle ./spacemacs-theme/spacemacs-theme.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/forks/spacemacs-theme/spacemacs-theme.el
   ;;; spacemacs-theme.el --- Color theme with a dark and light versions.  -*- lexical-binding: t; -*-
 
   ;; Copyright (C) 2015-2018 Nasser Alshammari
@@ -18879,7 +18881,7 @@ These chunks are modular; they may be redefined to produce variant file headers.
  init.el --- Aggregrotto Initialization File -*- no-byte-compile: t; lexical-binding: nil; -*-
 #+end_src
 
-#+begin_src emacs-lisp :noweb no-export :tangle ../init.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/init.el
   ;;; <<aggro init file>>
   ;;
   ;; Copyright (c) 2012-<<copyright year>> <<copyright holders>>
@@ -18957,7 +18959,7 @@ Earlier Emacs versions do not load the early init file and do not initialize the
 package manager before loading the init file, so this file is neither needed nor
 loaded on those versions.
 
-#+begin_src emacs-lisp :noweb no-export :tangle ../early-init.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/early-init.el
   ;;; early-<<aggro init file>>
   ;;
   ;; Copyright (c) 2020-<<copyright year>> <<copyright holders>>
@@ -18991,7 +18993,7 @@ https://www.gnu.org/software/emacs/manual/html_node/emacs/Early-Init-File.html
 
 ** TEMPLATES
 *** README.org
-#+begin_src text :tangle templates/README.org.template
+#+begin_src text :tangle ../build/core/templates/README.org.template
   ,#+TITLE: %LAYER_NAME% layer
   # Document tags are separated with "|" char
   # The example below contains 2 tags: "layer" and "web service"
@@ -19036,7 +19038,7 @@ https://www.gnu.org/software/emacs/manual/html_node/emacs/Early-Init-File.html
   # If space-doc-mode is enabled, Spacemacs will open a local copy of the linked file.
 #+end_src
 *** REPORTING
-#+begin_src text :tangle templates/REPORTING.template
+#+begin_src text :tangle ../build/core/templates/REPORTING.template
   #### Description :octocat:
   <<DESCRIPTION OF THE PROBLEM>>
   <<BE AWARE YOU NEED A GITHUB ACCOUNT TO SEND THIS REPORT>>
@@ -19060,7 +19062,7 @@ https://www.gnu.org/software/emacs/manual/html_node/emacs/Early-Init-File.html
   ```
 #+end_src
 *** dotspacemacs-template.el
-#+begin_src emacs-lisp :tangle templates/dotspacemacs-template.el
+#+begin_src emacs-lisp :tangle ../build/core/templates/dotspacemacs-template.el
   ;; -*- mode: emacs-lisp; lexical-binding: t -*-
   ;; This file is loaded by Spacemacs at startup.
   ;; It must be stored in your home directory.
@@ -19636,7 +19638,7 @@ https://www.gnu.org/software/emacs/manual/html_node/emacs/Early-Init-File.html
   ;; auto-generate custom variable definitions.
 #+end_src
 *** packages.el
-#+begin_src text :tangle templates/packages.el.template
+#+begin_src text :tangle ../build/core/templates/packages.el.template
   ;;; packages.el --- %LAYER_NAME% layer packages file for Spacemacs.
   ;;
   ;; Copyright (c) 2012-2025 Sylvain Benner & Contributors
@@ -19710,7 +19712,7 @@ https://www.gnu.org/software/emacs/manual/html_node/emacs/Early-Init-File.html
 #+end_src
 
 ** README
-#+begin_src markdown :noweb no-export :tangle ../README.md
+#+begin_src markdown :noweb no-export :tangle ../build/README.md
   <a name="top" id="fork-destination-box"></a>
   <a href="https://spacemacs.org"><img src="assets/spacemacs-badge.svg" alt="Made with Spacemacs" height="20"></a>
   <a href="https://www.gnu.org/licenses/gpl-3.0.en.html"><img src="assets/gplv3.png" alt="GPLv3 Software" align="right" height="20"></a>
@@ -20377,7 +20379,7 @@ https://www.gnu.org/software/emacs/manual/html_node/emacs/Early-Init-File.html
 #+end_src
 
 ** MAKE
-#+begin_src makefile :noweb no-export :tangle ../spacemacs.mk
+#+begin_src makefile :noweb no-export :tangle ../build/spacemacs.mk
   ## Makefile --- Spacemacs master makefile
   ##
   ## Copyright (c) 2012-<<copyright year>> <<copyright holders>>
@@ -20430,7 +20432,7 @@ https://www.gnu.org/software/emacs/manual/html_node/emacs/Early-Init-File.html
 ** TODO The top-level notice of COPYRIGHT file
 These contents lived in the top-level file COPYRIGHT in the beginning of the fork.
 
-#+begin_src text :noweb no-export :tangle ../COPYRIGHT
+#+begin_src text :noweb no-export :tangle ../build/COPYRIGHT
   Aggregrotto is licensed under GPL 3.0 terms, except as otherwise noted
   below and/or in individual files.
 
@@ -20624,7 +20626,7 @@ These contents lived in the top-level file COPYRIGHT in the beginning of the for
 
 ** Private directory
 *** private/README.md
-#+begin_src markdown no-export :tangle private/README.md
+#+begin_src markdown no-export :tangle ../build/private/README.md
 # Private directory
 
 The content of this directory is ignored by Git. This is the default place
@@ -20649,7 +20651,7 @@ your layer.
 #+end_src
 
 *** private/local/README.md
-#+begin_src markdown no-export :tangle private/local/README.md
+#+begin_src markdown no-export :tangle ../build/private/local/README.md
 # Private directory for local packages
 
 The content of this directory is ignored by Git.
@@ -20688,7 +20690,7 @@ to the list `dotspacemacs-additional-packages` in your dotspacemacs file.
 #+end_src
 
 *** private/snippets/README.md
-#+begin_src markdown no-export :tangle private/snippets/README.md
+#+begin_src markdown no-export :tangle ../build/private/snippets/README.md
 # Private directory for Yasnippets snippets
 
 The content of this directory is ignored by Git. This is the default place
@@ -20698,7 +20700,7 @@ This path will be loaded automatically and used whenever Yasnippets loads.
 #+end_src
 
 *** private/templates/README.md
-#+begin_src markdown no-export :tangle private/templates/README.md
+#+begin_src markdown no-export :tangle ../build/private/templates/README.md
 # Private directory for Yatemplate templates
 
 The content of this directory is ignored by Git. This is the default place
