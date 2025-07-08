@@ -9,28 +9,42 @@
 The following LISP is used to create the directory tree expected by Aggregrotto
 if it doesn't exist. The first element of the results is /expected to be nil/.
 
-#+name: Create Aggregrotto directory tree
-#+begin_src emacs-lisp
-  (mapcar (lambda (d) (when d (f-directory? d)))
-          (seq-uniq
+#+name: (Clean and re-)Create Aggregrotto directory tree
+#+begin_src emacs-lisp :results list
+  (let* ((aggregrotto-dir (f-dirname (buffer-file-name)))
+         (build-dir (f-expand "build" (f-parent aggregrotto-dir))))
+    ;; Delete then re-create the build directory.
+    (when (f-dir-p build-dir)
+      (f-delete build-dir t))
+    (f-mkdir build-dir)
+    ;; Loop over all org source block elements to create the needed tree below build-dir.
+    (remq nil (seq-uniq
            (mapcar (lambda (element-parameters)
                      (when (string-match ":tangle \\(.*\\)/" element-parameters)
-                       (let* ((aggregrotto-dir (f-dirname (buffer-file-name)))
-                              (build-dir (progn (f-mkdir (f-expand "build" (f-parent aggregrotto-dir)))
-                                                (f-expand "build" (f-parent aggregrotto-dir))))
-                              (dir (f-dirname (substring element-parameters (match-beginning 1))))
+                           (let* ((dir (f-dirname (substring element-parameters (match-beginning 1))))
                               (dir-real (f-relative dir)))
                          (unless (f-directory? dir-real)
                            (make-directory dir-real))
                          dir-real)))
+                       ;; Obtain the parameters of all org source blocks.
                    (org-element-map (org-element-parse-buffer) 'src-block
-                     (lambda (srcblock)
-                       (let ((params (org-element-property :parameters srcblock)))
-                         params))))))
+                         (lambda (src-block)
+                           (org-element-property :parameters src-block)))))))
 #+end_src
 
-#+RESULTS: Create Aggregrotto directory tree
-| t | t | nil | t | t | t | t | t | t | t | t | t | t |
+#+RESULTS: (Clean and re-)Create Aggregrotto directory tree
+- ../../../../../../../tmp
+- ../build/core/
+- ../build/
+- ../build/info/
+- ../build/core/banners/
+- ../build/core/forks/
+- ../build/core/forks/spacemacs-theme/
+- ../build/core/templates/
+- ../build/private/
+- ../build/private/local/
+- ../build/private/snippets/
+- ../build/private/templates/
 
 The following AWK scripts are used to hack on this literate document. They
 bridge the gap between what Org mode can do and what we want.
