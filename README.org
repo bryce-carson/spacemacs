@@ -16,3 +16,6 @@ As a design goal: "it is always safe to pull changes into your Aggrogrotto-based
 .emacs.d, as only Org files will be modified. Tangled files will not be
 modified, so your actual working Emacs won't be affected." Never force pull, as
 it is rude. Force push is for Jedi. Instead, merge with the force.
+
+Aggrogrotto is a different approach to building Spacemacs. The product is indeed
+a form of Spacemacs.
