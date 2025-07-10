@@ -1,3 +1,5 @@
+# -*- org-babel-pre-tangle-hook: (org-babel-execute-src-block (org-babel-goto-named-src-block "create-aggregrotto-directory-tree")); -*-
+
 #+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-bigblow.setup
 
 * INSTALL
@@ -717,14 +719,17 @@ A lock file is used to define some version information across sessions.
   (setq configuration-layer-elpa-subdirectory "develop")
 
   (setq configuration-layer-elpa-archives
-        `(("melpa"    . "melpa.org/packages/")
+        `(("delpa"    . (format "packages.delpa.org/melpa/at-least-days-old/%d/"
+                                dotspacemacs-delpa-at-least-days-old))
+          ("melpa"    . "melpa.org/packages/")
           ("gnu"      . "elpa.gnu.org/packages/")
           ("nongnu"   . "elpa.nongnu.org/nongnu/")
           ("spacelpa" . ,(concat configuration-layer-stable-elpa-archive "/packages/"))))
 
   (setq package-archive-priorities
-        '(("spacelpa" . 8)
-          ("melpa"    . 4)
+        '(("delpa"    . 5)
+          ("spacelpa" . 4)
+          ("melpa"    . 3)
           ("nongnu"   . 2)
           ("gnu"      . 1)))
 #+end_src
@@ -4169,13 +4174,19 @@ take actions accordingly.
     'spacemacs-dotspacemacs-init)
 
   (spacemacs|defc dotspacemacs-check-for-update nil
-    "If non-nil then spacemacs will check for updates at startup
-  when the current branch is not `develop'. Note that checking for
-  new versions works via git commands, thus it calls GitHub services
-  whenever you start Emacs."
+    <<dotspacemacs-check-for-update-docstring>>
     'boolean
     'spacemacs-dotspacemacs-init)
+#+end_src
 
+#+begin_src emacs-lisp :noweb-ref dotspacemacs-check-for-update-docstring
+  "If non-nil then spacemacs will check for updates at startup when the
+  current branch is not `develop'. Note that checking for new versions
+  works via git commands, thus it calls GitHub services whenever you start
+  Emacs."
+#+end_src
+
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-dotspacemacs.el
   (spacemacs|defc dotspacemacs-configuration-layers '(emacs-lisp)
     "List of configuration layers to load."
     '(repeat (choice symbol (cons symbol sexp)))
@@ -5312,19 +5323,49 @@ new version.
     "Name of the Spacemacs remote repository.")
   (defconst spacemacs-repository-owner "syl20bnr"
     "Name of the Spacemacs remote repository owner.")
+  #+end_src
+
+It should be permissible to wrap prose and source blocks in a quotation which
+does not impede the functioning of the source block. Thus far I have verified
+that you can evaluate a quoted source block and you can fold it; if these
+functionalities are intact it is probable that noweb functionality is not
+impeded.
+
+#+begin_quote
+The "checkversion" repository is not a public repository owned by Sylvain. What was this referring to?
+
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-release-management.el
   (defconst spacemacs-checkversion-remote "checkversion"
-    "Name of the remote repository used to check for new version.")
+    "Name of the remote repository used to check for new versione")
+#+end_src
+#+end_quote
+
+Continuing with the rest of the file...
+
+#+begin_src emacs-lisp :noweb-ref today is the 2nd or 17th
+  (progn (require 'calendar)
+         (or (eql 2 (cadr (calendar-current-date)))
+             (eql 17 (cadr (calendar-current-date)))))
+#+end_src
+
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-release-management.el
   (defconst spacemacs-checkversion-branch "master"
     "Name of the branch used to check for new version.")
 
-  (defvar dotspacemacs-check-for-update)
+  ;; FIXME: this gets `spacemacs|defc' elsewhere!
+  ;; (defvar dotspacemacs-check-for-update)
   (defvar spacemacs-version)
   ;; new version variables
   (defvar spacemacs-new-version nil
     "If non-nil a new Spacemacs version is available.")
-  ;; used to be "6 hours" but we now check for new versions only at startup
-  (defvar spacemacs-version-check-interval nil
+
+  ;; TODO: if we are getting---potentionally---hundreds of users on the
+  ;; *occasional* branch who will be checking GitHub for new tags we'll want to
+  ;; set an interval once again. NOTE: in the past it was `"6 hours"' but we now
+  ;; check for new versions only at startup
+  (defvar spacemacs-version-check-interval (* 3600 24)
     "Time between two version checks.")
+
   (defvar spacemacs-version-check-lighter "[+]"
     "Text displayed in the mode-line when a new version is available.")
   (defvar spacemacs-version--check-timer nil
@@ -5332,23 +5373,27 @@ new version.
   (defvar spacemacs-version--last-startup-check-file
     (expand-file-name (concat spacemacs-cache-directory "last-version-check"))
     "File where the last startup version check time is stored.")
+  ;; TODO: this can have a default value of zero, especially when defined in a
+  ;; new, always existing, cache file that is always loaded during startup. If the
+  ;; value is zero we haven't yet checked for an update. Zero implies only that
+  ;; the value has been reset and a check has not been performed yet; it doesn't
+  ;; not tell how long ago the last check was.
   (defvar spacemacs-version--last-startup-check-time nil
     "Time of last version check.")
-  (defvar spacemacs-version--startup-check-interval (* 3600 24)
-    "Minimum number of seconds between two version checks at startup.")
+
   (defvar spacemacs-revision--last nil
     "Last detected git revision of `spacemacs-start-directory' or nil.
   NOTE: This variable will be set asynchronously after Spacemacs startup.")
   (defvar spacemacs-revision--file
     (expand-file-name (concat spacemacs-cache-directory "spacemacs-revision"))
     "File where the last revision of `spacemacs-start-directory' is saved.")
+  ;; NOTE: at run-time, after initialization, or between sessions?
   (defvar spacemacs-revision--changed-hook nil
     "Hooks to be ran when Spacemacs detects revision change.")
 
   (defun spacemacs/switch-to-version (&optional version)
-    "Switch spacemacs to VERSION.
+    "Switch spacemacs to VERSION, a string with the format `x.x.x'.
 
-  VERSION is a string with the format `x.x.x'.
   IMPORTANT: The switch is performed by hard resetting the current branch.
   If VERSION is nil then a prompt will ask for a version number.
   If the current version is not `master' and not `develop' then
@@ -5358,13 +5403,24 @@ new version.
   users on `develop' branch must manually pull last commits instead."
     (interactive)
     (let ((branch (spacemacs//git-get-current-branch))
-          (dirty (spacemacs//git-working-directory-dirty)))
+          (proc-buffer "git-working-directory-dirty")
+          (default-directory (file-truename spacemacs-start-directory))
+          ;; `dirty' is non-nil when git status --porcelain returns anything.
+          (dirty (when (eq 0 (process-file "git" nil proc-buffer nil
+                                           "status" "--porcelain"))
+                   (with-current-buffer proc-buffer
+                     (prog1
+                         (when (and (buffer-string)
+                                    ;;simplecheckforanytext
+                                    (string-match-p "[^ \t\n]" (buffer-string)))
+                           (replace-regexp-in-string "\n\\'" "" (buffer-string)))
+                       (kill-buffer proc-buffer))))))
       (unless version
         (message "Getting version information...")
-        (let ((last-version (spacemacs/get-last-version)))
+        (let ((latest-version (spacemacs/get-latest-version-string)))
           (setq version (read-string
-                         (format "Version (default %s [latest]): " last-version)
-                         nil nil last-version))))
+                         (format "Switch to version (default %s [latest]): " latest-version)
+                         nil nil latest-version))))
       (cond ((string-equal "develop" branch)
              (message (concat "Cannot switch version because you are on "
                               "develop.\n"
@@ -5390,23 +5446,44 @@ new version.
                  (message "An error occurred while switching to version %s"
                           version))))
             (t (message "Update aborted.")))))
+#+end_src
 
-  (defun spacemacs/check-for-new-version (force &optional interval)
-    "Periodically check for new for new Spacemacs version.
+
+Previously the file was only loaded if it existed. Loading an empty lisp file
+has no important consequences. Conditionally loading a lisp file expected to
+define lisp variables does nothing useful other than *maybe define variables*.
+/Always loading/ a potentially empty lisp file has the effect of *maybe defining
+variables*, so it's safe to always load it.
+
+#+begin_src emacs-lisp :noweb-ref if it's the 2nd or 17th and/or we've already checked today
+  (not (progn (load spacemacs-version--last-startup-check-file :no-error)
+              ;; "Return non-nil if the version check at startup can be performed."
+              (when (or (null spacemacs-version--last-startup-check-time)
+                        (eql  spacemacs-version--last-startup-check-time (cadr (calendar-current-date))))
+                (setq spacemacs-version--last-startup-check-time (cadr (calendar-current-date)))
+                (spacemacs/dump-vars-to-file '(spacemacs-version--last-startup-check-time)
+                                             spacemacs-version--last-startup-check-file))))
+#+end_src
+
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-release-management.el
+  (defun spacemacs/check-latest-version (force &optional interval)
+    "Check for a new for new Spacemacs version, if able and necessary.
+
   Update `spacemacs-new-version' variable if any new version has been
   found."
     (interactive "P")
     (cond
      ((and (not force)
            (not dotspacemacs-check-for-update))
-      (message "Skipping check for new version (reason: dotfile)"))
+      (message "Skipping check for new version as it's disabled."))
      ((and (not force)
            (string-equal "develop" (spacemacs//git-get-current-branch)))
-      (message "Skipping check for new version (reason: develop branch)"))
+      (message "Skipping check for new version as git branch is develop."))
      ((and (not force)
-           (not (spacemacs//can-check-for-new-version-at-startup)))
-      (message (concat "Skipping check for new version "
-                       "(reason: last check is too recent)")))
+           <<if it's the 2nd or 17th and/or we've already checked today>>)
+      (message (concat "Skipping check for new version as none expected.")))
+
+     ;; Asynchronously check for a new version.
      ((require 'async nil t)
       (message "Start checking for new version...")
       (async-start
@@ -5415,8 +5492,21 @@ new version.
           (load (concat spacemacs-start-directory
                         "core/core-load-paths"))
           (require 'core-spacemacs)
-          (spacemacs/get-last-version))
+          (spacemacs/get-latest-version-string))
+       <<special lambda to handle this case specifically>>)
+      ;; Continue on with everything else.
+      (when interval
+        (setq spacemacs-version--check-timer
+              (run-at-time t (timer-duration interval)
+                           'spacemacs/check-latest-version))))
+     (t (message "Skipping check for new version as `async' didn't load."))))
+#+end_src
+
+Define a lambda in a noweb chunk to clean up the place where it's referenced.
+
+#+begin_src emacs-lisp :noweb-ref special lambda to handle this case specifically
        (lambda (result)
+    "FIXME: this function needs documentation!"
          (if result
              (if (or (version< result spacemacs-version)
                      (string= result spacemacs-version)
@@ -5425,13 +5515,12 @@ new version.
                  (message "Spacemacs is up to date.")
                (message "New version of Spacemacs available: %s" result)
                (setq spacemacs-new-version result))
-           (message "Unable to check for new version."))))
-      (when interval
-        (setq spacemacs-version--check-timer
-              (run-at-time t (timer-duration interval)
-                           'spacemacs/check-for-new-version))))
-     (t (message "Skipping check for new version (reason: async not loaded)"))))
+      (message "Unable to check for new version.")))
+#+end_src
 
+Continue on with things...
+
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-release-management.el
   (defun spacemacs/git-get-current-branch-rev ()
     "Returns the hash of the head commit on the current branch.
   Returns nil if an error occurred."
@@ -5479,13 +5568,13 @@ With that obsoleted we check the version more gently, following the proposal in
 does not work.
 
 #+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-release-management.el
-  (defun spacemacs//get-last-version (repo owner remote branch)
+  (defun spacemacs//get-latest-version-string (repo owner remote branch)
     "Return the last tagged version of BRANCH on REMOTE repository from
   OWNER REPO."
     (let ((url (format "https://github.com/%s/%s" owner repo)))
       (spacemacs//git-remove-remote remote)
       (spacemacs//git-add-remote remote url)
-      ;; <<obsoleted spacemacs-managed call to git fetch remote>>; #6692
+      ;; <<obsoleted spacemacs-managed call to git fetch remote>>; #6692 "hammer-smashed git"
       (spacemacs//git-fetch-tags remote branch))
     (let ((version (spacemacs//git-latest-tag remote branch)))
       (when version
@@ -5493,11 +5582,10 @@ does not work.
           (string-match "^.*\\([0-9]+\\.[0-9]+\\.[0-9]+\\)$" version)
           (match-string 1 version)))))
 
-  ;; FIXME: produces no output!
-  (defun spacemacs/get-last-version ()
+  (defun spacemacs/get-latest-version-string ()
     "Return the last tagged version."
     (interactive)
-    (spacemacs//get-last-version spacemacs-repository
+    (spacemacs//get-latest-version-string spacemacs-repository
                                  spacemacs-repository-owner
                                  spacemacs-checkversion-remote
                                  spacemacs-checkversion-branch))
@@ -5505,20 +5593,6 @@ does not work.
 
 **** Release management facilities (continued)
 #+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-release-management.el
-  (defun spacemacs//can-check-for-new-version-at-startup ()
-    "Return non-nil if the version check at startup can be performed."
-    (when (file-exists-p spacemacs-version--last-startup-check-file)
-      (load spacemacs-version--last-startup-check-file))
-    (let ((result
-           (or (null spacemacs-version--last-startup-check-time)
-               (> (- (float-time) spacemacs-version--last-startup-check-time)
-                  spacemacs-version--startup-check-interval))))
-      (when result
-        (setq spacemacs-version--last-startup-check-time (float-time))
-        (spacemacs/dump-vars-to-file '(spacemacs-version--last-startup-check-time)
-                                     spacemacs-version--last-startup-check-file))
-      result))
-
   (defun spacemacs//git-has-remote (remote)
     "Return non nil if REMOTE is declared."
     (let ((proc-buffer "git-has-remote")
@@ -5557,6 +5631,7 @@ does not work.
                               "fetch" remote))
         (kill-buffer proc-buffer))))
 
+  ;; TODO: document this more heavily.
   (defun spacemacs//git-fetch-tags (remote branch)
     "Fetch the tags for BRANCH in REMOTE repository."
     (let ((proc-buffer "git-fetch-tags")
@@ -5608,6 +5683,7 @@ does not work.
                               "checkout" branch))
         (kill-buffer proc-buffer))))
 
+  ;; MAYBE TODO: what if the branch changed after spacemacs was initialized?
   (defun spacemacs//git-get-current-branch ()
     "Return the current branch. Return nil if an error occurred."
     (let ((proc-buffer "git-get-current-branch")
@@ -5622,21 +5698,6 @@ does not work.
                  "\n$" ""
                  (buffer-substring (line-beginning-position)
                                    (line-end-position))))
-            (kill-buffer proc-buffer))))))
-
-  (defun spacemacs//git-working-directory-dirty ()
-    "Non-nil if the user's emacs directory is not clean.
-  Returns the output of git status --porcelain."
-    (let ((proc-buffer "git-working-directory-dirty")
-          (default-directory (file-truename spacemacs-start-directory)))
-      (when (eq 0 (process-file "git" nil proc-buffer nil
-                                "status" "--porcelain"))
-        (with-current-buffer proc-buffer
-          (prog1
-              (when (and (buffer-string)
-                         ;;simplecheckforanytext
-                         (string-match-p "[^ \t\n]" (buffer-string)))
-                (replace-regexp-in-string "\n\\'" "" (buffer-string)))
             (kill-buffer proc-buffer))))))
 
   (defun spacemacs//deffaces-new-version-lighter (state)
@@ -10273,7 +10334,7 @@ separately from the spacemacs buffer /feature/.
          (spacemacs/load-theme spacemacs--delayed-user-theme
                                spacemacs--fallback-theme t))
        (configuration-layer/display-summary)
-       (spacemacs/check-for-new-version nil spacemacs-version-check-interval)
+       (spacemacs/check-latest-version nil spacemacs-version-check-interval)
        (spacemacs-buffer/goto-link-line)
        (setq spacemacs-initialized t)
        (setq read-process-output-max dotspacemacs-read-process-output-max)
@@ -19091,10 +19152,7 @@ VALUE is validated against SYMBOL's custom type.
      ;; (default t)
      dotspacemacs-verify-spacelpa-archives t
 
-     ;; If non-nil then spacemacs will check for updates at startup
-     ;; when the current branch is not `develop'. Note that checking for
-     ;; new versions works via git commands, thus it calls GitHub services
-     ;; whenever you start Emacs. (default nil)
+     ;; <<dotspacemacs-check-for-update-docstring>>
      dotspacemacs-check-for-update nil
 
      ;; If non-nil, a form that evaluates to a package directory. For example, to
@@ -19696,11 +19754,11 @@ These chunks are modular; they may be redefined to produce variant file headers.
 
 * Top-level files
 ** init.el
-#+begin_src :noweb-ref aggro init file
+#+begin_src fundamental :noweb-ref "aggro init file"
  init.el --- Aggregrotto Initialization File -*- no-byte-compile: t; lexical-binding: nil; -*-
 #+end_src
 
-#+begin_src emacs-lisp :noweb no-export :tangle ../build/init.el
+#+begin_src emacs-lisp :noweb yes :tangle ../build/init.el
   ;;; <<aggro init file>>
   ;;
   ;; Copyright (c) 2012-<<copyright year>> <<copyright holders>>
@@ -19710,11 +19768,14 @@ These chunks are modular; they may be redefined to produce variant file headers.
   ;;
   ;; <<about this file>>
 
+  (defconst emacs-start-time (current-time))
+
   ;;; Garbage collection
   ;; Avoid garbage collection during startup.
   ;; see `SPC h . dotspacemacs-gc-cons' for more info
-  (defconst emacs-start-time (current-time))
   (setq gc-cons-threshold 402653184 gc-cons-percentage 0.6)
+
+  ;;; Core files and versioning of Spacemacs
   (load (concat (file-name-directory load-file-name) "core/core-load-paths")
         nil (not init-file-debug))
   (load (concat spacemacs-core-directory "core-versions")
@@ -19734,7 +19795,7 @@ These chunks are modular; they may be redefined to produce variant file headers.
       (make-directory (file-name-directory spacemacs--last-emacs-version-file)
                       t)))
 
-  ;; Spacemacs version handling
+  ;; Further Spacemacs version handling
   (if (not (version<= spacemacs-emacs-min-version emacs-version))
       (error (concat "Your version of Emacs (%s) is too old. "
                      "Spacemacs requires Emacs version %s or above.")
@@ -19779,7 +19840,7 @@ Earlier Emacs versions do not load the early init file and do not initialize the
 package manager before loading the init file, so this file is neither needed nor
 loaded on those versions.
 
-#+begin_src emacs-lisp :noweb no-export :tangle ../build/early-init.el
+#+begin_src emacs-lisp :noweb yes :tangle ../build/early-init.el
   ;;; early-<<aggro init file>>
   ;;
   ;; Copyright (c) 2020-<<copyright year>> <<copyright holders>>
@@ -20541,13 +20602,101 @@ These contents lived in the top-level file COPYRIGHT in the beginning of the for
   their own copyright notices and license terms:
 
   <<copyright notice of erc-yank>>
-
   <<copyright notice of evil-tmux-navigator>>
-
   <<copyright notice of org-async-init.el>>
-
   <<copyright notice of pylookup>>
-  ,* vim-colors.el, under layers/+spacemacs/spacemacs-modeline/local/vim-powerline.
+  <<copyright notice of vim-colors.el>>
+  <<copyright notice of nav-flash>>
+  <<copyright notice of snippets borrowed from Prelude>>
+  <<copyright notice of various code borrowed from Stack Exchange users>>
+  <<copyright notice of various code snippets borrowed from Emacs Wiki contributors>>
+#+end_src
+
+*** TODO Copyright notices for included software
+#+begin_src text :noweb-ref copyright notice of erc-yank
+  
+  erc-yank is included in the file layers/+chat/erc/local/erc-yank; its copyright
+  notice is reproduced below.
+
+      Copyright (C) 2012 John Wiegley <jwiegley@gmail.com>
+
+      This program is free software; you can redistribute it and/or
+      modify it under the terms of the GNU General Public License as
+      published by the Free Software Foundation; either version 2, or (at
+      your option) any later version.
+
+      This program is distributed in the hope that it will be useful, but
+      WITHOUT ANY WARRANTY; without even the implied warranty of
+      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+      General Public License for more details.
+
+      You should have received a copy of the GNU General Public License
+      along with GNU Emacs; see the file COPYING.  If not, write to the
+      Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+      Boston, MA 02111-1307, USA.
+#+end_src
+
+#+begin_src text :noweb-ref copyright notice of evil-tmux-navigator
+  
+  evil-tmux-navigator is included in the file layers/+tools/tmux/local/tmux; its
+  copyright notice is reproduced below.
+
+      Copyright (c) 2019 Keith Smiley <http://keith.so>
+
+      Permission is hereby granted, free of charge, to any person obtaining a copy of
+      this software and associated documentation files (the 'Software'), to deal in
+      the Software without restriction, including without limitation the rights to
+      use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+      the Software, and to permit persons to whom the Software is furnished to do so,
+      subject to the following conditions:
+
+      The above copyright notice and this permission notice shall be included in all
+      copies or substantial portions of the Software.
+
+      THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+      IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+      FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+      COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+      IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+      CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+#+end_src
+
+#+begin_src text :nowb-ref copyright notice of org-async-init.el
+  
+  org-async-init.el is included in the directory layers/+emacs/org/local; its
+  copyright notice is reproduced below.
+
+      Copyright (C) T. Verron.
+
+      Published at <http://superuser.com/a/898717/702698>.
+
+      Licensed under CC BY-SA 3.0 <https://creativecommons.org/licenses/by-sa/3.0/>.
+#+end_src
+
+#+begin_src text :noweb-ref copyright notice of pylookup
+  
+  pylookup is included in the file layers/+lang/python/local/pylookup; its
+  copyright notice is reproduced below.
+
+      Copyright (C) 2010-2013 Taesoo Kim.
+
+      This program is free software: you can redistribute it and/or modify
+      it under the terms of the GNU General Public License as published by
+      the Free Software Foundation, either version 3 of the License, or
+      (at your option) any later version.
+
+      This program is distributed in the hope that it will be useful,
+      but WITHOUT ANY WARRANTY; without even the implied warranty of
+      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+      GNU General Public License for more details.
+
+      You should have received a copy of the GNU General Public License
+      along with this program. If not, see <https://www.gnu.org/licenses/>.
+#+end_src
+
+#+begin_src text :noweb-ref copyright notice of vim-colors.el
+  
+  vim-colors.el is included in the file under layers/+spacemacs/spacemacs-modeline/local/vim-powerline; its copyright notice is reproduced below.
 
       Adapted from default color scheme of
       vim-powerline <https://github.com/Lokaltog/vim-powerline> and is move to
@@ -20574,8 +20723,12 @@ These contents lived in the top-level file COPYRIGHT in the beginning of the for
       CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
       TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
       SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+#+end_src
 
-  ,* nav-flash, under layers/+misc/nav-flash
+#+begin_src text :noweb-ref copyright notice of nav-flash
+  
+  nav-flash is included under the directory layers/+misc/nav-flash; its copyright
+  notice is reproduced below.
 
       This is ported from Doom Emacs <https://github.com/doomemacs/doomemacs>
       and originally licensed under MIT License.
@@ -20606,13 +20759,19 @@ These contents lived in the top-level file COPYRIGHT in the beginning of the for
       CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
       TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
       SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+#+end_src
 
+#+begin_src text :noweb-ref copyright notice of snippets borrowed from Prelude
+  
   ,* A few code snippets are borrowed from Prelude <https://github.com/bbatsov/prelude>
 
       Copyright © 2011-2022 Bozhidar Batsov and contributors.
 
       Distributed under the GNU General Public License, version 3
+#+end_src
 
+#+begin_src text :noweb-ref copyright notice of various code borrowed from Stack Exchange users
+  
   ,* Multiple code snippets from various users of Stack Exchange.
 
       Snippets from the following copyright holders are licensed under
@@ -20633,95 +20792,21 @@ These contents lived in the top-level file COPYRIGHT in the beginning of the for
       under fair use doctrine:
 
       Trey Jackson <https://stackoverflow.com/users/6148/trey-jackson>
+#+end_src
 
+#+begin_src text :noweb-ref copyright notice of various code snippets borrowed from Emacs Wiki contributors
+  
   ,* Various code snippets are from Emacs Wiki, which we choose to receive the work
     uner GNU Free Documentation License
 
       Copyright (c)  2022  Emacs Wiki.
+
       Permission is granted to copy, distribute and/or modify this document
       under the terms of the GNU Free Documentation License, Version 1.3
       or any later version published by the Free Software Foundation;
       with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
       A copy of the license is included in the section entitled "GNU
       Free Documentation License".
-#+end_src
-
-*** TODO Copyright notices for included software
-#+begin_src text :noweb-ref copyright notice of erc-yank
-  erc-yank is included in the file layers/+chat/erc/local/erc-yank; its copyright
-  notice is reproduced below.
-  
-  Copyright (C) 2012 John Wiegley <jwiegley@gmail.com>
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2, or (at
-  your option) any later version.
-
-  This program is distributed in the hope that it will be useful, but
-  WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with GNU Emacs; see the file COPYING.  If not, write to the
-  Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-  Boston, MA 02111-1307, USA.
-#+end_src
-
-#+begin_src text :noweb-ref copyright notice of evil-tmux-navigator
-  evil-tmux-navigator is included in the file layers/+tools/tmux/local/tmux; its
-  copyright notice is reproduced below.
-  
-  Copyright (c) 2019 Keith Smiley <http://keith.so>
-
-  Permission is hereby granted, free of charge, to any person obtaining a copy of
-  this software and associated documentation files (the 'Software'), to deal in
-  the Software without restriction, including without limitation the rights to
-  use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
-  the Software, and to permit persons to whom the Software is furnished to do so,
-  subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be included in all
-  copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
-  FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-  COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
-  IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-#+end_src
-
-#+begin_src text :nowb-ref copyright notice of org-async-init.el
-  org-async-init.el is included in the directory layers/+emacs/org/local; its
-  copyright notice is reproduced below.
-  
-  Copyright (C) T. Verron.
-
-  Published at <http://superuser.com/a/898717/702698>.
-
-  Licensed under CC BY-SA 3.0 <https://creativecommons.org/licenses/by-sa/3.0/>.
-#+end_src
-
-#+begin_src text :noweb-ref copyright notice of pylookup
-  pylookup is included in the file layers/+lang/python/local/pylookup; its
-  copyright notice is reproduced below.
-  
-  Copyright (C) 2010-2013 Taesoo Kim.
-
-  This program is free software: you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation, either version 3 of the License, or
-  (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program. If not, see <https://www.gnu.org/licenses/>.
 #+end_src
 
 ** =private/=
