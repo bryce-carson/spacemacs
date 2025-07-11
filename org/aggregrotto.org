@@ -5505,16 +5505,16 @@ variables*, so it's safe to always load it.
 Define a lambda in a noweb chunk to clean up the place where it's referenced.
 
 #+begin_src emacs-lisp :noweb-ref special lambda to handle this case specifically
-       (lambda (result)
+  (lambda (result)
     "FIXME: this function needs documentation!"
-         (if result
-             (if (or (version< result spacemacs-version)
-                     (string= result spacemacs-version)
-                     (if spacemacs-new-version
-                         (string= result spacemacs-new-version)))
-                 (message "Spacemacs is up to date.")
-               (message "New version of Spacemacs available: %s" result)
-               (setq spacemacs-new-version result))
+    (if result
+        (if (or (version< result spacemacs-version)
+                (string= result spacemacs-version)
+                (if spacemacs-new-version
+                    (string= result spacemacs-new-version)))
+            (message "Spacemacs is up to date.")
+          (message "New version of Spacemacs available: %s" result)
+          (setq spacemacs-new-version result))
       (message "Unable to check for new version.")))
 #+end_src
 

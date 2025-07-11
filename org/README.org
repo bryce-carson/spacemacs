@@ -1,0 +1,1 @@
+Only Org files are included in this directory. Apart from this README and aggregrotto all are project documentation from Spacemacs-proper (upstream). These documentation are included because changes to core functionality can impact documentation that must likewise be updated.
