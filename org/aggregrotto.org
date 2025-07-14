@@ -1,16 +1,48 @@
-# -*- org-babel-pre-tangle-hook: (org-babel-execute-src-block (org-babel-goto-named-src-block "create-aggregrotto-directory-tree")); -*-
+# -*- org-babel-pre-tangle-hook: (lambda () (require 'org) (load-library "ob") (org-babel-execute-src-block (org-babel-goto-named-src-block "create-aggregrotto-directory-tree"))); -*-
+#+SETUPFILE: darksun.theme
 
-#+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-bigblow.setup
+#+begin_src emacs-lisp :value raw :exports results :noweb yes
+  (eval "This is Spacemacs' core, /Aggregrotto/. The minimum version of Emacs supported
+  by the Spacemacs core defined herein is <<spacemacs-emacs-minimum-version>> and
+  the core version of Spacemacs defined is <<spacemacs-version>>.")
+#+end_src
+
+#+RESULTS:
+: This is Spacemacs' core, /Aggregrotto/. The minimum version of Emacs supported
+: by the Spacemacs core defined herein is 28.2 and
+: the core version of Spacemacs defined is 0.999.0.
+
+#+begin_src fundamental :exports none :noweb-ref spacemacs-emacs-minimum-version
+  28.2
+#+end_src
+#+begin_src fundamental :exports none :noweb-ref spacemacs-version
+  0.999.0
+#+end_src
 
 * INSTALL
 ** Building
-1. First, run a lisp chunk in this document to [[create-aggregrotto-directory-tree][clean then recreate the
-   aggregrotto directory tree in the build directory]].
-2. Install the contents of the [[file:~/Documents/src/aggrogrotto/build/][build/]] directory into a Spacemacs installation.
+1. Merely call ~(org-babel-tangle)~.
 
-** Build steps if aggregrotto is merged into Spacemacs-proper
-1. Clone the Spacemacs repository into a temporary directory.
-2. Run ~make install --install-dir ~/.emacs.d/~.
+** TODO Build steps if aggregrotto is merged into Spacemacs-proper
+These steps are probably unnecessary, because /a release should include all of
+the files pre-tangled/, and with the back-references from the elisp files to the
+org file functioning suitably.
+
+1. Call [[elisp:(org-babel-tangle)][(org-babel-tangle)]] to build the core.
+2. Install the core and its supporting files into an emacs directory with ~make install --install-dir ~/.emacs.d/~
+
+#+begin_src makefile :tangle ../build/Makefile
+  # This is the make file for spacemacs version <<spacemacs-version>>.
+  aggregrotto = "org/aggregrotto.org"
+
+  .PHONY: core
+  core:
+  	emacs --quick --chdir --nw --file ${aggregretto} -f org-babel-tangle
+
+  .PHONY: spacemacs
+  spacemacs : core
+  	install 
+#+end_src
 
 * Ideas
 - Aggressively "in the large" literate programming
@@ -45,10 +77,10 @@ if it doesn't exist. The first element of the results is /expected to be nil/.
                            (org-element-property :parameters src-block)))))))
 #+end_src
 
-#+RESULTS: (Clean and re-)Create Aggregrotto directory tree
-- ../../../../../../../tmp
-- ../build/core/
+#+RESULTS: create-aggregrotto-directory-tree
 - ../build/
+- ../../../../../../tmp
+- ../build/core/
 - ../build/core/info/
 - ../build/core/banners/
 - ../build/core/libs/
@@ -573,7 +605,7 @@ the "cfgl" system.
 
   (cl-defmethod cfgl-package-toggled-p ((pkg cfgl-package) &optional inhibit-messages)
     "Evaluate the `toggle' slot of passed PKG.
-  If INHIBIT-MESSAGES is non nil then any message emitted by the toggle evaluation
+  If INHIBIT-MESSAGES is non-nil then any message emitted by the toggle evaluation
   is ignored."
     (let ((message-log-max (unless inhibit-messages message-log-max))
           (toggle (oref pkg toggle)))
@@ -581,7 +613,7 @@ the "cfgl" system.
 
   (cl-defmethod cfgl-package-reqs-satisfied-p ((pkg cfgl-package) &optional inhibit-messages)
     "Check if requirements of a package are all enabled.
-  If INHIBIT-MESSAGES is non nil then any message emitted by the toggle evaluation
+  If INHIBIT-MESSAGES is non-nil then any message emitted by the toggle evaluation
   is ignored."
     (cl-every
      (lambda (dep-pkg)
@@ -594,7 +626,7 @@ the "cfgl" system.
     "Check if a package is enabled.
   This checks the excluded property, evaluates the toggle, if any, and recursively
   checks whether dependent packages are also enabled.
-  If INHIBIT-MESSAGES is non nil then any message emitted by the toggle evaluation
+  If INHIBIT-MESSAGES is non-nil then any message emitted by the toggle evaluation
   is ignored."
     (and (or (oref pkg protected) (not (oref pkg excluded)))
          (cfgl-package-reqs-satisfied-p pkg inhibit-messages)
@@ -638,13 +670,13 @@ More variables.
   file. It can be overridden by users inside `dotspacemacs/user-init'.")
 
   (defvar configuration-layer-exclude-all-layers nil
-    "If non nil then only the distribution layer is loaded.")
+    "If non-nil then only the distribution layer is loaded.")
 
   (defvar configuration-layer-force-distribution nil
     "If set, bypass the user's choice `dotspacemacs-distribution'.")
 
   (defvar configuration-layer--package-archives-refreshed nil
-    "Non nil if package archives have already been refreshed.")
+    "Non-nil if package archives have already been refreshed.")
 
   (defvar configuration-layer--load-packages-files nil
     "If non-nil force loading `packages.el' files when creating layer objects.")
@@ -687,7 +719,7 @@ More variables.
     "If non-nil then declared layers are considered to be used.")
 
   (defvar configuration-layer-error-count nil
-    "Non nil indicates the number of errors occurred during the
+    "Non-nil indicates the number of errors occurred during the
   installation of initialization.")
 
   (defvar configuration-layer-categories '()
@@ -833,10 +865,10 @@ A lock file is used to define some version information across sessions.
   likelihood of an archive, so it can gives false positive if the archive
   page is served but the archive is not.
 
-  If QUIET is non nil then the function does not print message in the Spacemacs
+  If QUIET is non-nil-then the function does not print message in the Spacemacs
   home buffer.
 
-  If FORCE is non nil then refresh the archives even if they have been already
+  If FORCE is non-nil then refresh the archives even if they have been already
   refreshed during the current session."
     (unless (and configuration-layer--package-archives-refreshed
                  (not force))
@@ -1037,7 +1069,7 @@ A lock file is used to define some version information across sessions.
 
   (defun configuration-layer/make-layer (layer-specs &optional obj usedp dir)
     "Return a `cfgl-layer' object based on LAYER-SPECS.
-  If OBJ is non nil then copy LAYER-SPECS properties into OBJ, otherwise create
+  If OBJ is non-nil then copy LAYER-SPECS properties into OBJ, otherwise create
   a new object.
   DIR is the directory where the layer is, if it is nil then search in the indexed
   layers for the path.
@@ -1093,7 +1125,7 @@ A lock file is used to define some version information across sessions.
   (defun configuration-layer/make-package (pkg-specs layer-name &optional obj)
     "Return a `cfgl-package' object based on PKG-SPECS.
   LAYER-NAME is the layer name where the PKG-SPECS is listed.
-  If OBJ is non nil then copy PKG-SPECS properties into OBJ, otherwise create
+  If OBJ is non-nil then copy PKG-SPECS properties into OBJ, otherwise create
   a new object."
     (let* ((pkg-name (if (listp pkg-specs) (car pkg-specs) pkg-specs))
            (layer (unless (eq 'dotfile layer-name)
@@ -1409,14 +1441,14 @@ A lock file is used to define some version information across sessions.
 
   (defun configuration-layer//warning (msg &rest args)
     "Display MSG as a warning message in buffer `*Messages*'.
-  If `configuration-layer--inhibit-warnings' is non nil then this function is a
+  If `configuration-layer--inhibit-warnings' is non-nil then this function is a
   no-op."
     (unless configuration-layer--inhibit-warnings
       (apply 'spacemacs-buffer/warning msg args)))
 
   (defun configuration-layer//error (msg &rest args)
     "Display MSG as a warning message in buffer `*Messages*'.
-  If `configuration-layer--inhibit-errors' is non nil then this function is a
+  If `configuration-layer--inhibit-errors' is non-nil then this function is a
   no-op."
     (unless configuration-layer--inhibit-errors
       (configuration-layer//increment-error-count)
@@ -1586,7 +1618,7 @@ A lock file is used to define some version information across sessions.
   (defun configuration-layer//filter-distant-packages
       (packages usedp &optional predicate)
     "Return the distant packages (ie to be intalled).
-  If USEDP is non nil then returns only the used packages; if it is nil then
+  If USEDP is non-nil then returns only the used packages; if it is nil then
   return both used and unused packages.
   PREDICATE is an additional expression that eval to a boolean."
     (cl-remove-if-not
@@ -1764,7 +1796,7 @@ A lock file is used to define some version information across sessions.
     "Declare a single layer with spec LAYER-SPECS.
   Set the variable `configuration-layer--declared-layers-usedp' to control
   whether the declared layer is an used one or not.
-  If `SKIP-LAYER-DEPS' is non nil then skip loading of layer dependenciesl"
+  If `SKIP-LAYER-DEPS' is non-nil then skip loading of layer dependenciesl"
     (let* ((layer-name (if (listp layer-specs) (car layer-specs) layer-specs))
            (layer (configuration-layer/get-layer layer-name))
            (usedp configuration-layer--declared-layers-usedp))
@@ -2017,7 +2049,7 @@ A lock file is used to define some version information across sessions.
            (spacemacs//redisplay))))))
 
   (defun configuration-layer//lazy-install-p (layer-name)
-    "Return non nil if the layer with LAYER-NAME should be lazy installed."
+    "Return non-nil if the layer with LAYER-NAME should be lazy installed."
     (or (eq 'all dotspacemacs-enable-lazy-installation)
         (and (memq dotspacemacs-enable-lazy-installation '(unused t))
              (not (configuration-layer/layer-used-p layer-name)))))
@@ -2167,7 +2199,7 @@ A lock file is used to define some version information across sessions.
             (cons pkg-name (cdr location)))))))
 
   (defun configuration-layer//new-version-available-p (pkg-name)
-    "Return non nil if there is a new version available for PKG-NAME."
+    "Return non-nil if there is a new version available for PKG-NAME."
     (let ((recipe (configuration-layer//get-package-recipe pkg-name))
           (pkg (configuration-layer/get-package pkg-name))
           (cur-version (configuration-layer//get-package-version-string pkg-name))
@@ -3052,7 +3084,7 @@ forking Zhang's code beneath the local /forks// directory.
   (defun configuration-layer//stable-elpa-verify-archive ()
     "Verify the downloaded stable ELPA repository archive.
 
-  Returns non nil if the verification succeeded.
+  Returns non-nil if the verification succeeded.
 
   If Spacemacs cannot verify the archive a prompt ask the user if they want to
   continue with the stable ELPA repository installation."
@@ -3136,7 +3168,7 @@ forking Zhang's code beneath the local /forks// directory.
   (defun configuration-layer//stable-elpa-download-tarball ()
     "Download the tarball of the stable ELPA repository if it used.
 
-  Returns non nil if the tarball has been downloaded.
+  Returns non-nil if the tarball has been downloaded.
 
   Returns nil if the tarball does not need to be downloaded or if an error
   happened during the download."
@@ -3487,16 +3519,14 @@ forking Zhang's code beneath the local /forks// directory.
 
 *** The Spacemacs Debug Facility
 #+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-debug.el
-  ;;; core-debug.el --- Spacemacs Core File  -*- lexical-binding: t; -*-
+  ;;; core-debug.el <<is a core file that uses lexical binding>>
   <<copyright>>
 
   ;;; Commentary:
-
   ;; Interface to time execution of intialization, and collecting system information
   ;; for reporting bugs.
 
   ;;; Code:
-
   (eval-when-compile
     ;; defined in init.el
     (defvar emacs-start-time)
@@ -3513,7 +3543,6 @@ forking Zhang's code beneath the local /forks// directory.
   (declare-function spacemacs/git-get-current-branch-rev "core-release-management" ())
   (declare-function configuration-layer/layer-used-p "core-configuration-layer" (layer-name))
   (declare-function spacemacs/set-leader-keys-for-major-mode "core-keybindings" (mode key def &rest bindings))
-
 #+end_src
 
 #+begin_src emacs-lisp :noweb no :noweb-ref "signal to reader to replace with a backtrace if relevant"
@@ -4179,6 +4208,9 @@ take actions accordingly.
     'spacemacs-dotspacemacs-init)
 #+end_src
 
+This docstring is separated out of the raw function definition because it is
+reproduced in the =.spacemacs= file template.
+
 #+begin_src emacs-lisp :noweb-ref dotspacemacs-check-for-update-docstring
   "If non-nil then spacemacs will check for updates at startup when the
   current branch is not `develop'. Note that checking for new versions
@@ -4249,7 +4281,7 @@ take actions accordingly.
     'spacemacs-dotspacemacs-init)
 
   (spacemacs|defc dotspacemacs-colorize-cursor-according-to-state t
-    "If non nil the cursor color matches the state color in GUI Emacs."
+    "If non-nil the cursor color matches the state color in GUI Emacs."
     'boolean
     'spacemacs-dotspacemacs-init)
 
@@ -4289,12 +4321,12 @@ take actions accordingly.
     'dotspacemacs-emacs-command-key "2016-01-09 (58e524)")
 
   (spacemacs|defc dotspacemacs-distinguish-gui-tab nil
-    "If non nil, distinguish C-i and tab in the GUI version of Emacs."
+    "If non-nil, distinguish C-i and tab in the GUI version of Emacs."
     'boolean
     'spacemacs-dotspacemacs-init)
 
   ;; (defvar dotspacemacs-distinguish-gui-ret nil
-  ;;   "If non nil, distinguish C-m and return in the GUI version of
+  ;;   "If non-nil, distinguish C-m and return in the GUI version of
   ;; emacs.")
 
   (spacemacs|defc dotspacemacs-default-font '("Source Code Pro"
@@ -4335,12 +4367,12 @@ take actions accordingly.
     'spacemacs-dotspacemacs-init)
 
   (spacemacs|defc dotspacemacs-display-default-layout nil
-    "If non nil the default layout name is displayed in the mode-line."
+    "If non-nil the default layout name is displayed in the mode-line."
     'boolean
     'spacemacs-dotspacemacs-init)
 
   (spacemacs|defc dotspacemacs-auto-resume-layouts nil
-    "If non nil then the last auto saved layouts are resume automatically upon
+    "If non-nil then the last auto saved layouts are resume automatically upon
   start."
     'boolean
     'spacemacs-dotspacemacs-init)
@@ -4435,31 +4467,31 @@ take actions accordingly.
     'spacemacs-dotspacemacs-init)
 
   (spacemacs|defc dotspacemacs-loading-progress-bar t
-    "If non nil a progress bar is displayed when spacemacs is loading. This
+    "If non-nil a progress bar is displayed when spacemacs is loading. This
   may increase the boot time on some systems and emacs builds, set it to nil
   to boost the loading time."
     'boolean
     'spacemacs-dotspacemacs-init)
 
   (spacemacs|defc dotspacemacs-fullscreen-at-startup nil
-    "If non nil the frame is fullscreen when Emacs starts up (Emacs 24.4+ only)."
+    "If non-nil the frame is fullscreen when Emacs starts up (Emacs 24.4+ only)."
     'boolean
     'spacemacs-dotspacemacs-init)
 
   (spacemacs|defc dotspacemacs-fullscreen-use-non-native nil
-    "If non nil `spacemacs/toggle-fullscreen' will not use native fullscreen. Use
+    "If non-nil `spacemacs/toggle-fullscreen' will not use native fullscreen. Use
   to disable fullscreen animations on macOS."
     'boolean
     'spacemacs-dotspacemacs-init)
 
   (spacemacs|defc dotspacemacs-maximized-at-startup t
-    "If non nil the frame is maximized when Emacs starts up (Emacs 24.4+ only).
+    "If non-nil the frame is maximized when Emacs starts up (Emacs 24.4+ only).
   Takes effect only if `dotspacemacs-fullscreen-at-startup' is nil."
     'boolean
     'spacemacs-dotspacemacs-init)
 
   (spacemacs|defc dotspacemacs-undecorated-at-startup nil
-    "If non nil the frame is undecorated when Emacs starts up."
+    "If non-nil the frame is undecorated when Emacs starts up."
     'boolean
     'spacemacs-dotspacemacs-init)
 
@@ -4485,24 +4517,24 @@ take actions accordingly.
     'spacemacs-dotspacemacs-init)
 
   (spacemacs|defc dotspacemacs-show-transient-state-title t
-    "If non nil show the titles of transient states."
+    "If non-nil show the titles of transient states."
     'boolean
     'spacemacs-dotspacemacs-init)
 
   (spacemacs|defc dotspacemacs-show-transient-state-color-guide t
-    "If non nil show the color guide hint for transient state keys."
+    "If non-nil show the color guide hint for transient state keys."
     'boolean
     'spacemacs-dotspacemacs-init)
 
   (spacemacs|defc dotspacemacs-mode-line-unicode-symbols t
-    "If non nil unicode symbols are displayed in the mode-line (eg. for lighters).
+    "If non-nil unicode symbols are displayed in the mode-line (eg. for lighters).
   If you use Emacs as a daemon and wants unicode characters only in GUI set
   the value to quoted `display-graphic-p'. (default t)"
     '(choice boolean (const display-graphic-p))
     'spacemacs-dotspacemacs-init)
 
   (spacemacs|defc dotspacemacs-smooth-scrolling t
-    "If non nil smooth scrolling (native-scrolling) is enabled.
+    "If non-nil smooth scrolling (native-scrolling) is enabled.
   Smooth scrolling overrides the default behavior of Emacs which
   recenters point when it reaches the top or bottom of the
   screen."
@@ -4543,7 +4575,7 @@ take actions accordingly.
     'spacemacs-dotspacemacs-init)
 
   (spacemacs|defc dotspacemacs-persistent-server nil
-    "If non nil advises quit functions to keep server open when quitting."
+    "If non-nil advises quit functions to keep server open when quitting."
     'boolean
     'spacemacs-dotspacemacs-init)
 
@@ -4676,7 +4708,7 @@ take actions accordingly.
   (spacemacs|defc dotspacemacs-use-clean-aindent-mode t
     "Correct indentation for simple modes.
 
-  If non nil activate `clean-aindent-mode' which tries to correct
+  If non-nil activate `clean-aindent-mode' which tries to correct
   virtual indentation of simple modes. This can interfere with mode specific
   indent handling like has been reported for `go-mode'.
   If it does deactivate it here. (default t)"
@@ -4684,7 +4716,7 @@ take actions accordingly.
     'spacemacs-dotspacemacs-init)
 
   (spacemacs|defc dotspacemacs-use-SPC-as-y nil
-    "Accept SPC as y for prompts if non nil. (default nil)"
+    "Accept SPC as y for prompts if non-nil. (default nil)"
     'boolean
     'spacemacs-dotspacemacs-init)
 
@@ -4701,7 +4733,7 @@ take actions accordingly.
 
   (spacemacs|defc dotspacemacs-home-shorten-agenda-source nil
     "If nil the home buffer shows the full path of agenda items
-  and todos. If non nil only the file name is shown."
+  and todos. If non-nil only the file name is shown."
     'boolean
     'spacemacs-dotspacemacs-init)
 
@@ -4806,7 +4838,7 @@ take actions accordingly.
 
   (defun dotspacemacs/add-layer (layer-name)
     "Add LAYER_NAME to dotfile and reload the it.
-  Returns non nil if the layer has been effectively inserted."
+  Returns non-nil if the layer has been effectively inserted."
     (unless (configuration-layer/layer-used-p layer-name)
       (with-current-buffer (find-file-noselect (dotspacemacs/location))
         (goto-char (point-min))
@@ -4918,9 +4950,9 @@ take actions accordingly.
         (configuration-layer/load))))
 
   (defun dotspacemacs/install (arg)
-    "Install the dotfile, return non nil if the dotfile has been installed.
+    "Install the dotfile, return non-nil if the dotfile has been installed.
 
-  If ARG is non nil then ask questions to the user before installing the dotfile."
+  If ARG is non-nil then ask questions to the user before installing the dotfile."
     (interactive "P")
     ;; preferences is an alist where the key is the text to replace by
     ;; the value in the dotfile
@@ -5277,20 +5309,16 @@ of Spacemacs---especially in relation to some future built-in feature of Emacs
 that has been packported to an earlier version---and /to help gits change
 between version of Spacemacs without using the git command line tool/.
 
-**** versions.el
-I don't feel like this needs to be its own core file. It should be integrated
-with release-management.
+A core file called "versions" was integrated into the "release management" core
+file, because it was minimal and it didn't need to exist separately.
 
-#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-versions.el
-  ;;; core-versions.el <<is a core file that uses lexical binding>>
-  <<copyright>>
-
-  ;;; Commentary:
-  ;; Define Spacemacs version and minimum supported Emacs version.
-
-  (defconst spacemacs-version          "0.999.0" "Spacemacs version.")
-  (defconst spacemacs-emacs-min-version   "28.2" "Minimal version of Emacs.")
-
+#+begin_src emacs-lisp :noweb-ref core-versions.el
+  ;;; Specify the version number of Spacemacs, and the oldest, supported version
+  ;;; of Emacs. Further, provision a macro for evaluating forms until the oldest,
+  ;;; "minimum", Spacemacs-supported version of Emacs reaches a given version
+  ;;; number.
+  (defconst spacemacs-version          "<<spacemacs-version>>" "Spacemacs version.")
+  (defconst spacemacs-emacs-min-version   "<<spacemacs-emacs-minimum-version>>" "Minimal version of Emacs.")
   (defmacro spacemacs|eval-until-emacs-min-version (version msg &rest body)
     "Evaluate the BODY form if `spacemacs-emacs-min-version' < VERSION, otherwise
   warn the MSG.
@@ -5306,8 +5334,6 @@ with release-management.
               (if ,msg '("%s" ,msg)
                 '("The minimum Spacemacs-supported version of Emacs (%s) is newer than current running version %s."
                   spacemacs-emacs-min-version ,version)))))
-
-  (provide 'core-versions)
 #+end_src
 
 **** Release management facilities
@@ -5318,6 +5344,8 @@ new version.
 #+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-release-management.el
   ;;; core-release-management.el <<is a core file that uses lexical binding>>
   <<copyright>>
+
+  <<core-versions.el>>
 
   (defconst spacemacs-repository "spacemacs"
     "Name of the Spacemacs remote repository.")
@@ -5332,15 +5360,16 @@ functionalities are intact it is probable that noweb functionality is not
 impeded.
 
 #+begin_quote
-The "checkversion" repository is not a public repository owned by Sylvain. What was this referring to?
+The "checkversion" repository is not a public repository owned by Sylvain. What
+was this referring to?
 
 #+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-release-management.el
   (defconst spacemacs-checkversion-remote "checkversion"
-    "Name of the remote repository used to check for new versione")
+    "Name of the remote queried for new versions.")
 #+end_src
 #+end_quote
 
-Continuing with the rest of the file...
+Continuing with the rest of the file
 
 #+begin_src emacs-lisp :noweb-ref today is the 2nd or 17th
   (progn (require 'calendar)
@@ -5352,24 +5381,30 @@ Continuing with the rest of the file...
   (defconst spacemacs-checkversion-branch "master"
     "Name of the branch used to check for new version.")
 
-  ;; FIXME: this gets `spacemacs|defc' elsewhere!
-  ;; (defvar dotspacemacs-check-for-update)
   (defvar spacemacs-version)
-  ;; new version variables
   (defvar spacemacs-new-version nil
     "If non-nil a new Spacemacs version is available.")
+#+end_src
 
-  ;; TODO: if we are getting---potentionally---hundreds of users on the
-  ;; *occasional* branch who will be checking GitHub for new tags we'll want to
-  ;; set an interval once again. NOTE: in the past it was `"6 hours"' but we now
-  ;; check for new versions only at startup
+#+begin_quote
+TODO: if we are getting---potentionally---hundreds of users on the *occasional*
+branch who will be checking GitHub for new tags we'll want to set an interval
+once again.
+
+This variable is used to run repeated checks for new versions while Spacemacs is
+running in another process; the check is done asynchronously in another process.
+For instance, if a spacemacs server was running this would check every day until
+the server was stopped.
+
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-release-management.el
   (defvar spacemacs-version-check-interval (* 3600 24)
-    "Time between two version checks.")
+    "The number of seconds between two checks for new versions of Spacemacs.")
+#+end_src
+#+end_quote
 
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-release-management.el
   (defvar spacemacs-version-check-lighter "[+]"
     "Text displayed in the mode-line when a new version is available.")
-  (defvar spacemacs-version--check-timer nil
-    "The current timer for new version check.")
   (defvar spacemacs-version--last-startup-check-file
     (expand-file-name (concat spacemacs-cache-directory "last-version-check"))
     "File where the last startup version check time is stored.")
@@ -5448,7 +5483,6 @@ Continuing with the rest of the file...
             (t (message "Update aborted.")))))
 #+end_src
 
-
 Previously the file was only loaded if it existed. Loading an empty lisp file
 has no important consequences. Conditionally loading a lisp file expected to
 define lisp variables does nothing useful other than *maybe define variables*.
@@ -5464,6 +5498,8 @@ variables*, so it's safe to always load it.
                 (spacemacs/dump-vars-to-file '(spacemacs-version--last-startup-check-time)
                                              spacemacs-version--last-startup-check-file))))
 #+end_src
+
+This function defines the actual check for a new version.
 
 #+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-release-management.el
   (defun spacemacs/check-latest-version (force &optional interval)
@@ -5483,7 +5519,7 @@ variables*, so it's safe to always load it.
            <<if it's the 2nd or 17th and/or we've already checked today>>)
       (message (concat "Skipping check for new version as none expected.")))
 
-     ;; Asynchronously check for a new version.
+     ;; Asynchronously check for a new version at timed intervals.
      ((require 'async nil t)
       (message "Start checking for new version...")
       (async-start
@@ -5506,7 +5542,10 @@ Define a lambda in a noweb chunk to clean up the place where it's referenced.
 
 #+begin_src emacs-lisp :noweb-ref special lambda to handle this case specifically
   (lambda (result)
-    "FIXME: this function needs documentation!"
+    "Update `spacemacs-new-version' on the condition RESULT is non-nil.
+
+  Messaging occurs in all cases, when RESULT is less than or equal to the
+  current version, if a new version is available, or if RESULT is nil."
     (if result
         (if (or (version< result spacemacs-version)
                 (string= result spacemacs-version)
@@ -5572,9 +5611,7 @@ does not work.
     "Return the last tagged version of BRANCH on REMOTE repository from
   OWNER REPO."
     (let ((url (format "https://github.com/%s/%s" owner repo)))
-      (spacemacs//git-remove-remote remote)
-      (spacemacs//git-add-remote remote url)
-      ;; <<obsoleted spacemacs-managed call to git fetch remote>>; #6692 "hammer-smashed git"
+      <<handle edge cases pertaining to git remotes>>
       (spacemacs//git-fetch-tags remote branch))
     (let ((version (spacemacs//git-latest-tag remote branch)))
       (when version
@@ -5587,14 +5624,43 @@ does not work.
     (interactive)
     (spacemacs//get-latest-version-string spacemacs-repository
                                  spacemacs-repository-owner
-                                 spacemacs-checkversion-remote
+                                          spacemacs-checkversion-remote; a local-only name
                                  spacemacs-checkversion-branch))
 #+end_src
+
+As mentioned inline, there are edge cases pertaining to Git remotes are handled
+before fetching the tags. Notably: an employee at GitHub specifically requested
+we not smash their servers (but that was a while ago). What an achievement!
+Apart from that, the "CHECKVERSION" remote is removed and then re-created,
+ensuring that the remote in the repository-local git config URL points to the
+correct remote repository.
+
+#+begin_quote
+I, Bryce Carson, believe this was introduced to allow an update coming from
+Remote 'A' to update allow Spacemacs to change the remote to Remote 'B'.
+#+end_quote
+
+#+begin_quote
+This is a separate chunk because this needs commentary and review. Why was this
+implemented? Is there a /good, enduring reason/ why we should reset the remote
+regardless of what it is?
+
+#+begin_src emacs-lisp :noweb-ref reset the remote to GitHub using the HTTPS protocol
+  (spacemacs//git-remove-remote remote)
+  (spacemacs//git-add-remote remote url)
+#+end_src
+
+We can then end up with a chunk that handles any edge cases before we proceed.
+#+begin_src emacs-lisp :noweb-ref handle edge cases pertaining to git remotes
+  <<reset the remote to GitHub using the HTTPS protocol>>
+  ;; <<obsoleted spacemacs-managed call to git fetch remote>>; #6692 "hammer-smashed git"
+#+end_src
+#+end_quote
 
 **** Release management facilities (continued)
 #+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-release-management.el
   (defun spacemacs//git-has-remote (remote)
-    "Return non nil if REMOTE is declared."
+    "Return non-nil if REMOTE is declared."
     (let ((proc-buffer "git-has-remote")
           (default-directory (file-truename spacemacs-start-directory)))
       (when (eq 0 (process-file "git" nil proc-buffer nil "remote"))
@@ -5631,17 +5697,11 @@ does not work.
                               "fetch" remote))
         (kill-buffer proc-buffer))))
 
-  ;; TODO: document this more heavily.
   (defun spacemacs//git-fetch-tags (remote branch)
-    "Fetch the tags for BRANCH in REMOTE repository."
+    "Fetch the tags for BRANCH on REMOTE."
     (let ((proc-buffer "git-fetch-tags")
           (default-directory (file-truename spacemacs-start-directory)))
       (prog1
-          ;;;; original comment: seems necessary to fetch first
-          ;; but we remove this according to issue #6692 proposal
-          ;; (eq 0 (process-file "git" nil proc-buffer nil
-          ;;                     "fetch" remote branch))
-          ;; explicitly fetch the new tags
           (eq 0 (process-file "git" nil proc-buffer nil
                               "fetch" "--tags" remote branch))
         (kill-buffer proc-buffer))))
@@ -6264,7 +6324,7 @@ does not work.
     "Base keymap for all spacemacs leader key commands.")
 
   (defun spacemacs/translate-C-i (_)
-    "If `dotspacemacs-distinguish-gui-tab' is non nil, the raw key
+    "If `dotspacemacs-distinguish-gui-tab' is non-nil, the raw key
   sequence does not include <tab> or <kp-tab>, and we are in the
   gui, translate to [C-i]. Otherwise, [9] (TAB)."
     (interactive)
@@ -6276,7 +6336,7 @@ does not work.
   (define-key key-translation-map [?\C-i] 'spacemacs/translate-C-i)
 
   ;; (defun spacemacs/translate-C-m (_)
-  ;;   "If `dotspacemacs-distinguish-gui-ret' is non nil, the raw key
+  ;;   "If `dotspacemacs-distinguish-gui-ret' is non-nil, the raw key
   ;; sequence does not include <ret>, and we are in the gui, translate
   ;; to [C-m]. Otherwise, [9] (TAB)."
   ;;   (interactive)
@@ -6338,7 +6398,7 @@ does not work.
     "Check for MAP-prefix. If it doesn't exist yet, use `bind-map'
   to create it and bind it to `dotspacemacs-major-mode-leader-key'
   and `dotspacemacs-major-mode-emacs-leader-key'. If MODE is a
-  minor-mode, the third argument should be non nil."
+  minor-mode, the third argument should be non-nil."
     (let* ((prefix (intern (format "%s-prefix" map)))
            (leader1 (when (spacemacs//acceptable-leader-p
                            dotspacemacs-major-mode-leader-key)
@@ -6910,7 +6970,7 @@ is no longer necessary (see above).
   imported into the `.spacemacs.env' file.")
 
   (defvar spacemacs--spacemacs-env-loaded nil
-    "non-nil if `spacemacs/load-spacemacs-env' has been called at least once.")
+    "Non-nil if `spacemacs/load-spacemacs-env' has been called at least once.")
 
   (defun spacemacs//init-spacemacs-env (&optional force)
     "Attempt to fetch the environment variables from the users shell.
@@ -7146,18 +7206,34 @@ is no longer necessary (see above).
 #+end_src
 
 *** funcs.el
+Functions presumed to be foundational to Spacemacs core, or a collection of
+otherwise uncategorized functions utilized in the core.
+
 #+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-funcs.el
   ;;; core-funcs.el <<is a core file that uses lexical binding>>
   <<copyright>>
+#+end_src
+
+**** /core-funcs.el/
+
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-funcs.el
 
   (defvar spacemacs-repl-list '()
     "List of all registered REPLs.")
+#+end_src
 
+#+begin_quote
+[[https://github.com/sunlin7][lin.sun]] is working on removing this macro in [[https://github.com/syl20bnr/spacemacs/pull/17062][#17062]].
+
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-funcs.el
   (defmacro spacemacs|dotspacemacs-backward-compatibility (variable default)
     "Return `if' sexp for backward compatibility with old dotspacemacs
   values."
     `(if (boundp ',variable) ,variable ',default))
+#+end_src
+#+end_quote
 
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-funcs.el
   (defun spacemacs/system-is-mac ()
     (eq system-type 'darwin))
 
@@ -7502,9 +7578,14 @@ is no longer necessary (see above).
     (let ((comint-buffer-maximum-size 0))
       (comint-truncate-buffer)))
 
-  
-  ;; Generalized next-error system ("gne")
+#+end_src
 
+**** The "Generalized ~next-error~ /System/"
+The following blocks describe a generalized system for working with
+~next-error~. These functions appear unused.
+
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-funcs.el
+  ;;; Generalized next-error system ("gne")
   (defun spacemacs/error-delegate ()
     "Decide which error API to delegate to.
 
@@ -7566,7 +7647,13 @@ is no longer necessary (see above).
     (forward-line (1- spacemacs--gne-cur-line))
     (funcall spacemacs--gne-line-func
              (buffer-substring (point-at-bol) (point-at-eol))))
+#+end_src
 
+**** /core-funcs.el/ (continued)
+The core functions blocks were interrupted with what appears to be something
+thematically different, the /Generalized ~next-error~ System/.
+
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-funcs.el
   (defun spacemacs/terminal-fix-mode-line-indicator-overlap (str)
     "Add a space between two mode line indicators,
   to fix an overlapping issue, that occurs when
@@ -7584,6 +7671,7 @@ is no longer necessary (see above).
 
   (provide 'core-funcs)
 #+end_src
+
 
 *** hooks.el
 #+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-hooks.el
@@ -7932,19 +8020,19 @@ Using the feature system in Emacs seems like a good idea for this. I've never he
       A STRING or a SEXP that evaluates to a string.
 
   `:use-minibuffer BOOLEAN'
-      If non nil then the minibuffer is used to display the documentation
+      If non-nil then the minibuffer is used to display the documentation
       strings. Default is nil.
 
   `:disable-evil-leader BOOLEAN'
-      If non nil then the evil leader has no effect when the micro state
+      If non-nil then the evil leader has no effect when the micro state
       is active. Default to nil.
 
   `:persistent BOOLEAN'
-      If BOOLEAN is non nil then the micro-state never exits. A binding
+      If BOOLEAN is non-nil then the micro-state never exits. A binding
       with an explicitly set `exit t' property is required. Default is nil.
 
   `:execute-binding-on-enter BOOLEAN'
-      If BOOLEAN is non nil then execute the micro-state command bound to
+      If BOOLEAN is non-nil then execute the micro-state command bound to
       to the pressed key that started the micro-state.
 
   `:bindings EXPRESSIONS'
@@ -7959,7 +8047,7 @@ Using the feature system in Emacs seems like a good idea for this. I've never he
         to a string
       - :pre is an SEXP evaluated before the bound action
       - :post is an SEXP evaluated after the bound action
-      - :exit SYMBOL or SEXP, if non nil then pressing this key will
+      - :exit SYMBOL or SEXP, if non-nil then pressing this key will
         leave the micro-state (default is nil).
         Important note: due to inner working of transient-maps in Emacs
         the `:exit' keyword is evaluate *before* the actual execution
@@ -8144,7 +8232,9 @@ Using the feature system in Emacs seems like a good idea for this. I've never he
 *** spacemacs-buffer.el
 The "Spacemacs Buffer" is the ~initial-buffer-choice~ of Spacemacs; the buffer
 is minimally customizable, and it is deeply integrated with Spacemacs' layer and
-initialization functionality.
+initialization functionality. While described separately these should be thought
+of as a single system, and /the Spacemacs Buffer/ is merely a UI component of
+that system.
 
 #+begin_src emacs-lisp :noweb no-export :tangle ../build/core/core-spacemacs-buffer.el
   ;;; core-spacemacs-buffer.el <<is a core file that uses lexical binding>>
@@ -8249,7 +8339,7 @@ All the definitions in the file are given here.
 
   (defvar spacemacs-buffer--release-note-version nil
     "If nil the release note is displayed.
-  If non nil it contains a version number, if the version number is lesser than
+  If non-nil it contains a version number, if the version number is lesser than
   the current version the release note it displayed")
 
   (defvar spacemacs-buffer--note-widgets nil
@@ -8999,7 +9089,7 @@ All the definitions in the file are given here.
 
   (defun spacemacs-buffer/message (msg &rest args)
     "Display MSG in *Messages* prepended with '(Spacemacs)'.
-  The message is displayed only if `init-file-debug' is non nil.
+  The message is displayed only if `init-file-debug' is non-nil.
   ARGS: format string arguments."
     (when init-file-debug
       (message "(Spacemacs) %s" (apply 'format msg args))))
@@ -9768,7 +9858,7 @@ All the definitions in the file are given here.
   (defun spacemacs-buffer/goto-buffer (&optional refresh do-not-switch)
     "Create the special buffer for `spacemacs-buffer-mode'.
   REFRESH if the buffer should be redrawn. This will automatically
-  switch to the buffer unless DO-NOT-SWITCH is non nil.
+  switch to the buffer unless DO-NOT-SWITCH is non-nil.
 
   If a prefix argument is given, switch to it in an other, possibly new window."
     (interactive)
@@ -10126,7 +10216,7 @@ separately from the spacemacs buffer /feature/.
     :prefix 'spacemacs-)
 
   (require 'subr-x nil 'noerror)
-  (require 'core-versions)
+  (require 'core-versions); now in release-management.
   (require 'core-load-paths)
   (require 'core-emacs-backports)
   (require 'core-env)
@@ -10334,6 +10424,7 @@ separately from the spacemacs buffer /feature/.
          (spacemacs/load-theme spacemacs--delayed-user-theme
                                spacemacs--fallback-theme t))
        (configuration-layer/display-summary)
+       ;; NOTE: does this only run at startup?
        (spacemacs/check-latest-version nil spacemacs-version-check-interval)
        (spacemacs-buffer/goto-link-line)
        (setq spacemacs-initialized t)
@@ -11407,7 +11498,7 @@ separately from the spacemacs buffer /feature/.
       where:
       - STRING1 is a key to be bound to the function or key map SYMBOL1.
       - DOCSTRING is a STRING or an SEXP that evaluates to a string
-      - :exit SYMBOL or SEXP, if non nil then pressing this key will
+      - :exit SYMBOL or SEXP, if non-nil then pressing this key will
         leave the transient state (default is nil).
         Important note: due to inner working of transient-maps in Emacs
         the `:exit' keyword is evaluate *before* the actual execution
@@ -11751,7 +11842,7 @@ so we can restore it when turning `ido-vertical-mode' off")
   :group 'ido)
 
 (defcustom ido-vertical-show-count nil
-  "Non nil means show the count of candidates while completing."
+  "Non-nil means show the count of candidates while completing."
   :type 'boolean
   :group 'ido-vertical)
 
@@ -11768,12 +11859,12 @@ so we can restore it when turning `ido-vertical-mode' off")
   :group 'ido-vertical)
 
 (defcustom ido-vertical-pad-list t
-  "Non nil means to pad the list of candidates to ensure the minibuffer area is always tall"
+  "Non-nil means to pad the list of candidates to ensure the minibuffer area is always tall"
   :type 'boolean
   :group 'ido-vertical)
 
 (defcustom ido-vertical-disable-if-short nil
-  "Non nil means that ido will go back to horizontal mode if the candidates all fit in the minibuffer area"
+  "Non-nil means that ido will go back to horizontal mode if the candidates all fit in the minibuffer area"
   :type 'boolean
   :group 'ido-vertical)
 
@@ -19007,6 +19098,7 @@ VALUE is validated against SYMBOL's custom type.
   # [[https://github.com/syl20bnr/spacemacs/blob/develop/layers/%2Bfun/emoji/README.org][Link to Emoji layer README.org]]
   # If space-doc-mode is enabled, Spacemacs will open a local copy of the linked file.
 #+end_src
+
 **** REPORTING
 #+begin_src text :tangle ../build/core/templates/REPORTING.template
   #### Description :octocat:
@@ -19031,6 +19123,7 @@ VALUE is validated against SYMBOL's custom type.
   %BACKTRACE%
   ```
 #+end_src
+
 **** dotspacemacs-template.el
 #+begin_src emacs-lisp :tangle ../build/core/templates/dotspacemacs-template.el
   ;; -*- mode: emacs-lisp; lexical-binding: t -*-
@@ -19152,7 +19245,7 @@ VALUE is validated against SYMBOL's custom type.
      ;; (default t)
      dotspacemacs-verify-spacelpa-archives t
 
-     ;; <<dotspacemacs-check-for-update-docstring>>
+     ;; <<dotspacemacs-check-for-update-docstring>> (default nil)
      dotspacemacs-check-for-update nil
 
      ;; If non-nil, a form that evaluates to a package directory. For example, to
@@ -19709,19 +19802,19 @@ These chunks are modular; they may be redefined to produce variant file headers.
   2025
 #+end_src
 
-#+begin_src text :noweb yes :noweb-ref "aggregrotto url"
+#+begin_src text :noweb-ref "aggregrotto url"
   https://github.com/bryce-carson/aggregrotto
 #+end_src
 
-#+begin_src text :noweb yes :noweb-ref "copyright holders"
+#+begin_src text :noweb-ref "copyright holders"
   Bryce Carson & Contributors
 #+end_src
 
-#+begin_src text :noweb yes :noweb-ref "bryce"
+#+begin_src text :noweb-ref "bryce"
   Bryce Carson <bryce.a.carson@gmail.com>
 #+end_src
 
-#+begin_src text :noweb yes :noweb-ref "about this file"
+#+begin_src text :noweb-ref "about this file"
   This file is not part of GNU Emacs.
 
   This program is free software; you can redistribute it and/or modify
@@ -19738,7 +19831,7 @@ These chunks are modular; they may be redefined to produce variant file headers.
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #+end_src
 
-#+begin_src text :noweb yes :noweb-ref "copyright boilerplate"
+#+begin_src text :noweb no-export :noweb-ref "copyright boilerplate"
   Copyright (c) <<copyright year>> <<copyright holders>>
 
   Author: <<bryce>>
@@ -19747,7 +19840,7 @@ These chunks are modular; they may be redefined to produce variant file headers.
   <<about this file>>
 #+end_src
 
-#+begin_src emacs-lisp :noweb yes :noweb-ref "copyright"
+#+begin_src emacs-lisp :noweb no-export :noweb-ref "copyright"
   ;;
   ;; <<copyright boilerplate>>
 #+end_src
@@ -19758,7 +19851,7 @@ These chunks are modular; they may be redefined to produce variant file headers.
  init.el --- Aggregrotto Initialization File -*- no-byte-compile: t; lexical-binding: nil; -*-
 #+end_src
 
-#+begin_src emacs-lisp :noweb yes :tangle ../build/init.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/init.el
   ;;; <<aggro init file>>
   ;;
   ;; Copyright (c) 2012-<<copyright year>> <<copyright holders>>
@@ -19840,7 +19933,7 @@ Earlier Emacs versions do not load the early init file and do not initialize the
 package manager before loading the init file, so this file is neither needed nor
 loaded on those versions.
 
-#+begin_src emacs-lisp :noweb yes :tangle ../build/early-init.el
+#+begin_src emacs-lisp :noweb no-export :tangle ../build/early-init.el
   ;;; early-<<aggro init file>>
   ;;
   ;; Copyright (c) 2020-<<copyright year>> <<copyright holders>>
@@ -19850,7 +19943,7 @@ loaded on those versions.
   ;;
   ;; <<about this file>>
 
-  ;; <http://git.savannah.gnu.org/cgit/emacs.git/commit/?id=24acb31c04b4048b85311d794e600ecd7ce60d3b>
+  ;; http://git.savannah.gnu.org/cgit/emacs.git/commit/?id=24acb31c04b4048b85311d794e600ecd7ce60d3b
   (setq package-enable-at-startup nil)
 
   <<define an internal spacemacs function to toggle gui elements>>

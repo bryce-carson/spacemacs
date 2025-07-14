@@ -1,5 +1,6 @@
 *
+/build/
 !.gitignore
-!/README
-!*.org
-!*/
+!README.*
+!/org/*.org
+!/org/darksun.theme
